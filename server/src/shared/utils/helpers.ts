@@ -21,10 +21,9 @@ export class Transformer {
     }
 
     static toPGCompositeType(data: Record<string, any>): string {
-        if (!data) {
-            throw new TypeError(`invalid object`);
-        }
         const values = Object.values(data).filter((value) => value !== undefined);
+        console.log(`in toPGCompositeType of NameDetails: ${values}`);
+        console.log(`(${values.join(',')})`);
         return `(${values.join(',')})`;
     }
 }

@@ -35,7 +35,7 @@ export class User {
     password: string;
 
     @Column({ type: 'date', nullable: true })
-    birthday: Date;
+    birthday: string;
 
     @Column({ type: 'text', nullable: true })
     avatar: string;

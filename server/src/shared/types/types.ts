@@ -29,3 +29,5 @@ export enum Gender {
     MALE = 'male',
     FEMALE = 'female',
 }
+
+export type Nullable<T> = T | null;
