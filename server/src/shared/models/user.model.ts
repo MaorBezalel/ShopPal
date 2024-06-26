@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Gender } from '../types/enums';
 import { Address, NameDetails } from '../types/embedded-entites';
-import { Review } from '.';
+import { Review, OrderUserLink } from '.';
 
 @Entity('User')
 export class User {
@@ -38,4 +38,7 @@ export class User {
 
     @OneToMany(() => Review, (review) => review.user)
     reviews: Promise<Review[]>;
+
+    @OneToMany(() => OrderUserLink, (orderUserLink) => orderUserLink.user)
+    orderUserLinks: Promise<OrderUserLink[]>;
 }

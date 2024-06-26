@@ -5,7 +5,7 @@ const baseConfig: DataSourceOptions = {
     type: 'postgres',
     url: process.env.DB_CONNECTION_URL,
     synchronize: false,
-    entities: [],
+    entities: [__dirname + '/shared/models/*{.ts,.js}'],
     subscribers: [],
 };
 

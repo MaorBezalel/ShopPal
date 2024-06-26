@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Address } from '../types/embedded-entites';
+import { OrderUserLink } from '.';
 
 @Entity('Order')
 export class Order {
@@ -18,4 +19,7 @@ export class Order {
 
     @Column(() => Address)
     delivery_address: Address;
+
+    @OneToMany(() => OrderUserLink, (orderUserLink) => orderUserLink.order)
+    orderUserLinks: Promise<OrderUserLink[]>;
 }
