@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Category } from '../types/types';
+import { Category } from '../types/enums';
+import { Dimension } from '../types/embedded-entites';
 
 @Entity('Product')
 class Product {
@@ -45,18 +46,4 @@ class Product {
 
     @Column(() => Dimension)
     dimension: Dimension;
-}
-
-class Dimension {
-    @Column({ type: 'real', nullable: true })
-    width: number;
-
-    @Column({ type: 'real', nullable: true })
-    height: number;
-
-    @Column({ type: 'real', nullable: true })
-    depth: number;
-
-    @Column({ type: 'real', nullable: true })
-    weight: number;
 }

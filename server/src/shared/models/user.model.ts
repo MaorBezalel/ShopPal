@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-import { Gender } from '../types/types';
+import { Gender } from '../types/enums';
+import { Address, NameDetails } from '../types/embedded-entites';
 @Entity('User')
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -32,26 +33,4 @@ export class User {
 
     @Column(() => Address)
     address: Address;
-}
-
-class NameDetails {
-    @Column({ type: 'text' })
-    first_name: string;
-
-    @Column({ type: 'text' })
-    last_name: string;
-
-    @Column({ type: 'text' })
-    middle_name: string;
-}
-
-class Address {
-    @Column({ type: 'text', nullable: true })
-    country: string;
-
-    @Column({ type: 'text', nullable: true })
-    city: string;
-
-    @Column({ type: 'text', nullable: true })
-    street: string;
 }
