@@ -1,7 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Gender } from '../types/enums';
 import { Address, NameDetails } from '../types/embedded-entites';
+import { Review } from '.';
+
 @Entity('User')
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -33,4 +35,7 @@ export class User {
 
     @Column(() => Address)
     address: Address;
+
+    @OneToMany(() => Review, (review) => review.user)
+    reviews: Promise<Review[]>;
 }

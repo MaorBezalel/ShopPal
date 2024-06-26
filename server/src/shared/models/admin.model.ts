@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { User } from './user.model';
+import { User } from '.';
 
 @Entity('Admin')
 export class Admin extends User {

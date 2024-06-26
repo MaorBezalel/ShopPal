@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { Category } from '../types/enums';
 import { Dimension } from '../types/embedded-entites';
 
+import { Review } from '.';
 @Entity('Product')
-class Product {
+export class Product {
     @PrimaryGeneratedColumn('uuid')
     product_id: string;
 
@@ -46,4 +47,7 @@ class Product {
 
     @Column(() => Dimension)
     dimension: Dimension;
+
+    @OneToMany(() => Review, (review) => review.product)
+    reviews: Promise<Review[]>;
 }
