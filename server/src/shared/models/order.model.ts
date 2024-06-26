@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Address } from '../types/embedded-entites';
-import { OrderUserLink } from '.';
+import { OrderUserLink, OrderProductLink } from '.';
 
 @Entity('Order')
 export class Order {
@@ -17,9 +17,12 @@ export class Order {
     @Column({ type: 'text', nullable: true })
     billing_info: string;
 
-    @Column(() => Address)
+    @Column({ type: 'jsonb' })
     delivery_address: Address;
 
     @OneToMany(() => OrderUserLink, (orderUserLink) => orderUserLink.order)
     orderUserLinks: Promise<OrderUserLink[]>;
+
+    @OneToMany(() => OrderProductLink, (orderProductLink) => orderProductLink.order)
+    orderProductLinks: Promise<OrderProductLink[]>;
 }

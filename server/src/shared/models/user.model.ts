@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Gender } from '../types/enums';
 import { Address, NameDetails } from '../types/embedded-entites';
 import { Review, OrderUserLink } from '.';
+import { Transformer } from '../utils/helpers';
 
 @Entity('User')
 export class User {
@@ -12,8 +13,14 @@ export class User {
     @Column({ type: 'text', unique: true })
     email: string;
 
-    @Column(() => NameDetails)
-    name_detail: NameDetails;
+    @Column({
+        type: 'text',
+        transformer: {
+            from: NameDetails.fromPGCompositeType,
+            to: NameDetails.toPGCompositeType,
+        },
+    })
+    name_details: NameDetails;
 
     @Column({ type: 'enum', enum: Gender })
     gender: Gender;
@@ -33,7 +40,13 @@ export class User {
     @Column({ type: 'text', nullable: true })
     avatar: string;
 
-    @Column(() => Address)
+    @Column({
+        type: 'text',
+        transformer: {
+            from: Address.fromPGCompositeType,
+            to: Address.toPGCompositeType,
+        },
+    })
     address: Address;
 
     @OneToMany(() => Review, (review) => review.user)

@@ -1,37 +1,64 @@
 import { Column } from 'typeorm';
+import { RegisterProperty } from '../decorators';
+import { getRegisteredProperties } from '../decorators';
+import { Transformer } from '../utils/helpers';
 
 export class NameDetails {
-    @Column({ type: 'text' })
+    @RegisterProperty
     first_name: string;
 
-    @Column({ type: 'text' })
+    @RegisterProperty
     last_name: string;
 
-    @Column({ type: 'text' })
-    middle_name: string;
+    @RegisterProperty
+    middle_name?: string;
+
+    static fromPGCompositeType(nameDetails: string): NameDetails {
+        return Transformer.fromPGCompositeType(nameDetails, getRegisteredProperties(NameDetails));
+    }
+
+    static toPGCompositeType(nameDetails: NameDetails): string {
+        return Transformer.toPGCompositeType(nameDetails);
+    }
 }
 
 export class Address {
-    @Column({ type: 'text', nullable: true })
+    @RegisterProperty
     country: string;
 
-    @Column({ type: 'text', nullable: true })
+    @RegisterProperty
     city: string;
 
-    @Column({ type: 'text', nullable: true })
+    @RegisterProperty
     street: string;
+
+    static fromPGCompositeType(address: string): Address {
+        return Transformer.fromPGCompositeType(address, getRegisteredProperties(Address));
+    }
+
+    static toPGCompositeType(address: Address): string {
+        return Transformer.toPGCompositeType(address);
+    }
 }
 
 export class Dimension {
-    @Column({ type: 'real', nullable: true })
+    @RegisterProperty
     width: number;
 
-    @Column({ type: 'real', nullable: true })
+    @RegisterProperty
     height: number;
 
-    @Column({ type: 'real', nullable: true })
+    @RegisterProperty
     depth: number;
 
-    @Column({ type: 'real', nullable: true })
+    @RegisterProperty
     weight: number;
+
+    static fromPGCompositeType(dimension: string): Dimension {
+        return Transformer.fromPGCompositeType(dimension, getRegisteredProperties(Dimension));
+    }
+
+    static toPGCompositeType(dimension: Dimension): string {
+        return Transformer.toPGCompositeType(dimension);
+    }
 }

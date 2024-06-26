@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Category } from '../types/enums';
 import { Dimension } from '../types/embedded-entites';
 
-import { Review } from '.';
+import { Review, OrderProductLink } from '.';
 @Entity('Product')
 export class Product {
     @PrimaryGeneratedColumn('uuid')
@@ -43,11 +43,20 @@ export class Product {
     shipping_info: string;
 
     @Column({ type: 'text', nullable: true })
-    warranty_into: string;
+    warranty_info: string;
 
-    @Column(() => Dimension)
+    @Column({
+        type: 'text',
+        transformer: {
+            from: Dimension.fromPGCompositeType,
+            to: Dimension.toPGCompositeType,
+        },
+    })
     dimension: Dimension;
 
     @OneToMany(() => Review, (review) => review.product)
     reviews: Promise<Review[]>;
+
+    @OneToMany(() => OrderProductLink, (orderProductLink) => orderProductLink.product)
+    orderProductLinks: Promise<OrderProductLink[]>;
 }
