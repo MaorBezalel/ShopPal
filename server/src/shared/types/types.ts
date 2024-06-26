@@ -24,3 +24,8 @@ export enum Category {
     WOMENS_SHOES = 'womens-shoes',
     WOMENS_WATCHES = 'womens-watches',
 }
+
+export enum Gender {
+    MALE = 'male',
+    FEMALE = 'female',
+}
