@@ -1,29 +1,30 @@
-import { getRegisteredProperties } from '../decorators';
-import { NameDetails } from '../types/embedded-entites';
+type ClassConstructor = new () => any;
 
-export class Transformer {
-    static fromPGCompositeType<T>(data: string, fields: string[]): T {
-        if (typeof data !== 'string') {
-            throw new TypeError(`composite type didn't return as string`);
-        }
+export class PGDataTransformer {
+    static fromPGCompositeType(toEmbeddedEntity: ClassConstructor): (value: any) => any {
+        const instance = new toEmbeddedEntity();
+        const fields = Object.keys(instance);
 
-        const values = data.replace('(', '').replace(')', '').split(',');
-        const result = fields.reduce((acc, field, index) => {
-            if (!isNaN(parseFloat(values[index]))) {
-                acc[field] = parseFloat(values[index]);
-            } else {
-                acc[field] = values[index];
-            }
+        return (dataFromPG: string) => {
+            const values = dataFromPG.replace('(', '').replace(')', '').split(',');
+            const result = fields.reduce((acc, field, index) => {
+                if (!isNaN(parseFloat(values[index]))) {
+                    acc[field] = parseFloat(values[index]);
+                } else {
+                    acc[field] = values[index];
+                }
 
-            return acc;
-        }, {} as any);
-        return result as T;
+                return acc;
+            }, {} as any);
+
+            return result as typeof toEmbeddedEntity;
+        };
     }
 
-    static toPGCompositeType(data: Record<string, any>): string {
-        const values = Object.values(data).filter((value) => value !== undefined);
-        console.log(`in toPGCompositeType of NameDetails: ${values}`);
-        console.log(`(${values.join(',')})`);
-        return `(${values.join(',')})`;
+    static toPGCompositeType(fromEmbeddedEntity: ClassConstructor): (value: any) => any {
+        return (data: new () => any) => {
+            const values = Object.values(data).filter((value) => value !== undefined);
+            return `(${values.join(',')})`;
+        };
     }
 }

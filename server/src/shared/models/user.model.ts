@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Gender } from '../types/enums';
 import { Address, NameDetails } from '../types/embedded-entites';
 import { Review, OrderUserLink } from '.';
-import { Transformer } from '../utils/helpers';
+import { PGDataTransformer } from '../utils/helpers';
 
 @Entity('User')
 export class User {
@@ -16,8 +16,8 @@ export class User {
     @Column({
         type: 'text',
         transformer: {
-            from: NameDetails.fromPGCompositeType,
-            to: NameDetails.toPGCompositeType,
+            from: PGDataTransformer.fromPGCompositeType(NameDetails),
+            to: PGDataTransformer.toPGCompositeType(NameDetails),
         },
     })
     name_details: NameDetails;
@@ -43,8 +43,8 @@ export class User {
     @Column({
         type: 'text',
         transformer: {
-            from: Address.fromPGCompositeType,
-            to: Address.toPGCompositeType,
+            from: PGDataTransformer.fromPGCompositeType(Address),
+            to: PGDataTransformer.toPGCompositeType(Address),
         },
     })
     address: Address;

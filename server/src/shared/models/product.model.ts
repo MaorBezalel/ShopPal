@@ -4,6 +4,7 @@ import { Category } from '../types/enums';
 import { Dimension } from '../types/embedded-entites';
 
 import { Review, OrderProductLink } from '.';
+import { PGDataTransformer } from '../utils/helpers';
 @Entity('Product')
 export class Product {
     @PrimaryGeneratedColumn('uuid')
@@ -48,8 +49,8 @@ export class Product {
     @Column({
         type: 'text',
         transformer: {
-            from: Dimension.fromPGCompositeType,
-            to: Dimension.toPGCompositeType,
+            from: PGDataTransformer.fromPGCompositeType(Dimension),
+            to: PGDataTransformer.toPGCompositeType(Dimension),
         },
     })
     dimension: Dimension;
