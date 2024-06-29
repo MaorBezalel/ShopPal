@@ -1,8 +1,8 @@
-type ClassConstructor = new () => any;
+import { Class } from '@/shared/types/utils.types';
 
 export class PGDataTransformer {
-    static fromPGCompositeType(toEmbeddedEntity: ClassConstructor): (value: any) => any {
-        const instance = new toEmbeddedEntity();
+    static fromPGCompositeType<TEmbeddedEntity extends object>(toClass: Class<TEmbeddedEntity>): (value: any) => any {
+        const instance = new toClass();
         const fields = Object.keys(instance);
 
         return (dataFromPG: string) => {
@@ -17,11 +17,11 @@ export class PGDataTransformer {
                 return acc;
             }, {} as any);
 
-            return result as typeof toEmbeddedEntity;
+            return result as TEmbeddedEntity;
         };
     }
 
-    static toPGCompositeType(fromEmbeddedEntity: ClassConstructor): (value: any) => any {
+    static toPGCompositeType<TEmbeddedEntity extends object>(fromClass: Class<TEmbeddedEntity>): (value: any) => any {
         return (data: new () => any) => {
             const values = Object.values(data).filter((value) => value !== undefined);
             return `(${values.join(',')})`;
