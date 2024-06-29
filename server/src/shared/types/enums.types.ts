@@ -1,3 +1,6 @@
+/**
+ * Enum for all product categories
+ */
 export enum Category {
     BEAUTY = 'beauty',
     FRAGRANCES = 'fragrances',
@@ -25,6 +28,11 @@ export enum Category {
     WOMENS_WATCHES = 'womens-watches',
 }
 
+/**
+ * Enum that represents Gender for users
+ *
+ * @todo Add value for `OTHER` as well as in the database defined enum type.
+ */
 export enum Gender {
     MALE = 'male',
     FEMALE = 'female',
