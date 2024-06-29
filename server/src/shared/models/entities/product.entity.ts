@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Review } from '@/shared/models/entities';
+import { OrderProductLink } from '@/shared/models/relationships';
+import { Dimension } from '@/shared/models/composites';
 import { Category } from '@/shared/types/enums';
-import { Dimension } from '@/shared/types/embedded-entites';
-import { Review, OrderProductLink } from '@/shared/models';
 import { PGDataTransformer } from '@/shared/utils/helpers';
 
 @Entity('Product')

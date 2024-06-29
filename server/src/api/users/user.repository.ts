@@ -1,6 +1,6 @@
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
-import { User } from '@/shared/models';
+import { User } from '@/shared/models/entities';
 
 type UserRepositoryType = {
     // !!!! GET !!!!
