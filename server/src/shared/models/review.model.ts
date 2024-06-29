@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { User, Product } from '.';
+import { User, Product } from '@/shared/models';
 
 @Entity('Review')
 export class Review {

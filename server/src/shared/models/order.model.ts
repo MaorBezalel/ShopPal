@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-
-import { Address } from '../types/embedded-entites';
-import { OrderUserLink, OrderProductLink } from '.';
+import { Address } from '@/shared/types/embedded-entites';
+import { OrderUserLink, OrderProductLink } from '@/shared/models';
 
 @Entity('Order')
 export class Order {

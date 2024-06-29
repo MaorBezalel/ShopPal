@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User, Order } from '.';
+import { User, Order } from '@/shared/models';
 
 @Entity('OrderUserLink')
 export class OrderUserLink {

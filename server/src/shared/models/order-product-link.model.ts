@@ -1,6 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-
-import { Order, Product } from '.';
+import { Order, Product } from '@/shared/models';
 
 @Entity('OrderProductLink')
 export class OrderProductLink {

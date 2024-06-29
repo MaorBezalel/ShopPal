@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { AppDataSource } from './shared/db/pg.data-source';
+import { AppDataSource } from '@/shared/db/pg.data-source';
 
 const app = express();
 const PORT = 3000;

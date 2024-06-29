@@ -1,10 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Category } from '@/shared/types/enums';
+import { Dimension } from '@/shared/types/embedded-entites';
+import { Review, OrderProductLink } from '@/shared/models';
+import { PGDataTransformer } from '@/shared/utils/helpers';
 
-import { Category } from '../types/enums';
-import { Dimension } from '../types/embedded-entites';
-
-import { Review, OrderProductLink } from '.';
-import { PGDataTransformer } from '../utils/helpers';
 @Entity('Product')
 export class Product {
     @PrimaryGeneratedColumn('uuid')

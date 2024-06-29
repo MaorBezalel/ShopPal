@@ -1,7 +1,6 @@
-import { AppDataSource } from '../../shared/db/pg.data-source';
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
-
-import { User } from '../../shared/models';
+import { AppDataSource } from '@/shared/db/pg.data-source';
+import { User } from '@/shared/models';
 
 type UserRepositoryType = {
     // !!!! GET !!!!

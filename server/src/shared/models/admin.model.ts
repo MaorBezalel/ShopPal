@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { User } from '.';
+import { Entity, Column } from 'typeorm';
+import { User } from '@/shared/models';
 
 @Entity('Admin')
 export class Admin extends User {

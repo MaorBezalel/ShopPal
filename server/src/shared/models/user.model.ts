@@ -1,9 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-
-import { Gender } from '../types/enums';
-import { Address, NameDetails } from '../types/embedded-entites';
-import { Review, OrderUserLink } from '.';
-import { PGDataTransformer } from '../utils/helpers';
+import { Gender } from '@/shared/types/enums';
+import { Address, NameDetails } from '@/shared/types/embedded-entites';
+import { Review, OrderUserLink } from '@/shared/models';
+import { PGDataTransformer } from '@/shared/utils/helpers';
 
 @Entity('User')
 export class User {
