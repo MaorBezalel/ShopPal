@@ -29,7 +29,7 @@ export enum Category {
 }
 
 /**
- * Enum that represents Gender for users
+ * Enum that represents gender for users
  *
  * @todo Add value for `OTHER` as well as in the database defined enum type.
  */
