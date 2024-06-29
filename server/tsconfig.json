@@ -9,7 +9,20 @@
         "strictPropertyInitialization": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["*"]
+        },
+        "plugins": [
+            {
+                "transform": "typescript-transform-paths"
+            },
+            {
+                "transform": "typescript-transform-paths",
+                "afterDeclarations": true
+            }
+        ]
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]
