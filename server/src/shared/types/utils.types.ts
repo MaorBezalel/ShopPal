@@ -64,7 +64,7 @@ export type Brand<TNominal, TBrand> = TNominal & { __brand: TBrand };
  *  type Props = { name: string; age: number; visible: boolean };
  *
  *  // Expect: "name" | "age" | "visible"
- *  type PropsKeys = $Keys<Props>;
+ *  type PropsKeys = Keys<Props>;
  */
 export type Keys<TObject extends object> = keyof TObject;
 
@@ -77,7 +77,7 @@ export type Keys<TObject extends object> = keyof TObject;
  *  type Props = { name: string; age: number; visible: boolean };
  *
  *  // Expect: string | number | boolean
- *  type PropsValues = $Values<Props>;
+ *  type PropsValues = Values<Props>;
  */
 export type Values<TObject extends object> = TObject[keyof TObject];
 
