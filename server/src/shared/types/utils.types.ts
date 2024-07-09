@@ -1,3 +1,5 @@
+import { User } from '@/shared/models/entities';
+
 /**
  * Represents a constructor of a class `TClass` (can be used as a generic type for classes).
  *
@@ -153,7 +155,7 @@ type Primitives = string | number | boolean | bigint | symbol | undefined | null
  * // };
  * type StrippedType = StripCustomTypes<ComplexType>;
  */
-type StripCustomTypes<T> = T extends Primitives
+export type StripCustomTypes<T> = T extends Primitives
     ? T
     : T extends Array<infer TElement>
       ? Array<StripCustomTypes<TElement>>
@@ -164,3 +166,19 @@ type StripCustomTypes<T> = T extends Primitives
           : T extends object
             ? { [TPropertyKey in keyof T]: StripCustomTypes<T[TPropertyKey]> }
             : never;
+
+export type AtMostOneUndefined<T> = {
+    [K in keyof T]: (Omit<T, K> & Partial<Pick<T, K>>) | T;
+}[keyof T];
+
+export type JwtPayload = {
+    email: string;
+    username: string;
+    user_id: string;
+};
+
+export type ErrorResponse = {
+    type: string;
+    message: string;
+    statusCode: number;
+};
