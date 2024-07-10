@@ -1,19 +1,30 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { ErrorResponse } from '@/shared/types/utils.types';
 
+
 import { HttpStatusCode } from '@/shared/types/httpcode.types';
 
 import AppError from '@/shared/exceptions/app-error';
+import { QueryFailedError } from 'typeorm';
 
 export const errorMiddleware = (error: Error, req: Request, res: Response<ErrorResponse>, next: NextFunction) => {
-    console.log('errorMiddleware -> error: ', error);
-
+    console.log(error);
     if (error instanceof AppError) {
         return res.status(error.statusCode).json({
             type: error.name,
             message: error.message,
             statusCode: error.statusCode,
         });
+    }
+
+    if (error instanceof QueryFailedError) 
+        {
+        return res.status(HttpStatusCode.BAD_REQUEST).json({
+            type: 'Query Failed Error',
+            message: error.message,
+            statusCode: HttpStatusCode.BAD_REQUEST,
+        });
+    
     }
 
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

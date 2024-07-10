@@ -2,31 +2,18 @@ import { Request, Response, NextFunction, CookieOptions } from 'express';
 
 import { HttpStatusCode } from '@/shared/types/httpcode.types';
 
+import { JWTHelper } from '@/shared/utils/helpers';
 import { User } from '@/shared/models/entities';
 import { UserService } from './user.service';
 
-import AppError from '@/shared/exceptions/app-error';
 
 class UserController {
     public static async signup(req: Request, res: Response, next: NextFunction) {
-        const isUserExist = await UserService.isUserAlreadyExist(req.body as User);
-
-        if (isUserExist) {
-            throw new AppError(
-                'User already exists! Please try a different email or username',
-                HttpStatusCode.CONFLICT,
-                'createUser'
-            );
-        }
-
+        await UserService.ensureUserExistence(req.body as User);
         const createdUser = await UserService.createUser(req.body as User);
-        const accessToken = UserService.signAccessToken(createdUser);
-        const refreshToken = UserService.signRefreshToken(createdUser);
-        const cookieOptions = {
-            httpOnly: true,
-            secure: true,
-            maxAge: parseInt(process.env.COOKIE_REFRESH_TOKEN_AGE!),
-        };
+        const accessToken = JWTHelper.signAccessToken(createdUser);
+        const refreshToken = JWTHelper.signRefreshToken(createdUser);
+        const cookieOptions = UserController.getSecuredHTTPOnlyCookieOptions();
         UserController.createCookie(res, process.env.COOKIE_REFRESH_TOKEN_NAME!, refreshToken, cookieOptions);
 
         res.status(HttpStatusCode.CREATED).json({ accessToken: accessToken, user: createdUser });
@@ -34,29 +21,27 @@ class UserController {
 
     public static async login(req: Request, res: Response, next: NextFunction) {
         const loginCredentials = req.body as Partial<User>;
-        const loginCredentialsPassword = loginCredentials.password;
         const user = await UserService.getUser(loginCredentials);
-
-        if (!user) {
-            throw new AppError("User doesn't exist with current login details", HttpStatusCode.UNAUTHORIZED, 'getUser');
-        }
-
-        const isPasswordMatching = UserService.isPasswordMatching(user, loginCredentialsPassword!);
-
-        if (!isPasswordMatching) {
-            throw new AppError('User exists, but invalid credentials', HttpStatusCode.UNAUTHORIZED, 'passwordMatch');
-        }
-
-        const accessToken = UserService.signAccessToken(user);
-        const refreshToken = UserService.signRefreshToken(user);
-        const cookieOptions = {
-            httpOnly: true,
-            secure: true,
-            maxAge: parseInt(process.env.COOKIE_REFRESH_TOKEN_AGE!),
-        };
+        await UserService.ensurePasswordMatching(user, loginCredentials?.password!);
+        const accessToken = JWTHelper.signAccessToken(user);
+        const refreshToken = JWTHelper.signRefreshToken(user);
+        const cookieOptions = UserController.getSecuredHTTPOnlyCookieOptions();
         UserController.createCookie(res, process.env.COOKIE_REFRESH_TOKEN_NAME!, refreshToken, cookieOptions);
 
         res.status(HttpStatusCode.CREATED).json({ accessToken: accessToken, user: user });
+    }
+
+    public static async updateUser(req: Request, res: Response, next: NextFunction) {
+        const updatedUserDetails = req.body as Partial<User>;
+        await UserService.updateUser(updatedUserDetails, req.params.id);
+
+        res.status(HttpStatusCode.CREATED).json({user: updatedUserDetails});
+    }
+
+    public static async deleteUser(req: Request, res: Response, next: NextFunction) {
+        await UserService.deleteUser(req.params.id);
+
+        res.status(HttpStatusCode.OK).json({message: 'User deleted successfully'});
     }
 
     private static createCookie<TValue>(
@@ -67,6 +52,18 @@ class UserController {
     ) {
         res.cookie(cookieName, cookieValue, cookieOptions);
     }
+
+    private static getSecuredHTTPOnlyCookieOptions(): CookieOptions {
+        const cookieOptions: CookieOptions = {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: parseInt(process.env.COOKIE_REFRESH_TOKEN_AGE!)
+        };
+
+        return cookieOptions;
+    }
 }
 
 export default UserController;
+

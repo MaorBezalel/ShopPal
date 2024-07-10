@@ -1,4 +1,7 @@
 import { Class } from '@/shared/types/utils.types';
+import type { JwtPayload } from '@/shared/types/utils.types';
+import { User } from '../models/entities';
+import jwt from 'jsonwebtoken';
 
 /**
  * Helper class for transforming data from and to Postgres composite types
@@ -44,4 +47,23 @@ export class PGDataTransformer {
             return `(${values.join(',')})`;
         };
     }
+}
+
+export class JWTHelper {
+    public static signAccessToken(userPayload: JwtPayload): string {
+        return jwt.sign({user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email}, process.env.JWT_SECRET!, {
+            expiresIn: process.env.JWT_ACCESS_TOKEN_LENGTH!,
+        });
+    }
+
+    public static signRefreshToken(userPayload: JwtPayload): string {
+        return jwt.sign({user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email}, process.env.JWT_SECRET!, {
+            expiresIn: process.env.JWT_REFRESH_TOKEN_LENGTH!,
+        });
+    }
+
+    public static verifyToken(token: string): jwt.JwtPayload | string {
+        return jwt.verify(token, process.env.JWT_SECRET!);
+    }
+
 }

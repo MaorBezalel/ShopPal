@@ -173,19 +173,12 @@ export type AtMostOneUndefined<T> = {
 }[keyof T];
 
 export type JwtPayload = {
+    user_id: string;
     email: string;
     username: string;
-    user_id: string;
-};
-
+}
 export type ErrorResponse = {
     type: string;
     message: string;
     statusCode: number;
 };
-
-export interface RequestWithUserPayload extends Request {
-    user_id: string;
-    username: string;
-    email: string;
-}

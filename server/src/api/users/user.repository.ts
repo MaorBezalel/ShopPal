@@ -1,20 +1,13 @@
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
 import { User } from '@/shared/models/entities';
-import { AtMostOneUndefined, StripCustomTypes } from '@/shared/types/utils.types';
+import { AtMostOneUndefined } from '@/shared/types/utils.types';
 
 export type UserRepositoryType = {
-    // !!!! GET !!!!
     getAllUsers: () => Promise<User[]>;
     getUsersBy: <TKey extends keyof User>(key: TKey, value: User[TKey]) => Promise<User[]>;
-
-    // !!!! UPDATE !!!!
     updateUsersBy<TKey extends keyof User>(user: User, key: TKey, value: User[TKey]): Promise<UpdateResult>;
-
-    // !!!! INSERT !!!!
     addUser: (user: User) => Promise<InsertResult>;
-
-    // !!!! DELETE !!!!
     deleteUser: (id: string) => Promise<DeleteResult>;
 };
 
@@ -29,7 +22,7 @@ export const UserRepository = AppDataSource.getRepository(User).extend({
             .where(`${key} = :value`, { value: value })
             .getMany();
     },
-    updateUsersBy: <TKey extends keyof User>(user: User, key: TKey, value: User[TKey]) => {
+    updateUsersBy: <TKey extends keyof User>(user: Partial<User>, key: TKey, value: User[TKey]) => {
         return AppDataSource.createQueryBuilder()
             .update(User)
             .set(user)
@@ -52,14 +45,14 @@ export const UserRepository = AppDataSource.getRepository(User).extend({
                 .getCount()
                 .then((count) => count > 0);
         } else if (!!findBy.email) {
-            return await AppDataSource.createQueryBuilder()
+            return AppDataSource.createQueryBuilder()
                 .select('user')
                 .from(User, 'user')
                 .where('user.email = :emailValue', { emailValue: findBy.email })
                 .getCount()
                 .then((count) => count > 0);
         } else {
-            return await AppDataSource.createQueryBuilder()
+            return AppDataSource.createQueryBuilder()
                 .select('user')
                 .from(User, 'user')
                 .where('user.username = :usernameValue', { usernameValue: findBy.username })
