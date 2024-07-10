@@ -1,4 +1,5 @@
 import { User } from '@/shared/models/entities';
+import type { Request } from 'express';
 
 /**
  * Represents a constructor of a class `TClass` (can be used as a generic type for classes).
@@ -182,3 +183,9 @@ export type ErrorResponse = {
     message: string;
     statusCode: number;
 };
+
+export interface RequestWithUserPayload extends Request {
+    user_id: string;
+    username: string;
+    email: string;
+}

@@ -1,0 +1,6 @@
+DB_CONNECTION_URL = postgresql://shopdb_owner:FW2rjszLbnJ0@ep-broad-pine-a5sit8fm.us-east-2.aws.neon.tech/shopdb?sslmode=require
+JWT_SECRET = someSecret
+JWT_ACCESS_TOKEN_LENGTH = 15m
+JWT_REFRESH_TOKEN_LENGTH = 7d 
+COOKIE_REFRESH_TOKEN_NAME = refreshToken
+COOKIE_REFRESH_TOKEN_AGE = 604800000 # 7 days in milliseconds
