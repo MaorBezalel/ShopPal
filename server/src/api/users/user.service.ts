@@ -5,7 +5,7 @@ import { UserRepository } from './user.repository';
 import bcrypt from 'bcryptjs';
 
 import AppError from '@/shared/exceptions/app-error';
-import { HttpStatusCode } from '@/shared/types/httpcode.types';
+import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 
 
 export class UserService {

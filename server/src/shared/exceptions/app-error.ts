@@ -1,4 +1,4 @@
-import type { HttpStatusCode } from '@/shared/types/httpcode.types';
+import type { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 
 class AppError extends Error {
     public readonly message: string;

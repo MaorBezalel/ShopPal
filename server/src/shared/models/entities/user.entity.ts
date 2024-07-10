@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Review } from '@/shared/models/entities';
 import { OrderUserLink } from '@/shared/models/relationships';
 import { Address, NameDetails } from '@/shared/models/composites';
-import { Gender } from '@/shared/types/enums.types';
+import { Gender } from '@/shared/types/enums/db.types';
 import { PGDataTransformer } from '@/shared/utils/helpers';
 
 @Entity('User')

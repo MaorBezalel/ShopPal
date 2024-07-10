@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import { JWTHelper } from '@/shared/utils/helpers';
 
 
-import { HttpStatusCode } from '@/shared/types/httpcode.types';
+import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 import AppError from '@/shared/exceptions/app-error';
 import jwt from 'jsonwebtoken';
 

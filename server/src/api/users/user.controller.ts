@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, CookieOptions } from 'express';
 
-import { HttpStatusCode } from '@/shared/types/httpcode.types';
+import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 
 import { JWTHelper } from '@/shared/utils/helpers';
 import { User } from '@/shared/models/entities';
@@ -33,13 +33,13 @@ class UserController {
 
     public static async updateUser(req: Request, res: Response, next: NextFunction) {
         const updatedUserDetails = req.body as Partial<User>;
-        await UserService.updateUser(updatedUserDetails, req.params.id);
+        await UserService.updateUser(updatedUserDetails, req.params.user_id);
 
         res.status(HttpStatusCode.CREATED).json({user: updatedUserDetails});
     }
 
     public static async deleteUser(req: Request, res: Response, next: NextFunction) {
-        await UserService.deleteUser(req.params.id);
+        await UserService.deleteUser(req.params.user_id);
 
         res.status(HttpStatusCode.OK).json({message: 'User deleted successfully'});
     }

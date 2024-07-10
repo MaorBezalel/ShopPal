@@ -14,6 +14,8 @@
         "paths": {
             "@/*": ["*"]
         },
+        "typeRoots": ["./src/shared/types", "./node_modules/@types"],
+        "types": ["node", "express"],
         "plugins": [
             {
                 "transform": "typescript-transform-paths"

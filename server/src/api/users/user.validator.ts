@@ -1,5 +1,5 @@
 import { Schema } from 'express-validator';
-import { Gender } from '@/shared/types/enums.types';
+import { Gender } from '@/shared/types/enums/db.types';
 
 export const loginByUsernameSchema: Schema = {
     username: {
@@ -227,6 +227,16 @@ export const signupSchema: Schema = {
 
 
 export const updateUserSchema: Schema = {
+    user_id: {
+        in: ['params'],
+        notEmpty: {
+            errorMessage: 'User ID is required!',
+        },
+        custom: {
+            options: (value, {req}) => value === req.jwtDecodedPayload?.user_id,
+            errorMessage: 'User ID does not match with the logged in user ID'
+        }
+    },
     email: {
         in: ['body'],
         notEmpty: {
@@ -414,3 +424,15 @@ export const updateUserSchema: Schema = {
 }
 
 
+export const deleteUserSchema: Schema = {
+    user_id: {
+        in: ['params'],
+        notEmpty: {
+            errorMessage: 'User ID is required!',
+        },
+        custom: {
+            options: (value, {req}) => value === req.jwtDecodedPayload?.user_id,
+            errorMessage: 'User ID does not match with the logged in user ID'
+        }
+    }
+}

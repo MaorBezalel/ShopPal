@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { loginByEmailSchema, loginByUsernameSchema, signupSchema, updateUserSchema } from './user.validator';
+import { loginByEmailSchema, loginByUsernameSchema, signupSchema, updateUserSchema, deleteUserSchema } from './user.validator';
 import UserController from '@/api/users/user.controller';
-import { checkSchema } from 'express-validator';
+import { check, checkSchema } from 'express-validator';
 import { validationMiddleware } from '@/middlewares/validation.middleware';
 
 import authorizationMiddleware from '@/middlewares/authorization.middleware';
@@ -27,14 +27,16 @@ router.post(
     tryCatchMiddleware(UserController.login)
 );
 
-router.put('/:id', 
+router.put('/:user_id', 
     authorizationMiddleware, 
     checkSchema(updateUserSchema), 
     validationMiddleware, 
     tryCatchMiddleware(UserController.updateUser));
 
-router.delete('/:id',
+router.delete('/:user_id',
     authorizationMiddleware,
+    checkSchema(deleteUserSchema),
+    validationMiddleware,
     tryCatchMiddleware(UserController.deleteUser));
 
 export default router;
