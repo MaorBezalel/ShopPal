@@ -10,11 +10,12 @@ import { AppDataSource } from '@/shared/db/pg.data-source';
 import UserRouter from '@/api/users/user.router'
 import AuthRouter from '@/api/auth/auth.router';
 import { errorMiddleware } from '@/middlewares/error.middleware';
+import corsMiddleware from './middlewares/cors.middleware';
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors({ origin: 'http://127.0.0.1:5500', credentials: true })); // DELETE AFTER (Client side port should be 5500 during development)
+app.use(corsMiddleware); 
 app.use(express.json());
 app.use(cookieParser());
 app.use('/user', UserRouter);
