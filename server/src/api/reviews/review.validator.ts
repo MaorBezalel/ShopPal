@@ -12,41 +12,41 @@ export const getReviewsSchema: Schema = {
     },
     limit: {
         in: ['query'],
+        optional: true,
         isInt: {
             options: { min: 1, max: 50 },
             errorMessage: 'Limit must be a number between 1 and 50!',
         },
-        optional: true,
         toInt: true,
     },
     offset: {
         in: ['query'],
+        optional: true,
         isInt: {
             options: { min: 0 },
             errorMessage: 'Offset must be a number greater than or equal to 0!',
         },
-        optional: true,
         toInt: true,
     },
     sortBy: {
         in: ['query'],
+        default: { options: 'date' },
         isString: true,
         toLowerCase: true,
         isIn: {
             options: [['rating', 'date']],
             errorMessage: 'Sort by must be either "rating" or "date"!',
         },
-        optional: true,
     },
     order: {
         in: ['query'],
+        default: { options: 'DESC' },
         isString: true,
         toUpperCase: true,
         isIn: {
             options: [['ASC', 'DESC']],
             errorMessage: 'Order must be either "ASC" or "DESC"!',
         },
-        optional: true,
     },
 };
 
