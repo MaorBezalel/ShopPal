@@ -281,20 +281,21 @@ export const updateUserSchema: Schema = {
         notEmpty: {
             errorMessage: 'Password is required!',
         },
+        isLength: {
+            options: { min: 6, max: 18 },
+            errorMessage: 'Password should be between 6 and 18 letters',
+        },
         isStrongPassword: {
             options: {
                 minLowercase: 1,
                 minUppercase: 1,
                 minNumbers: 1,
                 minSymbols: 1,
+                minLength: 6,
                 returnScore: false,
             },
             errorMessage:
                 'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
-        },
-        isLength: {
-            options: { min: 6, max: 18 },
-            errorMessage: 'Password should be between 6 and 18 letters',
         },
         isString: true,
         trim: true,
@@ -310,7 +311,7 @@ export const updateUserSchema: Schema = {
         },
         customSanitizer: {
             options: (value) => {
-                return Gender[(value as string).toUpperCase() as keyof typeof Gender];
+                return Gender[(value as string)?.toUpperCase() as keyof typeof Gender];
             },
         },
         optional: true,
