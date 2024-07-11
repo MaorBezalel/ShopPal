@@ -1,4 +1,4 @@
-import { Class } from '@/shared/types/utils.types';
+import { Class, isNullish } from '@/shared/types/utils.types';
 import type { JwtPayload } from '@/shared/types/utils.types';
 import { User } from '../models/entities';
 import jwt from 'jsonwebtoken';
@@ -24,7 +24,7 @@ export class PGDataTransformer {
                 if (!isNaN(parseFloat(values[index]))) {
                     acc[field] = parseFloat(values[index]);
                 } else {
-                    acc[field] = values[index];
+                    acc[field] = values[index] === '' ? null : values[index];
                 }
 
                 return acc;
@@ -43,7 +43,7 @@ export class PGDataTransformer {
      */
     static toPGCompositeType<TEmbeddedEntity extends object>(fromClass: Class<TEmbeddedEntity>): (value: any) => any {
         return (data: new () => any) => {
-            const values = Object.values(data).filter((value) => value !== undefined);
+            const values = Object.values(data).map((value) => (isNullish(value) ? '' : value));
             return `(${values.join(',')})`;
         };
     }
@@ -51,19 +51,26 @@ export class PGDataTransformer {
 
 export class JWTHelper {
     public static signAccessToken(userPayload: JwtPayload): string {
-        return jwt.sign({user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email}, process.env.JWT_SECRET!, {
-            expiresIn: process.env.JWT_ACCESS_TOKEN_LENGTH!,
-        });
+        return jwt.sign(
+            { user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email },
+            process.env.JWT_SECRET!,
+            {
+                expiresIn: process.env.JWT_ACCESS_TOKEN_LENGTH!,
+            }
+        );
     }
 
     public static signRefreshToken(userPayload: JwtPayload): string {
-        return jwt.sign({user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email}, process.env.JWT_SECRET!, {
-            expiresIn: process.env.JWT_REFRESH_TOKEN_LENGTH!,
-        });
+        return jwt.sign(
+            { user_id: userPayload.user_id, username: userPayload.username, email: userPayload.email },
+            process.env.JWT_SECRET!,
+            {
+                expiresIn: process.env.JWT_REFRESH_TOKEN_LENGTH!,
+            }
+        );
     }
 
     public static verifyToken(token: string): jwt.JwtPayload | string {
         return jwt.verify(token, process.env.JWT_SECRET!);
     }
-
 }

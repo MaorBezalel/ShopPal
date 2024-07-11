@@ -17,3 +17,8 @@ export class OrderUserLink {
     @JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
     user: Promise<User>;
 }
+
+// creating order process:
+// 1) req.body -> order details (of order table)
+// 2) req.JwtDecodedData -> if avaliable - user logged in -> add order to order table, add order product link, add order user link
+// 3) req.JwtDecodedData -> if not avaliable - user not logged in -> add order to order table, add order product link
