@@ -22,6 +22,10 @@ export const loginByUsernameSchema: Schema = {
         notEmpty: {
             errorMessage: 'Password is required!',
         },
+        isLength: {
+            options: { min: 6, max: 18 },
+            errorMessage: 'Password should be between 6 and 18 letters',
+        },
         isStrongPassword: {
             options: {
                 minLowercase: 1,
@@ -29,13 +33,10 @@ export const loginByUsernameSchema: Schema = {
                 minNumbers: 1,
                 minSymbols: 1,
                 returnScore: false,
+                minLength: 6,
             },
             errorMessage:
                 'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
-        },
-        isLength: {
-            options: { min: 6, max: 18 },
-            errorMessage: 'Password should be between 6 and 18 letters',
         },
         isString: true,
         trim: true,
@@ -61,6 +62,10 @@ export const loginByEmailSchema: Schema = {
         notEmpty: {
             errorMessage: 'Password is required!',
         },
+        isLength: {
+            options: { min: 6, max: 18 },
+            errorMessage: 'Password should be between 6 and 18 letters',
+        },
         isStrongPassword: {
             options: {
                 minLowercase: 1,
@@ -68,13 +73,10 @@ export const loginByEmailSchema: Schema = {
                 minNumbers: 1,
                 minSymbols: 1,
                 returnScore: false,
+                minLength: 6,
             },
             errorMessage:
                 'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
-        },
-        isLength: {
-            options: { min: 6, max: 18 },
-            errorMessage: 'Password should be between 6 and 18 letters',
         },
         isString: true,
         trim: true,
@@ -119,20 +121,21 @@ export const signupSchema: Schema = {
         notEmpty: {
             errorMessage: 'Password is required!',
         },
+        isLength: {
+            options: { min: 6, max: 18 },
+            errorMessage: 'Password should be between 6 and 18 letters',
+        },
         isStrongPassword: {
             options: {
                 minLowercase: 1,
                 minUppercase: 1,
                 minNumbers: 1,
                 minSymbols: 1,
+                minLength: 6,
                 returnScore: false,
             },
             errorMessage:
                 'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
-        },
-        isLength: {
-            options: { min: 6, max: 18 },
-            errorMessage: 'Password should be between 6 and 18 letters',
         },
         isString: true,
         trim: true,
@@ -140,6 +143,9 @@ export const signupSchema: Schema = {
 
     gender: {
         in: ['body'],
+        notEmpty: {
+            errorMessage: 'Gender is required!',
+        },
         toLowerCase: true,
         isIn: {
             options: [Object.values(Gender)],
@@ -147,7 +153,7 @@ export const signupSchema: Schema = {
         },
         customSanitizer: {
             options: (value) => {
-                return Gender[(value as string).toUpperCase() as keyof typeof Gender];
+                return Gender[(value as string)?.toUpperCase() as keyof typeof Gender];
             },
         },
     },
@@ -225,7 +231,6 @@ export const signupSchema: Schema = {
     },
 };
 
-
 export const updateUserSchema: Schema = {
     user_id: {
         in: ['params'],
@@ -233,9 +238,9 @@ export const updateUserSchema: Schema = {
             errorMessage: 'User ID is required!',
         },
         custom: {
-            options: (value, {req}) => value === req.jwtDecodedPayload?.user_id,
-            errorMessage: 'User ID does not match with the logged in user ID'
-        }
+            options: (value, { req }) => value === req.jwtDecodedPayload?.user_id,
+            errorMessage: 'User ID does not match with the logged in user ID',
+        },
     },
     email: {
         in: ['body'],
@@ -248,7 +253,7 @@ export const updateUserSchema: Schema = {
         isString: true,
         trim: true,
         toLowerCase: true,
-        optional: true
+        optional: true,
     },
 
     username: {
@@ -268,7 +273,7 @@ export const updateUserSchema: Schema = {
         },
         trim: true,
         toLowerCase: true,
-        optional: true
+        optional: true,
     },
 
     password: {
@@ -293,7 +298,7 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     gender: {
@@ -308,7 +313,7 @@ export const updateUserSchema: Schema = {
                 return Gender[(value as string).toUpperCase() as keyof typeof Gender];
             },
         },
-        optional: true
+        optional: true,
     },
 
     name_details: {
@@ -319,7 +324,7 @@ export const updateUserSchema: Schema = {
         isObject: {
             errorMessage: 'Name details must be an object!',
         },
-        optional: true
+        optional: true,
     },
 
     'name_details.first_name': {
@@ -329,7 +334,7 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     'name_details.middle_name': {
@@ -337,7 +342,7 @@ export const updateUserSchema: Schema = {
         default: { options: '' },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     'name_details.last_name': {
@@ -347,7 +352,7 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     address: {
@@ -358,7 +363,7 @@ export const updateUserSchema: Schema = {
         isObject: {
             errorMessage: 'Address must be an object!',
         },
-        optional: true
+        optional: true,
     },
 
     'address.country': {
@@ -368,7 +373,7 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     'address.city': {
@@ -378,7 +383,7 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     'address.street': {
@@ -388,41 +393,41 @@ export const updateUserSchema: Schema = {
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
     birthday: {
         in: ['body'],
         isDate: {
             errorMessage: 'Invalid date',
-            negated: true
+            negated: true,
         },
         toDate: true,
-        optional: true
+        optional: true,
     },
-    
+
     avatar: {
         in: ['body'],
-        isURL: {  // TODO: URL Validation isnt working as expceted
+        isURL: {
+            // TODO: URL Validation isnt working as expceted
             errorMessage: 'Invalid URL',
-            negated: true
+            negated: true,
         },
         isString: true,
         trim: true,
-        optional: true
+        optional: true,
     },
 
-    phone:{
-        in:['body'],
+    phone: {
+        in: ['body'],
         custom: {
             options: (value) => value === null || value.length === 10,
-            errorMessage: 'Phone number should be 10 digits'
+            errorMessage: 'Phone number should be 10 digits',
         },
         trim: true,
-        optional: true
-    }
-}
-
+        optional: true,
+    },
+};
 
 export const deleteUserSchema: Schema = {
     user_id: {
@@ -431,8 +436,8 @@ export const deleteUserSchema: Schema = {
             errorMessage: 'User ID is required!',
         },
         custom: {
-            options: (value, {req}) => value === req.jwtDecodedPayload?.user_id,
-            errorMessage: 'User ID does not match with the logged in user ID'
-        }
-    }
-}
+            options: (value, { req }) => value === req.jwtDecodedPayload?.user_id,
+            errorMessage: 'User ID does not match with the logged in user ID',
+        },
+    },
+};
