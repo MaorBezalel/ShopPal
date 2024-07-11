@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { OrderUserLink, OrderProductLink } from '@/shared/models/relationships';
 import { Address } from '@/shared/models/composites';
+import { OrderStatus } from '@/shared/types/enums/db.types';
+import { PGDataTransformer } from '@/shared/utils/helpers';
 
 @Entity('Order')
 export class Order {
@@ -10,13 +12,19 @@ export class Order {
     @Column({ type: 'date' })
     issued_time: Date;
 
-    @Column({ type: 'text' })
-    order_status: string;
+    @Column({ type: 'enum', enum: OrderStatus })
+    order_status: OrderStatus;
 
     @Column({ type: 'text', nullable: true })
     billing_info: string;
 
-    @Column({ type: 'jsonb' })
+    @Column({
+        type: 'text',
+        transformer: {
+            from: PGDataTransformer.fromPGCompositeType(Address),
+            to: PGDataTransformer.toPGCompositeType(Address),
+        },
+    })
     delivery_address: Address;
 
     @OneToMany(() => OrderUserLink, (orderUserLink) => orderUserLink.order)
