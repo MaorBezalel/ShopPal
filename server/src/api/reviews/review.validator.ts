@@ -116,9 +116,7 @@ export const updateReviewSchema: Schema = {
     },
     rating: {
         in: ['body'],
-        notEmpty: {
-            errorMessage: 'Rating is required!',
-        },
+        optional: true,
         isInt: {
             options: { min: 1, max: 5 },
             errorMessage: 'Rating must be a number between 1 and 5!',
@@ -127,9 +125,7 @@ export const updateReviewSchema: Schema = {
     },
     comment: {
         in: ['body'],
-        notEmpty: {
-            errorMessage: 'Comment is required!',
-        },
+        optional: true,
         isString: {
             errorMessage: 'Comment must be a string!',
         },
