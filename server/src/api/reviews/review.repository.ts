@@ -19,36 +19,36 @@ export const ReviewRepository = AppDataSource.getRepository(Review).extend({
         return await query.getMany();
     },
 
-    async isReviewAlreadyExists({ product_id, user_id }: Pick<Review, 'product_id' | 'user_id'>): Promise<boolean> {
-        const query = this.createQueryBuilder('review')
-            .where('review.product_id = :product_id', { product_id })
-            .andWhere('review.user_id = :user_id', { user_id });
-
-        return (await query.getCount()) > 0;
-    },
-
-    async insertReview(review: CreateReviewRequestProps): Promise<InsertResult> {
-        const reviewWithCurrentDate = { ...review, date: new Date() } as Review;
-        return await this.createQueryBuilder('review').insert().values(reviewWithCurrentDate).execute();
+    async insertReview(review: Review): Promise<InsertResult> {
+        return await this.createQueryBuilder('review').insert().values(review).execute();
     },
 
     async updateReview(updatedReviewDetails: UpdateReviewRequestProps): Promise<UpdateResult> {
         const { product_id, user_id } = updatedReviewDetails;
         const updatedReviewDetailsWithCurrentDate = { ...updatedReviewDetails, date: new Date() } as Partial<Review>;
 
-        return await this.createQueryBuilder('review')
-            .update()
+        return await this.createQueryBuilder()
+            .update(Review)
             .set(updatedReviewDetailsWithCurrentDate)
-            .where('review.product_id = :product_id', { product_id })
-            .andWhere('review.user_id = :user_id', { user_id })
+            .where('product_id = :product_id', { product_id })
+            .andWhere('user_id = :user_id', { user_id })
             .execute();
     },
 
     async deleteReview({ product_id, user_id }: DeleteReviewRequestProps): Promise<DeleteResult> {
-        return await this.createQueryBuilder('review')
+        return await this.createQueryBuilder()
             .delete()
-            .where('review.product_id = :product_id', { product_id })
-            .andWhere('review.user_id = :user_id', { user_id })
+            .from(Review)
+            .where('product_id = :product_id', { product_id })
+            .andWhere('user_id = :user_id', { user_id })
             .execute();
+    },
+
+    async isReviewAlreadyExists({ product_id, user_id }: Pick<Review, 'product_id' | 'user_id'>): Promise<boolean> {
+        const query = this.createQueryBuilder('review')
+            .where('review.product_id = :product_id', { product_id })
+            .andWhere('review.user_id = :user_id', { user_id });
+
+        return (await query.getCount()) > 0;
     },
 });

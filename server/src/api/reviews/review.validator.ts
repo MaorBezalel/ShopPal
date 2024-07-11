@@ -89,6 +89,10 @@ export const createReviewSchema: Schema = {
         isString: {
             errorMessage: 'Comment must be a string!',
         },
+        isLength: {
+            options: { min: 1, max: 500 },
+            errorMessage: 'Comment must be between 1 and 500 characters!',
+        },
     },
 };
 
@@ -126,6 +130,10 @@ export const updateReviewSchema: Schema = {
         optional: true,
         isString: {
             errorMessage: 'Comment must be a string!',
+        },
+        isLength: {
+            options: { min: 1, max: 500 },
+            errorMessage: 'Comment must be between 1 and 500 characters!',
         },
     },
 };

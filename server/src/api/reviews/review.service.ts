@@ -25,17 +25,13 @@ export class ReviewService {
         const isReviewExist = await ReviewRepository.isReviewAlreadyExists(reviewToCreate);
 
         if (isReviewExist) {
-            throw new AppError(
-                'Review already exists! Please try a different review',
-                HttpStatusCode.CONFLICT,
-                'createReview'
-            );
+            throw new AppError('User has already reviewed this product!', HttpStatusCode.CONFLICT, 'createReview');
         }
 
-        const result = await ReviewRepository.insertReview(reviewToCreate);
-        const newlyCreatedReview = { ...reviewToCreate, date: result.raw[0].date } as Review;
+        const reviewWithCurrentDate = { ...reviewToCreate, date: new Date() } as Review;
+        await ReviewRepository.insertReview(reviewWithCurrentDate);
 
-        return newlyCreatedReview;
+        return reviewWithCurrentDate;
     }
 
     public static async updateReview(updatedReviewDetails: UpdateReviewRequestProps): Promise<void> {
