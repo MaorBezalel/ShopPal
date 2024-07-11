@@ -37,3 +37,9 @@ export enum Gender {
     MALE = 'male',
     FEMALE = 'female',
 }
+
+export enum OrderStatus {
+    ARRIVED = 'arrived',
+    PURCHASED = 'purchased',
+    DELIVERING = 'delivering',
+}
