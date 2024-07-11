@@ -26,7 +26,7 @@ router.post(
     tryCatchMiddleware(ReviewController.createReview)
 );
 
-router.put(
+router.patch(
     '/:product_id',
     authorizationMiddleware,
     checkSchema(updateReviewSchema),
