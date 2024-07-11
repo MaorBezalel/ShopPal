@@ -3,10 +3,10 @@ import { checkSchema } from 'express-validator';
 import { ReviewController } from '@/api/reviews/review.controller';
 import { validationMiddleware, authorizationMiddleware, tryCatchMiddleware } from '@/middlewares';
 import {
-    getReviewsSchema, // no need for auth
-    createReviewSchema, // need auth
-    updateReviewSchema, // need auth
-    deleteReviewSchema, // need auth
+    getReviewsSchema,
+    createReviewSchema,
+    updateReviewSchema,
+    deleteReviewSchema,
 } from '@/api/reviews/review.validator';
 
 const router = Router();
