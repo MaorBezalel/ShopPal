@@ -7,7 +7,7 @@ export class OrderUserLink {
     order_id: string;
 
     @PrimaryColumn('uuid')
-    product_id: string;
+    user_id: string;
 
     @ManyToOne(() => Order, (order) => order.orderUserLinks)
     @JoinColumn({ name: 'order_id', referencedColumnName: 'order_id' })
