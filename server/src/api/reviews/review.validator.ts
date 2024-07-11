@@ -41,10 +41,10 @@ export const getReviewsSchema: Schema = {
     order: {
         in: ['query'],
         isString: true,
-        toLowerCase: true,
+        toUpperCase: true,
         isIn: {
-            options: [['asc', 'desc']],
-            errorMessage: 'Order must be either "asc" or "desc"!',
+            options: [['ASC', 'DESC']],
+            errorMessage: 'Order must be either "ASC" or "DESC"!',
         },
         optional: true,
     },
