@@ -3,48 +3,48 @@ import { AppDataSource } from '@/shared/db/pg.data-source';
 import { Cart } from '@/shared/models/relationships';
 
 export type CartRepositoryType = {
-    getUserCartWithProducts: (userId: string) => Promise<Cart[]>;
-    addProductToCart: (userId: string, productId: string, quantity: number) => Promise<InsertResult>;
-    removeProductFromCart: (userId: string, productId: string) => Promise<DeleteResult>;
-    removeAllProductsFromCart: (userId: string) => Promise<DeleteResult>;
+    getUserCartWithProducts: (user_id: string) => Promise<Cart[]>;
+    addProductToCart: (user_id: string, product_id: string, quantity: number) => Promise<InsertResult>;
+    removeProductFromCart: (user_id: string, product_id: string) => Promise<DeleteResult>;
+    removeAllProductsFromCart: (user_id: string) => Promise<DeleteResult>;
 };
 
 export const CartRepository = AppDataSource.getRepository(Cart).extend({
 
     // Retrieve a user's cart with all products
-    getUserCartWithProducts: async (userId: string): Promise<Cart[]> => {
+    getUserCartWithProducts: async (user_id: string): Promise<Cart[]> => {
         return AppDataSource.createQueryBuilder()
             .select('cart')
             .from(Cart, 'cart')
             .leftJoinAndSelect('cart.product', 'product')
-            .where('cart.user_id = :userId', { userId })
+            .where('cart.user_id = :user_id', { user_id })
             .getMany();
     },
 
     // Add a new product to a user's cart
-    addProductToCart: async (userId: string, productId: string, quantity: number): Promise<InsertResult> => {
+    addProductToCart: async (user_id: string, product_id: string, quantity: number): Promise<InsertResult> => {
         return AppDataSource.createQueryBuilder()
             .insert()
             .into(Cart)
-            .values({ user_id: userId, product_id: productId, quantity: quantity })
+            .values({ user_id: user_id, product_id: product_id, quantity: quantity })
             .execute();
     },
 
     // Remove a product from the cart
-    removeProductFromCart: async (userId: string, productId: string): Promise<DeleteResult> => {
+    removeProductFromCart: async (user_id: string, product_id: string): Promise<DeleteResult> => {
         return AppDataSource.createQueryBuilder()
             .delete()
             .from(Cart)
-            .where('user_id = :userId AND product_id = :productId', { userId, productId })
+            .where('user_id = :user_id AND product_id = :product_id', { user_id, product_id })
             .execute();
     },
 
     // Remove all products from a user's cart
-    removeAllProductsFromCart: async (userId: string): Promise<DeleteResult> => {
+    removeAllProductsFromCart: async (user_id: string): Promise<DeleteResult> => {
         return AppDataSource.createQueryBuilder()
             .delete()
             .from(Cart)
-            .where('user_id = :userId', { userId })
+            .where('user_id = :user_id', { user_id })
             .execute();
     },
 });
