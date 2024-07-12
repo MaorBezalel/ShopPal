@@ -26,7 +26,7 @@ export const addProductToCartSchema: Schema = {
     },
 
     product_id: {
-        in: ['params'],
+        in: ['body'],
         notEmpty: {
             errorMessage: 'Product ID is required!',
         },

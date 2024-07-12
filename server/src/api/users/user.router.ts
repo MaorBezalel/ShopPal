@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { loginByEmailSchema, loginByUsernameSchema, signupSchema, updateUserSchema, deleteUserSchema } from './user.validator';
 import UserController from '@/api/users/user.controller';
-import { check, checkSchema } from 'express-validator';
+import { checkSchema } from 'express-validator';
 import { validationMiddleware } from '@/middlewares/validation.middleware';
 
 import authorizationMiddleware from '@/middlewares/authorization.middleware';
