@@ -10,7 +10,7 @@ const router = Router();
 
 router.get('/:user_id');
 router.post('/');
-router.put('/:order_id');
+router.patch('/:order_id');
 router.delete('/:order_id');
 
 export default router;
