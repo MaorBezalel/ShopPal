@@ -45,20 +45,6 @@ export const createOrderForGuestUserSchema: Schema = {
             options: { min: 1 },
             errorMessage: 'Product IDs must be an array with at least one product ID!',
         },
-        custom: {
-            // For now we will not validate the UUIDs, but we will keep the code here for future reference
-            // options: (value) => {
-            //     const uuidRegex = '[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}';
-
-            //     if (!Array.isArray(value)) return false; // check if it's an array
-            //     if (value.length === 0) return false; // check if it's not empty
-            //     if (new Set(value).size !== value.length) return false; // check if all elements are unique
-            //     if (value.some((id) => !id.match(uuidRegex))) return false; // check if all elements are valid UUIDs
-
-            //     return true;
-            // },
-            errorMessage: 'Product IDs must be valid UUIDs!',
-        },
         errorMessage: 'Unknown validation error occurred for parameter "product_ids"!',
     },
 
@@ -69,7 +55,7 @@ export const createOrderForGuestUserSchema: Schema = {
         },
         isArray: {
             options: { min: 1 },
-            errorMessage: 'Quantities must be an array!',
+            errorMessage: 'Quantities must be non-empty array!',
         },
         custom: {
             options: (quantities, { req }) => {
@@ -86,21 +72,6 @@ export const createOrderForGuestUserSchema: Schema = {
             },
         },
         errorMessage: 'Unknown validation error occurred for parameter "quantity"!',
-    },
-
-    issued_time: {
-        in: ['body'],
-        notEmpty: {
-            errorMessage: 'Issued time is required!',
-        },
-        isDate: {
-            options: {
-                format: 'YYYY-MM-DD HH:mm:ss',
-                strictMode: true,
-            },
-            errorMessage: 'Issued time must be a valid date in the format "YYYY-MM-DD HH:mm:ss"!',
-        },
-        errorMessage: 'Unknown validation error occurred for parameter "issued_time"!',
     },
 
     // TODO: Maybe we should expect an object here instead of a string, since this could be a composite type containing multiple fields such as:
@@ -191,20 +162,6 @@ export const createOrderForAuthenticatedUserSchema: Schema = {
             options: { min: 1 },
             errorMessage: 'Product IDs must be an array with at least one product ID!',
         },
-        custom: {
-            // For now we will not validate the UUIDs, but we will keep the code here for future reference
-            // options: (value) => {
-            //     const uuidRegex = '[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}';
-
-            //     if (!Array.isArray(value)) return false; // check if it's an array
-            //     if (value.length === 0) return false; // check if it's not empty
-            //     if (new Set(value).size !== value.length) return false; // check if all elements are unique
-            //     if (value.some((id) => !id.match(uuidRegex))) return false; // check if all elements are valid UUIDs
-
-            //     return true;
-            // },
-            errorMessage: 'Product IDs must be valid UUIDs!',
-        },
         errorMessage: 'Unknown validation error occurred for parameter "product_ids"!',
     },
 
@@ -215,7 +172,7 @@ export const createOrderForAuthenticatedUserSchema: Schema = {
         },
         isArray: {
             options: { min: 1 },
-            errorMessage: 'Quantities must be an array!',
+            errorMessage: 'Quantities must non-empty array!',
         },
         custom: {
             options: (quantities, { req }) => {
@@ -232,21 +189,6 @@ export const createOrderForAuthenticatedUserSchema: Schema = {
             },
         },
         errorMessage: 'Unknown validation error occurred for parameter "quantity"!',
-    },
-
-    issued_time: {
-        in: ['body'],
-        notEmpty: {
-            errorMessage: 'Issued time is required!',
-        },
-        isDate: {
-            options: {
-                format: 'YYYY-MM-DD HH:mm:ss',
-                strictMode: true,
-            },
-            errorMessage: 'Issued time must be a valid date in the format "YYYY-MM-DD HH:mm:ss"!',
-        },
-        errorMessage: 'Unknown validation error occurred for parameter "issued_time"!',
     },
 
     // TODO: Maybe we should expect an object here instead of a string, since this could be a composite type containing multiple fields such as:
