@@ -41,9 +41,11 @@ export class PGDataTransformer {
      * @param fromClass - class to transform data from
      * @returns - function that transforms data from class instance to Postgres composite type
      */
-    static toPGCompositeType<TEmbeddedEntity extends object>(fromClass: Class<TEmbeddedEntity>): (value: any) => any {
-        return (data: new () => any) => {
-            const values = Object.values(data).map((value) => (isNullish(value) ? '' : value));
+    static toPGCompositeType<TEmbeddedEntity extends object>(fromClass: Class<TEmbeddedEntity>): (value: TEmbeddedEntity) => string {
+        return (data: TEmbeddedEntity) => {
+            const fields = Object.keys(new fromClass());
+            const values = fields.map(field => (isNullish(data[field as keyof TEmbeddedEntity]) ? '' : String(data[field as keyof TEmbeddedEntity])));
+    
             return `(${values.join(',')})`;
         };
     }
