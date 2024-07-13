@@ -3,11 +3,19 @@ import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 import { CartService } from './carts.service';
 
 export class CartController {
-    public static async getUserCartWithProducts(req: Request, res: Response, next: NextFunction) {
-        const user_id = req.params.user_id;
-        const userCart = await CartService.getUserCartWithProducts(user_id);
-        
-        res.status(HttpStatusCode.OK).json({ userCart });
+
+    public static async getCartWithProducts(req: Request, res: Response, next: NextFunction) {
+        const userType = req.jwtDecodedPayload;
+        if (!userType){
+            const product_ids = req.body.product_ids;
+            const products = await CartService.getProductsByIds(product_ids);
+            res.status(HttpStatusCode.OK).json({ products });
+        }
+        else{
+            const user_id = req.params.user_id;
+            const userCart = await CartService.getUserCartWithProducts(user_id);
+            res.status(HttpStatusCode.OK).json({ userCart });
+        }
     }
 
     public static async addProductToCart(req: Request, res: Response, next: NextFunction) {

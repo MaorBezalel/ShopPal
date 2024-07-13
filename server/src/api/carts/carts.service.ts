@@ -2,10 +2,16 @@ import { Cart } from "@/shared/models/relationships";
 import { CartRepository } from "./carts.repository";
 import AppError from '@/shared/exceptions/app-error';
 import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
+import { Product } from "@/shared/models/entities";
 
 export class CartService {
+
     public static async getUserCartWithProducts(user_id: string): Promise<Cart[]> {
         return await CartRepository.getUserCartWithProducts(user_id);
+    }
+
+    public static async getProductsByIds(product_ids: string[]): Promise<Product[]> {
+        return await CartRepository.getProductsByIds(product_ids);
     }
 
     public static async addProductToCart(user_id: string, product_id: string, quantity: number): Promise<void> {

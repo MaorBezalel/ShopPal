@@ -1,6 +1,7 @@
 import { InsertResult, DeleteResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
 import { Cart } from '@/shared/models/relationships';
+import { Product } from '@/shared/models/entities';
 
 export type CartRepositoryType = {
     getUserCartWithProducts: (user_id: string) => Promise<Cart[]>;
@@ -18,6 +19,15 @@ export const CartRepository = AppDataSource.getRepository(Cart).extend({
             .from(Cart, 'cart')
             .leftJoinAndSelect('cart.product', 'product')
             .where('cart.user_id = :user_id', { user_id })
+            .getMany();
+    },
+
+    // Retrieve products by their IDs
+    getProductsByIds: async (productIds: string[]): Promise<Product[]> => {
+        return AppDataSource.createQueryBuilder()
+            .select('product')
+            .from(Product, 'product')
+            .whereInIds(productIds)
             .getMany();
     },
 

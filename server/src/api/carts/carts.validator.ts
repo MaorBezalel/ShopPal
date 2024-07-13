@@ -13,6 +13,16 @@ export const getLoggedUserCartSchema: Schema = {
     },
 };
 
+export const getGuestCartSchema: Schema = {
+    product_ids: {
+        in: ['body'],
+        isArray: {
+            errorMessage: 'Product IDs must be an array!',
+        },
+    },
+
+};
+
 export const addProductToCartSchema: Schema = {
     user_id: {
         in: ['params'],
