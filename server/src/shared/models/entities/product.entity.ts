@@ -52,6 +52,7 @@ export class Product {
             from: PGDataTransformer.fromPGCompositeType(Dimension),
             to: PGDataTransformer.toPGCompositeType(Dimension),
         },
+        nullable: true
     })
     dimension: Dimension;
 

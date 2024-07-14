@@ -7,6 +7,7 @@ import AppError from '@/shared/exceptions/app-error';
 import { QueryFailedError } from 'typeorm';
 
 export const errorMiddleware = (error: Error, req: Request, res: Response<ErrorResponse>, next: NextFunction) => {
+
     if (error instanceof AppError) {
         return res.status(error.statusCode).json({
             type: error.name,

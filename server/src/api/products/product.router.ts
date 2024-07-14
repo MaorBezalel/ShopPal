@@ -1,34 +1,40 @@
 import { Router } from 'express';
-//import {
-//    createProductSchema, // auth
-//    updateProductSchema, // auth
-//    deleteProductSchema, // auth
-//    getOneProductSchema, // no auth
-//    getManyProductsSchema, // no auth
-//} from './product.validator';
-
+import tryCatchMiddleware from '@/middlewares/tryCatch.middleware';
+import { validationMiddleware } from '@/middlewares/validation.middleware';
+import ProductController from './product.controller';
+import { checkSchema } from 'express-validator';
+import ProductSchemaValidator from './product.validator';
 const router = Router();
 
-// all products routes
-// get query params:
-// - limit: number of products to return
-// - offset: number of products to skip
-// - sortBy: sort products by field
-// - order: order of sorting (asc, desc)
-// - categories: filter products by category (using array Category enum)
-// - searchByTitle: search products by title
-// - minPrice: filter products by minimum price
-// - maxPrice: filter products by maximum price
-// - minRating: filter products by minimum rating
-// - inStock: filter products that are in stock
-// - brand: fitler products by brand
-// - dimension: filter products by dimension
-router.get('/');
-router.post('/');
+router.get('/', 
+    checkSchema(ProductSchemaValidator.getManyProductSchema),
+    validationMiddleware,
+    tryCatchMiddleware(ProductController.getManyProducts));
 
-// single product routes
-router.get('/:product_id');
-router.put('/:product_id');
-router.delete('/:product_id');
+// NOTE: create product route will not be implemented right now in the frontend
+// TODO: requires authorization based on current logged user role
+router.post('/', 
+    checkSchema(ProductSchemaValidator.createProductSchema),
+    validationMiddleware,    
+    tryCatchMiddleware(ProductController.createProduct));
+
+router.get('/:product_id', 
+    checkSchema(ProductSchemaValidator.getOneProductSchema),
+    validationMiddleware,
+    tryCatchMiddleware(ProductController.getOneProduct));
+
+// NOTE: update product route will not be implemented right now in the frontend
+// TODO: requires authorization based on current logged user role
+router.patch('/:product_id', 
+    checkSchema(ProductSchemaValidator.updateProductSchema),
+    validationMiddleware,
+    tryCatchMiddleware(ProductController.updateProduct));
+
+// NOTE: delete product route will not be implemented right now in the frontend
+// TODO: requires authorization based on current logged user role 
+router.delete('/:product_id', 
+    checkSchema(ProductSchemaValidator.deleteProductSchema),
+    validationMiddleware,
+    tryCatchMiddleware(ProductController.deleteProduct));
 
 export default router;

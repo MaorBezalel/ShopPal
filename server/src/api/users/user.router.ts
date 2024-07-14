@@ -27,7 +27,7 @@ router.post(
     tryCatchMiddleware(UserController.login)
 );
 
-router.put('/:user_id', 
+router.patch('/:user_id', 
     authorizationMiddleware, 
     checkSchema(updateUserSchema), 
     validationMiddleware, 
