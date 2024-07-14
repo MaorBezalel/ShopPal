@@ -4,6 +4,12 @@ export enum Gender {
     OTHER = 'other',
 }
 
+export enum OrderStatus {
+    ARRIVED = 'arrived',
+    PURCHASED = 'purchased',
+    DELIVERING = 'delivering',
+}
+
 export enum Category {
     BEAUTY = 'beauty',
     FRAGRANCES = 'fragrances',

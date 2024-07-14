@@ -1,4 +1,4 @@
-import { Gender, Category } from '@/shared/types/enum.types';
+import { Gender, Category, OrderStatus } from '@/shared/types/enum.types';
 import { Address, NameDetails, Dimension } from '@/shared/types/composite.types';
 
 export type User = {
@@ -13,6 +13,10 @@ export type User = {
     avatar?: string;
     address: Address;
 };
+
+export type Admin = {
+    admin_since: Date;
+} & User;
 
 export type Product = {
     product_id: string;
@@ -36,5 +40,24 @@ export type Review = {
     user_id: string;
     rating: number;
     review: string;
-    created_at: Date;
+    date: Date;
 };
+
+export type Order = {
+    order_id: string;
+    issued_time: Date;
+    order_status: OrderStatus;
+    billing_info?: string;
+    delivery_address: Address;
+    // TODO: Add orderUserLinks and orderProductLinks (with the right server format)
+};
+
+export type CartItem = {
+    user_id: string;
+    product_id: string;
+    quantity: number;
+    __product__?: Product; // TODO: Use different alias in the server for this property (to: product)
+    __user__?: User; // TODO: Use different alias in the server for this property (to: user)
+};
+
+export type Cart = CartItem[];

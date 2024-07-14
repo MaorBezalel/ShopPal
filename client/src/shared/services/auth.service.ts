@@ -1,4 +1,11 @@
-import { SERVER_URL } from '@/shared/constants.';
-import axios from 'axios';
+import { API } from '.';
+import { ResponseError } from '@/shared/types/api.types';
 
-export const signup = async();
+export type RefreshTokenResponse = {
+    accessToken: string;
+};
+
+export const refreshToken = async (): Promise<RefreshTokenResponse | ResponseError> => {
+    const response = await API.post('/auth/refresh');
+    return response.data;
+};
