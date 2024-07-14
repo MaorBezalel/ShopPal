@@ -1,9 +1,6 @@
 import { User } from '@/shared/models/entities';
-import jwt from 'jsonwebtoken';
-import type { JwtPayload } from '@/shared/types/utils.types';
 import { UserRepository } from './user.repository';
 import bcrypt from 'bcryptjs';
-
 import AppError from '@/shared/exceptions/app-error';
 import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 
