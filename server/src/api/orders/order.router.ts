@@ -1,16 +1,54 @@
 import { Router } from 'express';
-//import {
-//    getOrdersSchema, // auth
-//    createOrderSchema, // no auth
-//    updateOrderSchema, // auth (would probably be used by 3rd party order management system)
-//    deleteOrderSchema, // auth (would probably be used by 3rd party payment system after the user received refund)
-//} from './product.validator';
+import { checkSchema } from 'express-validator';
+import { OrderController } from '@/api/orders/order.controller';
+import { validationMiddleware, authorizationMiddleware, tryCatchMiddleware } from '@/middlewares';
+import {
+    getOrdersSchema,
+    createOrderForGuestUserSchema,
+    createOrderForAuthenticatedUserSchema,
+    updateOrderSchema,
+    deleteOrderSchema,
+} from '@/api/orders/order.validator';
 
 const router = Router();
 
-router.get('/:user_id');
-router.post('/');
-router.put('/:order_id');
-router.delete('/:order_id');
+router.get(
+    '/:user_id',
+    authorizationMiddleware,
+    checkSchema(getOrdersSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.getOrders)
+);
+
+router.post(
+    '/',
+    checkSchema(createOrderForGuestUserSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.createOrderForGuestUser)
+);
+
+router.post(
+    '/:user_id',
+    authorizationMiddleware,
+    checkSchema(createOrderForAuthenticatedUserSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.createOrderForAuthenticatedUser)
+);
+
+router.patch(
+    '/:order_id',
+    authorizationMiddleware,
+    checkSchema(updateOrderSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.updateOrder)
+);
+
+router.delete(
+    '/:order_id',
+    authorizationMiddleware,
+    checkSchema(deleteOrderSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.deleteOrder)
+);
 
 export default router;

@@ -172,11 +172,15 @@ export type AtMostOneUndefined<T> = {
     [K in keyof T]: (Omit<T, K> & Partial<Pick<T, K>>) | T;
 }[keyof T];
 
+export type PartialProperties<TObject extends object, TKeys extends keyof TObject> = {
+    [TKey in keyof TObject]: TKey extends TKeys ? TObject[TKey] | undefined : TObject[TKey];
+};
+
 export type JwtPayload = {
     user_id: string;
     email: string;
     username: string;
-}
+};
 export type ErrorResponse = {
     type: string;
     message: string;
