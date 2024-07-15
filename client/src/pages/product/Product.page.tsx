@@ -1,3 +1,6 @@
+
+
+
 export const ProductPage = () => {
     return (
         <div>
