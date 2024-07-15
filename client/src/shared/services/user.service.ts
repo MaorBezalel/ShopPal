@@ -2,8 +2,12 @@ import { API } from '.';
 import type { User } from '@/shared/types/entities.types';
 import type { ResponseError } from '../types/api.types';
 
-type SignupRequest = Partial<User>;
-type LoginRequest = Pick<User, 'email' | 'password'> | Pick<User, 'username' | 'password'>;
+export type SignupRequest = Partial<User>;
+export type LoginRequest = {
+    email?: string;
+    password: string;
+    username?: string;
+};
 type UpdateUserRequest = Partial<User>;
 
 type SignupResponse = {
@@ -20,14 +24,28 @@ type UpdateUserResponse = {
 type DeleteUserResponse = {
     message: string;
 };
+type LogoutResponse = {
+    message: string;
+};
 
 export const signup = async (userDetails: SignupRequest): Promise<SignupResponse | ResponseError> => {
-    const response = await API.post('/auth/signup', userDetails);
+    const response = await API.post('/user/signup', userDetails);
     return response.data;
 };
 
 export const login = async (userDetails: LoginRequest): Promise<LoginResponse | ResponseError> => {
-    const response = await API.post('/auth/login', userDetails);
+    let response;
+
+    if (userDetails.email) {
+        response = await API.post('/user/loginByEmail', userDetails);
+    } else {
+        response = await API.post('/user/loginByUsername', userDetails);
+    }
+    return response.data;
+};
+
+export const logout = async (): Promise<LogoutResponse | ResponseError> => {
+    const response = await API.post('/user/logout');
     return response.data;
 };
 

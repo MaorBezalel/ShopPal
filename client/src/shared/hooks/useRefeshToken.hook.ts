@@ -9,7 +9,7 @@ export const useRefreshToken = () => {
         const response = await refreshToken();
 
         if ('accessToken' in response) {
-            setAuth((prev) => (prev !== null ? { ...prev, accessToken: response.accessToken } : null));
+            setAuth({ user: response.user, accessToken: response.accessToken });
         }
     }, []);
 
