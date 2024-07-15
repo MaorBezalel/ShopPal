@@ -49,15 +49,12 @@ export type Order = {
     order_status: OrderStatus;
     billing_info?: string;
     delivery_address: Address;
-    // TODO: Add orderUserLinks and orderProductLinks (with the right server format)
 };
 
 export type CartItem = {
     user_id: string;
     product_id: string;
     quantity: number;
-    __product__?: Product; // TODO: Use different alias in the server for this property (to: product)
-    __user__?: User; // TODO: Use different alias in the server for this property (to: user)
 };
 
 export type Cart = CartItem[];

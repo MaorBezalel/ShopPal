@@ -149,7 +149,7 @@ export const deleteReviewSchema: Schema = {
         },
     },
     user_id: {
-        in: ['body'],
+        in: ['params'],
         notEmpty: {
             errorMessage: 'User ID is required!',
         },

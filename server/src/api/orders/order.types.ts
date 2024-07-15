@@ -32,6 +32,7 @@ export type DeleteOrderProps = {
     user_id: string;
 };
 
-export type GetOrdersResponseProps = (Order & {
-    product: Pick<OrderProductLink, 'product_id' | 'quantity'> & Pick<Product, 'title' | 'thumbnail'>;
-})[];
+export type GetOrdersResponseProps = {
+    order_details: Order;
+    order_products: Partial<Product> & Pick<OrderProductLink, 'quantity'>[];
+};

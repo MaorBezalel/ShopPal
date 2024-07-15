@@ -29,7 +29,6 @@ export class PGDataTransformer {
 
                 return acc;
             }, {} as any);
-
             return result as TEmbeddedEntity;
         };
     }
@@ -41,11 +40,15 @@ export class PGDataTransformer {
      * @param fromClass - class to transform data from
      * @returns - function that transforms data from class instance to Postgres composite type
      */
-    static toPGCompositeType<TEmbeddedEntity extends object>(fromClass: Class<TEmbeddedEntity>): (value: TEmbeddedEntity) => string {
+    static toPGCompositeType<TEmbeddedEntity extends object>(
+        fromClass: Class<TEmbeddedEntity>
+    ): (value: TEmbeddedEntity) => string {
         return (data: TEmbeddedEntity) => {
             const fields = Object.keys(new fromClass());
-            const values = fields.map(field => (isNullish(data[field as keyof TEmbeddedEntity]) ? '' : String(data[field as keyof TEmbeddedEntity])));
-    
+            const values = fields.map((field) =>
+                isNullish(data[field as keyof TEmbeddedEntity]) ? '' : String(data[field as keyof TEmbeddedEntity])
+            );
+
             return `(${values.join(',')})`;
         };
     }

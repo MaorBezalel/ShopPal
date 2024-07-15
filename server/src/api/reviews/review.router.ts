@@ -35,7 +35,7 @@ router.patch(
 );
 
 router.delete(
-    '/:product_id',
+    '/:product_id/:user_id',
     authorizationMiddleware,
     checkSchema(deleteReviewSchema),
     validationMiddleware,

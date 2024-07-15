@@ -2,12 +2,10 @@ import { useEffect } from 'react';
 import { API_PRIVATE } from '../services';
 import { useRefreshToken } from '@/shared/hooks/useRefeshToken.hook';
 import { useAuth } from './useAuth.hook';
-import { useNavigate } from 'react-router';
 
 export function usePrivateAPI() {
     const refresh = useRefreshToken();
     const { auth } = useAuth();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const requestInterceptor = API_PRIVATE.interceptors.request.use(
@@ -31,11 +29,6 @@ export function usePrivateAPI() {
                     const newAccessToken = await refresh();
                     prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return API_PRIVATE(prevRequest);
-                }
-
-                // when refresh token is expired
-                else if (error?.response.status === 406 && !prevRequest?.sent) {
-                    navigate('/auth', { state: { from: location }, replace: true });
                 }
             }
         );
