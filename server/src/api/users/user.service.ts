@@ -4,16 +4,14 @@ import bcrypt from 'bcryptjs';
 import AppError from '@/shared/exceptions/app-error';
 import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
 
-
 export class UserService {
     public static async getUser(partialUser: Partial<User>): Promise<User> {
-        const user = await !!partialUser.email
+        const user = (await !!partialUser.email)
             ? await UserRepository.getUserByCredentials('email', partialUser.email!)
             : await UserRepository.getUserByCredentials('username', partialUser.username!);
 
-        if (!user) 
-        {
-                throw new AppError("User doesn't exist with current login details", HttpStatusCode.UNAUTHORIZED, 'getUser');
+        if (!user) {
+            throw new AppError("User doesn't exist with current login details", HttpStatusCode.NOT_FOUND, 'getUser');
         }
 
         return user;
@@ -27,13 +25,12 @@ export class UserService {
     }
 
     public static async updateUser(updatedUserDetails: Partial<User>, userId: string): Promise<void> {
-
         if (updatedUserDetails.password) {
             updatedUserDetails.password = await UserService.hashPassword(updatedUserDetails.password);
         }
 
         const result = await UserRepository.updateUsersBy(updatedUserDetails, 'user_id', userId);
-        
+
         if (result.affected === 0) {
             throw new AppError('Could not update user, user not found', HttpStatusCode.NOT_FOUND, 'updateUser');
         }
@@ -59,18 +56,15 @@ export class UserService {
         }
     }
 
-    
     public static async ensurePasswordMatching(user: User, password: string): Promise<void> {
         const isPasswordMatching = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatching) {
-            throw new AppError('User exists, but invalid credentials', HttpStatusCode.UNAUTHORIZED, 'passwordMatch');
+            throw new AppError('User exists, but invalid credentials', HttpStatusCode.NOT_FOUND, 'passwordMatch');
         }
     }
-
 
     private static async hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, parseInt(process.env.BCRYPT_HASH_LENGTH!));
     }
-
 }

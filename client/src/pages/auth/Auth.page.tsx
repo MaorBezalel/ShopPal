@@ -1,5 +1,5 @@
 
-import { login } from "@/shared/services/user.service";
+import { useApi } from "@/shared/hooks/useApi.hook";
 import type { LoginRequest } from "@/shared/services/user.service";
 import { useRef } from "react";
 import { useNavigate } from "react-router";
@@ -9,6 +9,7 @@ export function AuthPage() {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const rememberMeRef = useRef<HTMLInputElement>(null);
+    const {userApi} = useApi();
     const {setAuth, setRememberMe} = useAuth();
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export function AuthPage() {
         let loginResult;
 
         try {
-            loginResult = await login(loginDetails);
+            loginResult = await userApi.login(loginDetails);
         }
         catch(error) {
             console.error(error);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import { useAuth } from "@/shared/hooks/useAuth.hook";
 import { useRefreshToken } from "@/shared/hooks/useRefeshToken.hook";

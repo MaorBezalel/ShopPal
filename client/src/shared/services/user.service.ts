@@ -1,6 +1,7 @@
-import { API } from '.';
+import { useCallback } from 'react';
 import type { User } from '@/shared/types/entities.types';
 import type { ResponseError } from '../types/api.types';
+import { AxiosInstance } from 'axios';
 
 export type SignupRequest = Partial<User>;
 export type LoginRequest = {
@@ -28,36 +29,54 @@ type LogoutResponse = {
     message: string;
 };
 
-export const signup = async (userDetails: SignupRequest): Promise<SignupResponse | ResponseError> => {
-    const response = await API.post('/user/signup', userDetails);
-    return response.data;
+type useUserServiceProps = {
+    PRIVATE_API: AxiosInstance;
+    PUBLIC_API: AxiosInstance;
 };
 
-export const login = async (userDetails: LoginRequest): Promise<LoginResponse | ResponseError> => {
-    let response;
+export const useUserService = ({ PRIVATE_API, PUBLIC_API }: useUserServiceProps) => {
+    const signup = useCallback(
+        async (userDetails: SignupRequest): Promise<SignupResponse | ResponseError> => {
+            const response = await PUBLIC_API.post('/user/signup', userDetails);
+            return response.data;
+        },
+        [PUBLIC_API]
+    );
 
-    if (userDetails.email) {
-        response = await API.post('/user/loginByEmail', userDetails);
-    } else {
-        response = await API.post('/user/loginByUsername', userDetails);
-    }
-    return response.data;
-};
+    const login = useCallback(
+        async (userDetails: LoginRequest): Promise<LoginResponse | ResponseError> => {
+            let response;
 
-export const logout = async (): Promise<LogoutResponse | ResponseError> => {
-    const response = await API.post('/user/logout');
-    return response.data;
-};
+            if (userDetails.email) {
+                response = await PUBLIC_API.post('/user/loginByEmail', userDetails);
+            } else {
+                response = await PUBLIC_API.post('/user/loginByUsername', userDetails);
+            }
+            return response.data;
+        },
+        [PUBLIC_API]
+    );
 
-export const updateUser = async (
-    userDetails: UpdateUserRequest,
-    userId: string
-): Promise<UpdateUserResponse | ResponseError> => {
-    const response = await API.put(`/users/${userId}`, userDetails);
-    return response.data;
-};
+    const logout = useCallback(async (): Promise<LogoutResponse | ResponseError> => {
+        const response = await PUBLIC_API.post('/user/logout');
+        return response.data;
+    }, [PUBLIC_API]);
 
-export const deleteUser = async (userId: string): Promise<DeleteUserResponse | ResponseError> => {
-    const response = await API.delete(`/users/${userId}`);
-    return response.data;
+    const updateUser = useCallback(
+        async (userDetails: UpdateUserRequest, userId: string): Promise<UpdateUserResponse | ResponseError> => {
+            const response = await PRIVATE_API.patch(`/user/${userId}`, userDetails);
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
+
+    const deleteUser = useCallback(
+        async (userId: string): Promise<DeleteUserResponse | ResponseError> => {
+            const response = await PRIVATE_API.delete(`/user/${userId}`);
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
+
+    return { signup, login, logout, updateUser, deleteUser };
 };

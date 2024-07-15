@@ -3,15 +3,16 @@ import home_banner_lottie from '@/assets/lottie/home-banner.json';
 import products_banner_svg from '@/assets/svgs/products-banner.svg';
 import { useNavigate } from 'react-router';
 import { useAuth } from '@/shared/hooks/useAuth.hook';
-import { logout } from '@/shared/services/user.service';
+import { useApi } from '@/shared/hooks/useApi.hook';
 
 export function HomePage() {
     const navigate = useNavigate();
+    const { userApi } = useApi();
     const { auth, setAuth } = useAuth();
     
     const handleLogout = async () => {
         try {
-            const message = await logout();
+            const message = await userApi.logout();
             setAuth(null);
             console.log(message);
         }
@@ -19,7 +20,6 @@ export function HomePage() {
             console.error(error);
         }
     }
-    
     return (
     <>
         <Lottie animationData={home_banner_lottie} loop={true} className="h-[40rem] w-[40rem]" />

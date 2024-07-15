@@ -14,11 +14,14 @@ export default function App() {
     return (
         <Routes>
             {/* public routes */}
-            <Route path="/" element={<HomePage />} />
+            <Route element={<PersistentLogin />}>
+                <Route path="/" element={<HomePage />} />
+            </Route>
             <Route path="products" element={<ProductsPage />} />
             <Route path="product/:id" element={<ProductPage />} />
             <Route path="auth" element={<AuthPage />} />
             <Route path="cart" element={<CartPage />} />
+            
 
             {/* private routes */}
             <Route element={<PersistentLogin />}>

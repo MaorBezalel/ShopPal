@@ -1,6 +1,7 @@
-import { API } from '.';
 import type { Cart, Product } from '@/shared/types/entities.types';
 import type { ResponseError } from '../types/api.types';
+import { useCallback } from 'react';
+import { AxiosInstance } from 'axios';
 
 type GetGuestCartRequest = {
     product_ids: string[];
@@ -26,41 +27,60 @@ type DeleteCartResponse = {
     message: string;
 };
 
-export const GetGuestCart = async (
-    productDetails: GetGuestCartRequest
-): Promise<GetGuestCartResponse | ResponseError> => {
-    const response = await API.post('/cart/', productDetails);
-
-    return response.data;
+type useCartServiceProps = {
+    PRIVATE_API: AxiosInstance;
+    PUBLIC_API: AxiosInstance;
 };
 
-export const GetUserCart = async (userId: string): Promise<GetUserCartResponse | ResponseError> => {
-    const response = await API.get(`/cart/${userId}`);
+export const useCartService = ({ PRIVATE_API, PUBLIC_API }: useCartServiceProps) => {
+    const getGuestCart = useCallback(
+        async (productDetails: GetGuestCartRequest): Promise<GetGuestCartResponse | ResponseError> => {
+            const response = await PUBLIC_API.post('/cart/', productDetails);
 
-    return response.data;
-};
+            return response.data;
+        },
+        [PUBLIC_API]
+    );
 
-export const AddProductToCart = async (
-    productId: string,
-    quantity: number,
-    userId: string
-): Promise<AddProductToCartResponse | ResponseError> => {
-    const response = await API.post(`/cart/${userId}`, { productId, quantity });
+    const getUserCart = useCallback(
+        async (userId: string): Promise<GetUserCartResponse | ResponseError> => {
+            const response = await PRIVATE_API.get(`/cart/${userId}`);
 
-    return response.data;
-};
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
 
-export const RemoveProductFromCart = async (
-    productId: string,
-    userId: string
-): Promise<DeleteProductFromCartResponse | ResponseError> => {
-    const response = await API.delete(`/cart/${userId}/${productId}`);
+    const addProductToCart = useCallback(
+        async (
+            productId: string,
+            quantity: number,
+            userId: string
+        ): Promise<AddProductToCartResponse | ResponseError> => {
+            const response = await PRIVATE_API.post(`/cart/${userId}`, { productId, quantity });
 
-    return response.data;
-};
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
 
-export const RemoveCart = async (userId: string): Promise<DeleteCartResponse | ResponseError> => {
-    const response = await API.delete(`/cart/${userId}`);
+    const removeProductFromCart = useCallback(
+        async (productId: string, userId: string): Promise<DeleteProductFromCartResponse | ResponseError> => {
+            const response = await PRIVATE_API.delete(`/cart/${userId}/${productId}`);
 
-    return response.data;
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
+
+    const removeCart = useCallback(
+        async (userId: string): Promise<DeleteCartResponse | ResponseError> => {
+            const response = await PRIVATE_API.delete(`/cart/${userId}`);
+
+            return response.data;
+        },
+        [PRIVATE_API]
+    );
+
+    return { getGuestCart, getUserCart, addProductToCart, removeProductFromCart, removeCart };
 };
