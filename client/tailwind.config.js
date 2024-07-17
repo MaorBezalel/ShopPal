@@ -72,17 +72,18 @@ export default {
             },
         },
         screens: {
-            'mobile-sm': '320px',
-            'mobile-md': '375px',
-            'mobile-lg': '425px',
+            // a "desktop-first" approach (larger screens first and smaller screens later)
+            'pc-lg': { min: '1680px' },
+            'pc-md': { max: '1679px', min: '1440px' },
+            'pc-sm': { max: '1439px', min: '1280px' },
 
-            'tablet-sm': '640px',
-            'tablet-md': '768px',
-            'tablet-lg': '1024px',
+            'tablet-lg': { max: '1279px', min: '1024px' },
+            'tablet-md': { max: '1023px', min: '768px' },
+            'tablet-sm': { max: '767px', min: '640px' },
 
-            'pc-sm': '1280px',
-            'pc-md': '1440px',
-            'pc-lg': '1680px',
+            'mobile-lg': { max: '639px', min: '480px' },
+            'mobile-md': { max: '479px', min: '320px' },
+            'mobile-sm': { max: '319px' },
         },
     },
     plugins: [],
