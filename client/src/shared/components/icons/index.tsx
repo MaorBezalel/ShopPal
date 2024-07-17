@@ -1,0 +1,9 @@
+export { IconLogin } from './IconLogin.icon';
+export { IconShoppingBag } from './IconShoppingBag.icon';
+export { IconGithub } from './IconGitHub.icon';
+export { IconUser } from './IconUser.icon';
+export { IconEmail } from './IconEmail.icon';
+export { IconPassword } from './IconPassword.icon';
+export { IconPasswordEye } from './IconPasswordEye.icon';
+export { IconTheme } from './IconTheme.icon';
+export { IconLogout } from './IconLogout.icon';
