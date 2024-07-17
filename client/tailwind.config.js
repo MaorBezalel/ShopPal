@@ -71,6 +71,19 @@ export default {
                 },
             },
         },
+        screens: {
+            'mobile-sm': '320px',
+            'mobile-md': '375px',
+            'mobile-lg': '425px',
+
+            'tablet-sm': '640px',
+            'tablet-md': '768px',
+            'tablet-lg': '1024px',
+
+            'pc-sm': '1280px',
+            'pc-md': '1440px',
+            'pc-lg': '1680px',
+        },
     },
     plugins: [],
 };
