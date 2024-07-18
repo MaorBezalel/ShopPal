@@ -1,4 +1,6 @@
 import React from 'react';
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router';
 import type { Product } from '@/shared/types/entities.types';
 import { ProductCardColumn } from './ProductCardColumn';
 import { ProductCardRow } from './ProductCardRow';
@@ -10,11 +12,17 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({cardShape, product} : ProductCardProps) => {
+    
+    const navigator = useNavigate();
+
+    const handleProductCardClick = useCallback(() => {
+        navigator(`/product/${product.product_id}`, { state: { product } });
+    }, []);
 
     return (
-        <>
+        <div onClick={handleProductCardClick}>
             {cardShape === 'column' ? <ProductCardColumn product={product} /> : <ProductCardRow product={product}/>}
-        </>
+        </div>
     )
 };
 

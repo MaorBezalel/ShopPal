@@ -19,7 +19,7 @@ export const usePaginatedQuery = (stringKey: string, queryFn: (config: any) => P
         return res;
     }, [itemsPerPage, saveResults, page, filters, offset]);
 
-    const { isLoading, isError, error } = useQuery({
+    const { isLoading, isError, error, isFetching } = useQuery({
         queryKey: [stringKey, page, itemsPerPage, filters],
         queryFn: runQuery,
         refetchOnWindowFocus: false,
@@ -34,8 +34,9 @@ export const usePaginatedQuery = (stringKey: string, queryFn: (config: any) => P
         data,
         page,
         itemsPerPage,
-        isInitialLoading: isLoading && page === 1,
+        isInitialLoading: isFetching && page === 1,
         isLoading,
+        isFetching,
         isError,
         error,
         goToNextPage,

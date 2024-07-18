@@ -66,7 +66,6 @@ const [hasMore, setHasMore] = useState<boolean>(true);
   } = usePaginatedQuery('products', fetchProducts, productsOptions);
 
 
-
   return {
     products: data || [],
     sortOptions,
