@@ -1,12 +1,20 @@
-import { AppDataSource } from "@/shared/db/pg.data-source";
-import { DeleteResult, UpdateResult, InsertResult } from "typeorm";
-import { Product } from "@/shared/models/entities";
-import { Nullable } from "@/shared/types/utils.types";
-import { deleteProductParameters, getManyProductsParameters, getOneProductParameters, updateProductParameters } from "./product.types";
+import { AppDataSource } from '@/shared/db/pg.data-source';
+import { DeleteResult, UpdateResult, InsertResult } from 'typeorm';
+import { Product } from '@/shared/models/entities';
+import { Nullable } from '@/shared/types/utils.types';
+import {
+    deleteProductParameters,
+    getManyProductsParameters,
+    getOneProductParameters,
+    updateProductParameters,
+} from './product.types';
 
 type ProductRepositoryType = {
     getProductById: (getOneProductParams: getOneProductParameters) => Promise<Nullable<Product>>;
-    updateProductById: (updatedProductDetails: Partial<Product>, updateProductParams: updateProductParameters) => Promise<UpdateResult>;
+    updateProductById: (
+        updatedProductDetails: Partial<Product>,
+        updateProductParams: updateProductParameters
+    ) => Promise<UpdateResult>;
     deleteProductById: (deleteProductParams: deleteProductParameters) => Promise<DeleteResult>;
     addProduct: (product: Product) => Promise<InsertResult>;
     getProducts: (getManyProductsParameters: getManyProductsParameters) => Promise<Product[]>;
@@ -20,14 +28,14 @@ const ProductRepository: ProductRepositoryType = AppDataSource.getRepository(Pro
             .where('product.product_id = :productId', { productId: product_id })
             .getOne(),
 
-    updateProductById: (updatedProductDetails: Partial<Product>,{ product_id }: updateProductParameters) =>
+    updateProductById: (updatedProductDetails: Partial<Product>, { product_id }: updateProductParameters) =>
         AppDataSource.createQueryBuilder()
             .update(Product)
             .set(updatedProductDetails)
             .where('product_id = :productId', { productId: product_id })
             .execute(),
 
-    deleteProductById: ({ product_id }: deleteProductParameters) => 
+    deleteProductById: ({ product_id }: deleteProductParameters) =>
         AppDataSource.createQueryBuilder()
             .delete()
             .from(Product)
@@ -35,14 +43,21 @@ const ProductRepository: ProductRepositoryType = AppDataSource.getRepository(Pro
             .execute(),
 
     addProduct: (product: Product) =>
-        AppDataSource.createQueryBuilder()
-            .insert()
-            .into(Product)
-            .values(product)
-            .execute(),
+        AppDataSource.createQueryBuilder().insert().into(Product).values(product).execute(),
 
-    getProducts: ({ offset, limit, categories, title, sortBy, order, brand, minPrice, maxPrice, minRating, inStock }: getManyProductsParameters) =>
-    {
+    getProducts: ({
+        offset,
+        limit,
+        categories,
+        title,
+        sortBy,
+        order,
+        brand,
+        minPrice,
+        maxPrice,
+        minRating,
+        inStock,
+    }: getManyProductsParameters) => {
         const query = AppDataSource.createQueryBuilder()
             .select('product')
             .from(Product, 'product')
@@ -65,13 +80,16 @@ const ProductRepository: ProductRepositoryType = AppDataSource.getRepository(Pro
             inStock ? query.andWhere('product.stock > 0') : query.andWhere('product.stock = 0');
         }
 
-        return query
-            .offset(offset)
-            .limit(limit)
-            .orderBy(`product.${sortBy}`, order)
-            .getMany();
-    }
+        query.offset(offset).limit(limit);
 
+        if (sortBy === 'title') {
+            query.orderBy({ [`product.title`]: order });
+        } else {
+            query.orderBy({ [`product.${sortBy}`]: order, 'product.title': 'ASC' });
+        }
+
+        return query.getMany();
+    },
 });
 
 export default ProductRepository;

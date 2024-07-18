@@ -1,13 +1,13 @@
-import { Category } from "@/shared/types/enums/db.types";
-import { Product } from "@/shared/models/entities";
-import { Nullable } from "@/shared/types/utils.types";
+import { Category } from '@/shared/types/enums/db.types';
+import { Product } from '@/shared/models/entities';
+import { Nullable } from '@/shared/types/utils.types';
 
 export type getManyProductsParameters = {
     offset: number;
     limit: number;
     categories: Nullable<Category[]>;
     title: Nullable<string>;
-    sortBy: Pick<Product, 'title' | 'price' | 'rating' | 'stock' | 'brand'>;
+    sortBy: keyof Pick<Product, 'title' | 'price' | 'rating' | 'stock' | 'brand'>;
     order: 'ASC' | 'DESC';
     brand: Nullable<string>;
     minPrice: number;
@@ -27,7 +27,6 @@ export type updateProductParameters = {
 export type deleteProductParameters = {
     product_id: string;
 };
-
 
 export type createProductBody = Product;
 export type updateProductBody = Partial<Product>;
