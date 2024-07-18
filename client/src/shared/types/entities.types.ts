@@ -55,6 +55,7 @@ export type CartItem = {
     user_id: string;
     product_id: string;
     quantity: number;
+    __product__: Product;
 };
 
 export type Cart = CartItem[];

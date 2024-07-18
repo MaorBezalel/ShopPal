@@ -12,7 +12,7 @@ type GetGuestCartResponse = {
 };
 
 type GetUserCartResponse = {
-    userCart: Cart[];
+    userCart: Cart;
 };
 
 type AddProductToCartResponse = {
@@ -33,6 +33,7 @@ type useCartServiceProps = {
 };
 
 export const useCartService = ({ PRIVATE_API, PUBLIC_API }: useCartServiceProps) => {
+    
     const getGuestCart = useCallback(
         async (productDetails: GetGuestCartRequest): Promise<GetGuestCartResponse | ResponseError> => {
             const response = await PUBLIC_API.post('/cart/', productDetails);

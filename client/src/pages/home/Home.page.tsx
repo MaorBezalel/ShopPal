@@ -1,6 +1,6 @@
 import Lottie from 'lottie-react';
 import home_banner_lottie from '@/assets/lottie/home-banner.json';
-import products_banner_svg from '@/assets/svgs/products-banner.svg';
+//import products_banner_svg from '@/assets/svgs/products-banner.svg';
 import { useNavigate } from 'react-router';
 import { useAuth } from '@/shared/hooks/useAuth.hook';
 import { useApi } from '@/shared/hooks/useApi.hook';
