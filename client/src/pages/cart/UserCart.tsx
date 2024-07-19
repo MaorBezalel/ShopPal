@@ -17,35 +17,42 @@ type UserCartProps = {
     const isMounted = useRef<boolean>(false);
     const userId = useAuth().auth?.user.user_id;
     const [cartItems, setCartItems] = useState<Cart>();
+    const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
 
     useEffect(() => {
         isMounted.current = true;
         const fetchData = async () => {
+            setIsLoading(true);
             if (userId) {
+              try {
                 const response = await api.cartApi.getUserCart(userId);
-                console.log(response);
                 if ('userCart' in response) {
-                    isMounted.current &&
-                    setCartItems(response.userCart);
-                    }
-                else {
-                    console.log(response.message);
+                  setCartItems(response.userCart);
+                  setIsEmpty(response.userCart.length === 0);
+                } else {
+                  console.log(response.message);
+                  setIsError(true);
                 }
+              } catch (error) {
+                console.error("Fetching error:", error);
+                setIsError(true);
+              }
             }
-        };
-
-        fetchData();
-        return () => {
+            setIsLoading(false);
+          };
+      
+          fetchData();
+          return () => {
             isMounted.current = false;
-        };
-    }, [api.cartApi, userId]);
+          };
+        }, [api.cartApi, userId]);
 
-    // Inside UserCart or GuestCart component
 const calculateTotalPrice = () => {
     // Logic to calculate total price based on cart items
     let totalPrice = 0;
-    // Assuming cartItems is an array of items in the cart
     cartItems?.forEach(item => {
         totalPrice += item.__product__.price * item.quantity;
     });
@@ -97,16 +104,24 @@ useEffect(() => {
 
     return (
         <div>
-            {cartItems?.map((item) => (
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : isError ? (
+          <p>Error loading cart.</p>
+        ) : isEmpty ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          cartItems?.map((item) => (
             <ProductDisplayInCart
-                key={item.__product__.product_id}
-                thumbnail={item.__product__.thumbnail}
-                title={item.__product__.title}
-                price={item.__product__.price}
-                quantity={item.quantity}
-                onRemoveProduct={() => handleRemoveProductFromCart(item.__product__.product_id)}
+              key={item.__product__.product_id}
+              thumbnail={item.__product__.thumbnail}
+              title={item.__product__.title}
+              price={item.__product__.price}
+              quantity={item.quantity}
+              onRemoveProduct={() => handleRemoveProductFromCart(item.__product__.product_id)}
             />
-        ))}
-        </div>
+          ))
+        )}
+      </div>
     );
 }

@@ -16,26 +16,45 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     const isMounted = useRef<boolean>(false);
     const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>, quantities: Array<number> }>('cart', { product_ids: [], quantities: [] });
     const [productDetails, setProductDetails] = useState<Product[]>([]);
-    
+    const [isLoading, setIsLoading] = useState(true); // New state for loading
+    const [isError, setIsError] = useState(false); // New state for error
+    const [isEmpty, setIsEmpty] = useState(false); // New state for empty cart
 
 
 
     useEffect(() => {
-        isMounted.current = true;
         const fetchData = async () => {
+            isMounted.current = true;
+            setIsLoading(true); // Start loading
+            setIsError(false); // Reset error state
             if (cart.product_ids.length) {
-                const response = await api.cartApi.getGuestCart({ product_ids: cart.product_ids});
-                console.log("Response:", response);
-                if ('products' in response) {
-                    isMounted.current &&
-                    setProductDetails(response.products);
-                    console.log("Product Details:", productDetails);
-                }else{
-                    console.log(response.message);
+                const isValidQuantities = cart.quantities.length === cart.product_ids.length && cart.quantities.every(q => typeof q === 'number');
+
+                if (!isValidQuantities) {
+                    console.error("Invalid cart state: Quantities and Product IDs mismatch or Quantities not all numbers");
+                    setIsError(true); // Set error state due to invalid cart state
+                    setIsLoading(false); // End loading since we're not proceeding with the fetch
+                    setCart({ product_ids: [], quantities: [] }); // Clear the cart to prevent further errors
+                    return; // Exit the function early
+                }
+                try {
+                    const response = await api.cartApi.getGuestCart({ product_ids: cart.product_ids });
+                    if ('products' in response) {
+                        setProductDetails(response.products);
+                        setIsEmpty(response.products.length === 0); // Check if the response is empty
+                    } else {
+                        console.log(response.message);
+                        setIsError(true); // Set error state if response doesn't contain products
+                    }
+                } catch (error) {
+                    console.error("Fetching error:", error);
+                    setIsError(true);
                 }
             } else {
                 console.log("No product IDs found in local storage");
+                setIsEmpty(true); // Set empty state if no product IDs
             }
+            setIsLoading(false); // End loading
         };
 
         fetchData();
@@ -72,7 +91,6 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
       };
 
       const handleClearCart = () => {
-        console.log("Clearing cart");
         setCart({ product_ids: [], quantities: [] });
         setProductDetails([]);
         onTotalPriceUpdate(0);
@@ -91,16 +109,24 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
 
     return(
         <div>
-            {productDetails.map((product, index) => (
-                <ProductDisplayInCart
-                    key={product.product_id}
-                    thumbnail={product.thumbnail}
-                    title={product.title}
-                    price={product.price}
-                    quantity={cart.quantities[index]}
-                    onRemoveProduct={() => removeProductFromCart(product.product_id)}
-                />
-        ))}
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : isError ? (
+                <div>Error loading cart. Please try again later.</div>
+            ) : isEmpty ? (
+                <div>Your cart is empty.</div>
+            ) : (
+                productDetails.map((product, index) => (
+                    <ProductDisplayInCart
+                        key={product.product_id}
+                        thumbnail={product.thumbnail}
+                        title={product.title}
+                        price={product.price}
+                        quantity={cart.quantities[index]}
+                        onRemoveProduct={() => removeProductFromCart(product.product_id)}
+                    />
+                ))
+            )}
         </div>
     );
 
