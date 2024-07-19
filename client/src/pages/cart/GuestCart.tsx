@@ -16,17 +16,17 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     const isMounted = useRef<boolean>(false);
     const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>, quantities: Array<number> }>('cart', { product_ids: [], quantities: [] });
     const [productDetails, setProductDetails] = useState<Product[]>([]);
-    const [isLoading, setIsLoading] = useState(true); // New state for loading
-    const [isError, setIsError] = useState(false); // New state for error
-    const [isEmpty, setIsEmpty] = useState(false); // New state for empty cart
+    const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false); 
 
 
 
     useEffect(() => {
         const fetchData = async () => {
             isMounted.current = true;
-            setIsLoading(true); // Start loading
-            setIsError(false); // Reset error state
+            setIsLoading(true);
+            setIsError(false);
             if (cart.product_ids.length) {
                 const isValidQuantities = cart.quantities.length === cart.product_ids.length && cart.quantities.every(q => typeof q === 'number');
 
@@ -35,7 +35,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
                     setIsError(true); // Set error state due to invalid cart state
                     setIsLoading(false); // End loading since we're not proceeding with the fetch
                     setCart({ product_ids: [], quantities: [] }); // Clear the cart to prevent further errors
-                    return; // Exit the function early
+                    return;
                 }
                 try {
                     const response = await api.cartApi.getGuestCart({ product_ids: cart.product_ids });
@@ -54,7 +54,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
                 console.log("No product IDs found in local storage");
                 setIsEmpty(true); // Set empty state if no product IDs
             }
-            setIsLoading(false); // End loading
+            setIsLoading(false);
         };
 
         fetchData();
@@ -84,7 +84,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
           const newQuantities = [...cart.quantities];
           newProductIds.splice(productIndex, 1);
           newQuantities.splice(productIndex, 1);
-          setCart({ product_ids: newProductIds, quantities: newQuantities }); // Correctly updates local storage
+          setCart({ product_ids: newProductIds, quantities: newQuantities });
     
           setProductDetails(prevDetails => prevDetails.filter(product => product.product_id !== productId));
         }
@@ -110,11 +110,11 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     return(
         <div>
             {isLoading ? (
-                <div>Loading...</div>
+                <p className="m-5">Loading...</p>
             ) : isError ? (
-                <div>Error loading cart. Please try again later.</div>
+                <p className="m-5">Error loading cart. Please try again later.</p>
             ) : isEmpty ? (
-                <div>Your cart is empty.</div>
+                <p className="m-5">Your cart is empty.</p>
             ) : (
                 productDetails.map((product, index) => (
                     <ProductDisplayInCart

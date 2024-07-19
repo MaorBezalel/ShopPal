@@ -126,3 +126,8 @@
         --accent-950: #fcf2e9;
     }
 }
+@layer utilities {
+    .container-highlight {
+        @apply outline outline-1 outline-red-600;
+    }
+}

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    darkMode: 'selector', // will apply dark mode (all elements with `dark:` perfix) only if the `dark` class is present in the `html` tag
     theme: {
         extend: {
             colors: {
@@ -70,6 +71,20 @@ export default {
                     950: 'var(--accent-950)',
                 },
             },
+        },
+        screens: {
+            // a "desktop-first" approach (larger screens first and smaller screens later)
+            'pc-lg': { min: '1680px' },
+            'pc-md': { max: '1679px', min: '1440px' },
+            'pc-sm': { max: '1439px', min: '1280px' },
+
+            'tablet-lg': { max: '1279px', min: '1024px' },
+            'tablet-md': { max: '1023px', min: '768px' },
+            'tablet-sm': { max: '767px', min: '640px' },
+
+            'mobile-lg': { max: '639px', min: '480px' },
+            'mobile-md': { max: '479px', min: '320px' },
+            'mobile-sm': { max: '319px' },
         },
     },
     plugins: [],

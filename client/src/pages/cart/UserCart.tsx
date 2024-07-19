@@ -21,7 +21,6 @@ type UserCartProps = {
     const [isError, setIsError] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
 
-
     useEffect(() => {
         isMounted.current = true;
         const fetchData = async () => {
@@ -51,7 +50,6 @@ type UserCartProps = {
         }, [api.cartApi, userId]);
 
 const calculateTotalPrice = () => {
-    // Logic to calculate total price based on cart items
     let totalPrice = 0;
     cartItems?.forEach(item => {
         totalPrice += item.__product__.price * item.quantity;
@@ -72,7 +70,7 @@ const handleRemoveProductFromCart = async (productId: string) => {
             // Filter out the removed product and update state
             setCartItems(currentItems => currentItems?.filter(item => item.__product__.product_id !== productId));
         } else {
-            console.error(response.message); // Handle error scenario
+            console.error(response.message);
         }
     } catch (error) {
         console.error("Error removing product from cart:", error);
@@ -88,7 +86,7 @@ const handleClearCart = async () => {
             setCartItems([]);
             onClearCart(); // Notify parent component that the cart is cleared
         } else {
-            console.error(response.message); // Handle error scenario
+            console.error(response.message);
         }
     } catch (error) {
         console.error("Error clearing cart:", error);
@@ -105,11 +103,11 @@ useEffect(() => {
     return (
         <div>
         {isLoading ? (
-          <p>Loading...</p>
+          <p className="m-5">Loading...</p>
         ) : isError ? (
-          <p>Error loading cart.</p>
+          <p className="m-5">Error loading cart.</p>
         ) : isEmpty ? (
-          <p>Your cart is empty.</p>
+          <p className="m-5">Your cart is empty.</p>
         ) : (
           cartItems?.map((item) => (
             <ProductDisplayInCart
