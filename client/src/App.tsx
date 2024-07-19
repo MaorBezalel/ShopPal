@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { HomePage } from '@/pages/home/Home.page.tsx';
 import { ProductsPage } from '@/pages/products/Products.page';
 import { ProductPage } from '@/pages/product/Product.page';
@@ -21,7 +21,11 @@ export default function App() {
                 </Route>
                 <Route path="products" element={<ProductsPage />} />
                 <Route path="product/:id" element={<ProductPage />} />
-                <Route path="auth" element={<AuthPage />} />
+                <Route path="auth">
+                    <Route path="/auth" element={<Navigate to="/auth/login" />} />
+                    <Route path="login" element={<AuthPage type="login" />} />
+                    <Route path="signup" element={<AuthPage type="signup" />} />
+                </Route>
                 <Route path="cart" element={<CartPage />} />
 
                 {/* private routes */}

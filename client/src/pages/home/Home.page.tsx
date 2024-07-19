@@ -42,7 +42,7 @@ export function HomePage() {
                     </Link>
                     {!auth?.user && (
                         <Link
-                            to="/auth"
+                            to="/auth/login"
                             className="flex flex-row items-center gap-3 rounded-md bg-secondary-300 px-8 py-4 text-3xl text-background-50 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:bg-secondary-400 hover:brightness-100 active:scale-95 active:bg-secondary-500"
                         >
                             <span>Login</span>

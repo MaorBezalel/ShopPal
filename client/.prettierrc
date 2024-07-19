@@ -8,5 +8,6 @@
     "arrowParens": "always",
     "quoteProps": "as-needed",
     "useTabs": false,
+    "singleAttributePerLine": true,
     "plugins": ["prettier-plugin-tailwindcss"]
 }
