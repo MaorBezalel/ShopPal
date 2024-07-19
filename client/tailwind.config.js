@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    darkMode: 'selector', // will apply dark mode (all elements with `dark:` perfix) only if the `dark` class is present in the `html` tag
     theme: {
         extend: {
             colors: {
