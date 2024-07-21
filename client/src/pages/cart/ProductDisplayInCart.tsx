@@ -11,7 +11,7 @@ interface ProductDisplayProps {
 
 
 
-export const ProductDisplayInCart = ({title, price, quantity, thumbnail, onRemoveProduct  }: ProductDisplayProps) => {
+export const ProductDisplayInCart = ({ title, price, quantity, thumbnail, onRemoveProduct }: ProductDisplayProps) => {
 
     return (
         <div className="container mx-auto">

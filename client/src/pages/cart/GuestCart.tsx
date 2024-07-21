@@ -12,7 +12,7 @@ type UserCartProps = {
     clearTrigger: boolean;
     onCheckout: () => void;
     checkoutTrigger: boolean;
-  };
+};
 
 export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
     const api = useApi();
@@ -21,7 +21,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     const [productDetails, setProductDetails] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(false); 
+    const [isEmpty, setIsEmpty] = useState(false);
     const navigate = useNavigate();
 
 
@@ -85,24 +85,24 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     const removeProductFromCart = (productId: string) => {
         const productIndex = cart.product_ids.findIndex(id => id === productId);
         if (productIndex > -1) {
-          const newProductIds = [...cart.product_ids];
-          const newQuantities = [...cart.quantities];
-          newProductIds.splice(productIndex, 1);
-          newQuantities.splice(productIndex, 1);
-          setCart({ product_ids: newProductIds, quantities: newQuantities });
-    
-          setProductDetails(prevDetails => prevDetails.filter(product => product.product_id !== productId));
-        }
-      };
+            const newProductIds = [...cart.product_ids];
+            const newQuantities = [...cart.quantities];
+            newProductIds.splice(productIndex, 1);
+            newQuantities.splice(productIndex, 1);
+            setCart({ product_ids: newProductIds, quantities: newQuantities });
 
-      const handleClearCart = () => {
+            setProductDetails(prevDetails => prevDetails.filter(product => product.product_id !== productId));
+        }
+    };
+
+    const handleClearCart = () => {
         setCart({ product_ids: [], quantities: [] });
         setProductDetails([]);
         onTotalPriceUpdate(0);
         onClearCart();
-      };
+    };
 
-      useEffect(() => {
+    useEffect(() => {
         if (clearTrigger) {
             handleClearCart(); // Call the existing cart clearing logic when clearTrigger changes
         }
@@ -110,16 +110,19 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
 
 
     const handleCheckout = () => {
-        const itemsInCart = productDetails.map((product, index) =>(
+        const itemsInCart = productDetails.map((product, index) => (
             {
                 product_id: product.product_id,
                 thumbnail: product.thumbnail,
                 title: product.title,
                 price: product.price,
-                quantity: cart.quantities[index]}
+                quantity: cart.quantities[index]
+            }
         ));
-        navigate('/checkout', { state: {itemsInCart: itemsInCart} });
-        onCheckout();
+        if (itemsInCart.length > 0) {
+            navigate('/checkout', { state: { itemsInCart: itemsInCart } });
+            onCheckout();
+        }
     };
 
     useEffect(() => {
@@ -131,7 +134,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
 
 
 
-    return(
+    return (
         <div>
             {isLoading ? (
                 <p className="m-5">Loading...</p>
