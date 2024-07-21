@@ -8,6 +8,7 @@ import { useState } from "react";
 export const CartPage = () => {
     const { auth } = useAuth();
     const [totalPrice, setTotalPrice] = useState(0);
+    const [checkoutTrigger, setCheckoutTrigger] = useState(false);
     const [clearTrigger, setClearTrigger] = useState(false); // Add a state to trigger cart clearing
 
 
@@ -21,9 +22,13 @@ export const CartPage = () => {
 
     };
 
+    const handleCheckout = () => {
+        setCheckoutTrigger(prev => !prev);
+    };
+
     
     return (
-<div className="flex justify-center container container-highlight mx-auto 
+<div className="flex justify-center container mx-auto 
 tablet-md:flex-col 
 tablet-sm:flex-col
 mobile-lg:flex-col
@@ -41,10 +46,14 @@ mobile-sm:flex-col">
             {auth ? 
             <UserCart onTotalPriceUpdate={handleTotalPriceUpdate} 
             onClearCart={handleClearCart}
-            clearTrigger={clearTrigger}/> : 
+            clearTrigger={clearTrigger}
+            onCheckout={handleCheckout}
+            checkoutTrigger={checkoutTrigger}/> : 
             <GuestCart onTotalPriceUpdate={handleTotalPriceUpdate} 
             onClearCart={handleClearCart}
-            clearTrigger={clearTrigger}/>}
+            clearTrigger={clearTrigger}
+            onCheckout={handleCheckout}
+            checkoutTrigger={checkoutTrigger}/>}
         </div>
     </div>
     <div className="flex-none my-6 tablet-md:mx-auto tablet-sm:mx-auto mobile-lg:mx-auto mobile-md:mx-auto mobile-sm:mx-auto">
@@ -58,7 +67,7 @@ mobile-sm:flex-col">
             <h2 className="tablet-md:pr-5 tablet-sm:pr-5 mobile-lg:pr-5 mobile-md:pr-5 mobile-sm:pr-5">Total</h2>
             <span>${totalPrice.toFixed(2)}</span>
         </div>
-        <button className="bg-secondary-300 hover:bg-primary-500 px-4 py-1 rounded-md my-2 text-white">CHECKOUT</button>
+        <button onClick={handleCheckout} className="bg-secondary-300 hover:bg-primary-500 px-4 py-1 rounded-md my-2 text-white">CHECKOUT</button> 
         <br />
         <button onClick={handleClearCart} className="bg-accent-400 hover:bg-accent-600 px-4 py-1 rounded-md my-2 text-white">Clear cart</button>
     </div>

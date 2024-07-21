@@ -3,15 +3,18 @@ import { useEffect, useRef, useState} from "react";
 import { useAuth } from "@/shared/hooks/useAuth.hook";
 import { Cart } from "@/shared/types/entities.types";
 import { ProductDisplayInCart } from "./ProductDisplayInCart";
+import { useNavigate } from 'react-router';
 
 type UserCartProps = {
     onTotalPriceUpdate: (totalPrice: number) => void;
     onClearCart: () => void;
     clearTrigger: boolean;
+    onCheckout: () => void;
+    checkoutTrigger: boolean;
   };
 
 
-  export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger }: UserCartProps) {
+  export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
 
     const api = useApi();
     const isMounted = useRef<boolean>(false);
@@ -20,6 +23,8 @@ type UserCartProps = {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         isMounted.current = true;
@@ -99,6 +104,26 @@ useEffect(() => {
     }
 }, [clearTrigger]);
 
+const handleCheckout = () => {
+  const itemsInCart = cartItems?.map((item) =>(
+      {
+          product_id: item.__product__.product_id,
+          thumbnail: item.__product__.thumbnail,
+          title: item.__product__.title,
+          price: item.__product__.price,
+          quantity: item.quantity,
+        }
+  ));
+  navigate('/checkout', { state: {itemsInCart: itemsInCart} });
+  onCheckout();
+};
+
+useEffect(() => {
+  if (checkoutTrigger) {
+      handleCheckout();
+  }
+}, [checkoutTrigger]);
+
 
     return (
         <div>
@@ -116,8 +141,7 @@ useEffect(() => {
               title={item.__product__.title}
               price={item.__product__.price}
               quantity={item.quantity}
-              onRemoveProduct={() => handleRemoveProductFromCart(item.__product__.product_id)}
-            />
+              onRemoveProduct={() => handleRemoveProductFromCart(item.__product__.product_id)}/>
           ))
         )}
       </div>

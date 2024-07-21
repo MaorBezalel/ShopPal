@@ -1,4 +1,6 @@
 // ProductDisplay.tsx
+
+
 interface ProductDisplayProps {
     title: string;
     price: number;
@@ -7,7 +9,9 @@ interface ProductDisplayProps {
     onRemoveProduct: () => void;
 }
 
-export const ProductDisplayInCart = ({ title, price, quantity, thumbnail, onRemoveProduct }: ProductDisplayProps) => {
+
+
+export const ProductDisplayInCart = ({title, price, quantity, thumbnail, onRemoveProduct  }: ProductDisplayProps) => {
 
     return (
         <div className="container mx-auto">

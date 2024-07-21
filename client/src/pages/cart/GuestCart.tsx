@@ -3,15 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "@/shared/hooks/useLocalStorage.hook";
 import { ProductDisplayInCart } from "./ProductDisplayInCart";
 import { Product } from "@/shared/types";
+import { useNavigate } from 'react-router';
 
 // Define props type
 type UserCartProps = {
     onTotalPriceUpdate: (totalPrice: number) => void;
     onClearCart: () => void;
     clearTrigger: boolean;
+    onCheckout: () => void;
+    checkoutTrigger: boolean;
   };
 
-export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigger }: UserCartProps) {
+export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
     const api = useApi();
     const isMounted = useRef<boolean>(false);
     const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>, quantities: Array<number> }>('cart', { product_ids: [], quantities: [] });
@@ -19,6 +22,8 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false); 
+    const navigate = useNavigate();
+
 
 
 
@@ -97,12 +102,31 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         onClearCart();
       };
 
-
       useEffect(() => {
         if (clearTrigger) {
             handleClearCart(); // Call the existing cart clearing logic when clearTrigger changes
         }
     }, [clearTrigger]);
+
+
+    const handleCheckout = () => {
+        const itemsInCart = productDetails.map((product, index) =>(
+            {
+                product_id: product.product_id,
+                thumbnail: product.thumbnail,
+                title: product.title,
+                price: product.price,
+                quantity: cart.quantities[index]}
+        ));
+        navigate('/checkout', { state: {itemsInCart: itemsInCart} });
+        onCheckout();
+    };
+
+    useEffect(() => {
+        if (checkoutTrigger) {
+            handleCheckout();
+        }
+    }, [checkoutTrigger]);
 
 
 

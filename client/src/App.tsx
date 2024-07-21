@@ -9,6 +9,7 @@ import { OrderPage } from './pages/order/Order.page';
 import { NotFoundPage } from './pages/not-found/NotFound.page';
 import { RequireAuth } from '@/shared/components/RequireAuth';
 import { PersistentLogin } from './shared/components/PersistentLogin';
+import { CheckoutPage } from './pages/checkout/Checkout.page';
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="product/:id" element={<ProductPage />} />
             <Route path="auth" element={<AuthPage />} />
             <Route path="cart" element={<CartPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
             
 
             {/* private routes */}
