@@ -9,7 +9,7 @@ import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll.hook";
 
 import type { ListView, ProductShape, SortProductOptions, OrderProductOptions, ProductOptions } from "./Products.types";
 
-import ErrorMessage from "@/shared/components/ErrorMessage";
+import Message from "@/shared/components/Message";
 
 export const ProductsPage = () => {
 
@@ -60,7 +60,7 @@ export const ProductsPage = () => {
                   <ListViewBar defaultListView={'grid'} onListViewChange={onListViewChange}/> 
                 </div>
             </div>
-            {isErrorLoadingProducts && <ErrorMessage message={errorLoadingProductsMessage!}/>}
+            {isErrorLoadingProducts && <Message message={errorLoadingProductsMessage!} type="error"/>}
             {isLoadingFirstProductsPage && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><LoadingAnimation /></div>}
             {!isErrorLoadingProducts && !isLoadingFirstProductsPage && <ProductList products={products} productsShape={productsShape} isLoadingProducts={isLoadingProducts}/>}
         </div>

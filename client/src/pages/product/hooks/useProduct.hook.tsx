@@ -1,50 +1,87 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useApi } from '@/shared/hooks/useApi.hook';
-import type { Product } from '@/shared/types';
+import { useAuth } from '@/shared/hooks/useAuth.hook';
+import type { Product, GuestCart } from '@/shared/types';
+import { useQuery } from '@tanstack/react-query';
+import useLocalStorage from '@/shared/hooks/useLocalStorage.hook';
 
 type useProductProps = {
-    product?: Product;
+    initialProduct?: Product;
     product_id: string;
 }
 
-export const useProduct = ({ product_id, product } : useProductProps) => {
+export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
+    const [currentProduct, setCurrentProduct] = useState<Product | undefined>(initialProduct);
+    const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState<number>(1);
+    const { productApi, cartApi } = useApi();
+    const { auth } = useAuth();
+    const [ guestCart, setGuestCart] = useLocalStorage<GuestCart>('cart', {product_ids: [], quantities: []});
 
-    const [currentProduct, setCurrentProduct] = useState<Product | undefined>(product);
-    const { productApi } = useApi();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isError, setIsError] = useState<boolean>(false);
-    const [error, setError] = useState<string | undefined>(undefined);
+    const queryProduct = useCallback(async () => {
+        try 
+        {
+            const response = await productApi.getProduct(product_id);
+            if ('message' in response) {
+                throw new Error(response.message);
+            }
+            setCurrentProduct(response.product);
+            return response.product;
+        }
+        catch (error) {
+            throw new Error('Failed to fetch product');
+        }
+    }, [productApi, product_id]);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                setIsLoading(true);
-                setIsError(false);
-
-                const response = await productApi.getProduct(product_id);
-                if ('message' in response) {
-                    throw new Error(response.message);
+    const queryAddToCart = useCallback(async () => {
+            if (auth) {
+                try {
+                    const response = await cartApi.addProductToCart(product_id, currentProductSelectedQuantity, auth.user.user_id);
+                    return response;
                 }
-                setCurrentProduct(response.product);
+                catch (error) {
+                    throw new Error('Failed to add product to cart');
+                }
             }
-            catch (error) {
-                setIsError(true);
-                setError((error as Error).message || 'Failed to fetch product');
+            else {
+                if (guestCart.product_ids.includes(product_id)) 
+                {
+                    setGuestCart({product_ids: guestCart.product_ids, quantities: guestCart.quantities.map((quantity, index) => index === guestCart.product_ids.indexOf(product_id) ? quantity + currentProductSelectedQuantity : quantity)});
+                }
+                else 
+                {
+                    setGuestCart({product_ids: [...guestCart.product_ids, product_id], quantities: [...guestCart.quantities, currentProductSelectedQuantity]});
+                }
+                return 'Added to guest cart';
             }
-            finally {
-                setIsLoading(false);
-            }
-        }
-        if (product) 
-        {
-            setCurrentProduct(product);
-        }
-        else
-        {
-            fetchProduct();
-        }
+
+    }, [auth, currentProductSelectedQuantity, cartApi, product_id, guestCart]);
+
+    const increaseProductSelectedQuantity = useCallback(() => {
+        setCurrentProductSelectedQuantity(prev => prev + 1);
+    }, [])
+
+    const decreaseProductSelectedQuantity = useCallback(() => {
+        setCurrentProductSelectedQuantity(prev => Math.max(1, prev - 1));
     }, []);
+    
+    const {isLoading: isLoadingProduct, isError: isErrorProduct, error: errorProduct, isSuccess: isSuccessProduct} = useQuery({
+        queryKey: ['product', product_id], 
+        queryFn: queryProduct,
+        refetchOnWindowFocus: false,
+        retry: false
+    });
 
-    return { currentProduct, isLoading, isError, error };
+    const {isLoading: isLoadingAddToCart, isError: isErrorAddToCart, error: errorAddToCart, refetch: addProductToCart, isSuccess: isSuccessAddToCart} = useQuery({
+        queryKey: ['cart', product_id],
+        queryFn: queryAddToCart,
+        refetchOnWindowFocus: false,
+        enabled: false,
+        retry: false
+    });
+
+
+    return { currentProduct, currentProductSelectedQuantity, increaseProductSelectedQuantity, decreaseProductSelectedQuantity, 
+        fetchProductState: {isLoading: isLoadingProduct, isError: isErrorProduct, error: errorProduct, isSuccess: isSuccessProduct},
+        addToCartState: {isLoading: isLoadingAddToCart, isError: isErrorAddToCart, error: errorAddToCart, isSuccess: isSuccessAddToCart}, 
+        addProductToCart};
 };
-

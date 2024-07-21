@@ -58,3 +58,4 @@ export type CartItem = {
 };
 
 export type Cart = CartItem[];
+export type GuestCart = { product_ids: string[]; quantities: number[] };

@@ -1,11 +1,9 @@
 import React from 'react';
-import { useCallback } from 'react';
 import ProductCard from '../components/ProductCard';
 
 import type { ProductShape } from '../Products.types';
 import type { Product } from '@/shared/types';
 
-import { useNavigate } from 'react-router';
 
 import LoadingAnimation from '@/shared/components/LoadingAnimation';
 

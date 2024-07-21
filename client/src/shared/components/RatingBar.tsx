@@ -1,12 +1,13 @@
 import React from 'react';
 import RatingStar from '@/assets/photos/star.png';
+import {memo} from 'react';
 
 interface RatingBarProps {
     rating: number;
     className?: string;
 }
 
-export const RatingBar: React.FC<RatingBarProps> = ({ className, rating }: RatingBarProps) => {
+export const RatingBar: React.FC<RatingBarProps> = memo(({ className, rating }: RatingBarProps) => {
 
     if (rating < 0 || rating > 5) {
         throw new Error('Rating must be between 0 and 5');
@@ -22,5 +23,5 @@ export const RatingBar: React.FC<RatingBarProps> = ({ className, rating }: Ratin
             <p className='text-sm'>{`(${rating})`}</p>
         </div>
     );
-};
+});
 
