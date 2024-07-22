@@ -1,40 +1,51 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+export function useTypedSearchParams<T extends object>(
+    initialTypedParams: T,
+    convertFromURLToTyped: (urlParams: Record<string, string>) => T
+) {
+    const [rawSearchParams, setRawSearchParams] = useSearchParams();
+    const [typedSearchParams, setTypedSearchParams] = useState<T>(initialTypedParams);
 
-export function useTypedSearchParams<T extends object>(initialTypedParams: T, convertFromURLToTyped: (urlParams: Record<string, string>) => T) {
-  const [rawSearchParams, setRawSearchParams] = useSearchParams();
-  const [typedSearchParams, setTypedSearchParams] = useState<T>(initialTypedParams);
+    const setStateAndSearchParams = useCallback((newState: Partial<T>) => {
+        setTypedSearchParams((prevState) => {
+            return { ...prevState, ...newState };
+        });
+    }, []);
 
-  const setStateAndSearchParams = useCallback((newState: Partial<T>) => {
-    setTypedSearchParams((prevState) => {
-      return { ...prevState, ...newState };
-    });
-  }, []);
+    useEffect(() => {
+        const newTypedSearchParams = initialTypedParams;
 
-  useEffect(() => {
-    const newTypedSearchParams = initialTypedParams;
+        for (const [key, value] of rawSearchParams.entries()) {
+            newTypedSearchParams[key as keyof T] = value as any;
+        }
 
-    for (const [key, value] of rawSearchParams.entries()) {
-        newTypedSearchParams[key as keyof T] = value as any;
-    }
+        if (JSON.stringify(newTypedSearchParams) !== JSON.stringify(typedSearchParams)) {
+            setTypedSearchParams(convertFromURLToTyped(newTypedSearchParams as Record<string, string>));
+        }
+    }, []);
 
-    setTypedSearchParams(convertFromURLToTyped(newTypedSearchParams as Record<string, string>));
-  }, []);
+    useEffect(() => {
+        let newSearchParamsRecord: Record<string, string> = {};
+        for (const [key, value] of Object.entries(typedSearchParams)) {
+            if (value !== null && value !== undefined) {
+                if (Array.isArray(value) && value.length > 0) {
+                    newSearchParamsRecord[key] = value.join(',');
+                } else if (!Array.isArray(value)) {
+                    newSearchParamsRecord[key] = value.toString();
+                }
+            }
+        }
 
+        const newSearchParams = new URLSearchParams(newSearchParamsRecord).toString();
+        const currentSearchParams = window.location.search;
 
-  useEffect(() => {
-    const newSearchParams = new URLSearchParams();
-    for (const [key, value] of Object.entries(typedSearchParams)) {
-      if (value !== null && value !== undefined) {
-        newSearchParams.set(key, value.toString());
-      }
-    }
+        if (newSearchParams !== currentSearchParams.substring(1)) {
+            // Remove '?' from currentSearchParams
+            setRawSearchParams(new URLSearchParams(newSearchParamsRecord));
+        }
+    }, [typedSearchParams]);
 
-    setRawSearchParams(newSearchParams); 
-  }, [typedSearchParams]); 
-
-
-
-  return [typedSearchParams, setStateAndSearchParams] as const;
+    return [typedSearchParams, setStateAndSearchParams] as const;
 }

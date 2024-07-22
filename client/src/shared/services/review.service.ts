@@ -1,18 +1,18 @@
-import type { Review } from '@/shared/types/entities.types';
+import type { Review, ReviewsWithAuthor } from '@/shared/types/entities.types';
 import type { ResponseError } from '../types/api.types';
 import { useCallback } from 'react';
 import { AxiosInstance } from 'axios';
 
-type GetReviewRequestParams = {
+export type GetReviewRequestParams = {
     product_id: string;
-    limit?: number;
-    offset?: number;
+    limit: number;
+    offset: number;
     sortBy?: keyof Pick<Review, 'rating' | 'date'>;
     order?: 'asc' | 'desc';
 };
 
-type GetReviewRequestResponse = {
-    reviews: Review[];
+export type GetReviewsResponse = {
+    reviews: ReviewsWithAuthor;
 };
 
 type CreateReviewRequestResponse = {
@@ -26,7 +26,7 @@ type useReviewServiceProps = {
 
 export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServiceProps) => {
     const getReviews = useCallback(
-        async (reviewRequestParams: GetReviewRequestParams): Promise<GetReviewRequestResponse | ResponseError> => {
+        async (reviewRequestParams: GetReviewRequestParams): Promise<GetReviewsResponse | ResponseError> => {
             const response = await PUBLIC_API.get(`/review/${reviewRequestParams.product_id}`, {
                 params: reviewRequestParams,
             });

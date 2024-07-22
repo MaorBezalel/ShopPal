@@ -11,19 +11,21 @@ interface ProductCardProps {
     key: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({cardShape, product} : ProductCardProps) => {
-    
+const ProductCard: React.FC<ProductCardProps> = ({ cardShape, product }: ProductCardProps) => {
     const navigator = useNavigate();
 
     const handleProductCardClick = useCallback(() => {
-        navigator(`/product/${product.product_id}`, { state: { product } });
+        navigator(
+            `/product/${product.product_id}?reviews_sortBy=date&reviews_order=desc&reviews_limit=5&reviews_offset=0`,
+            { state: { product } }
+        );
     }, []);
 
     return (
         <div onClick={handleProductCardClick}>
-            {cardShape === 'column' ? <ProductCardColumn product={product} /> : <ProductCardRow product={product}/>}
+            {cardShape === 'column' ? <ProductCardColumn product={product} /> : <ProductCardRow product={product} />}
         </div>
-    )
+    );
 };
 
 export default ProductCard;

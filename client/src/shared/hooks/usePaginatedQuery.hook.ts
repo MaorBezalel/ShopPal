@@ -12,14 +12,14 @@ export const usePaginatedQuery = (stringKey: string, queryFn: (config: any) => P
     const runQuery = useCallback(async () => {
         const res = await queryFn({ offset, limit: itemsPerPage, ...filters });
         if (saveResults) {
-            setData((prev: any) => [...prev, ...res]);
+            setData((prev: any) => (prev ? [...prev, ...res] : res));
         } else {
             setData(res);
         }
         return res;
     }, [itemsPerPage, saveResults, page, filters, offset]);
 
-    const { isLoading, isError, error, isFetching } = useQuery({
+    const { isLoading, isError, error, isFetching, isSuccess } = useQuery({
         queryKey: [stringKey, page, itemsPerPage, filters],
         queryFn: runQuery,
         refetchOnWindowFocus: false,
@@ -38,6 +38,7 @@ export const usePaginatedQuery = (stringKey: string, queryFn: (config: any) => P
         isLoading,
         isFetching,
         isError,
+        isSuccess,
         error,
         goToNextPage,
         goToPreviousPage,

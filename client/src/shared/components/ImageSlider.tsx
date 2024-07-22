@@ -7,47 +7,54 @@ import { memo } from 'react';
 
 interface ImageSliderProps {
     images?: string[];
+    className?: string;
 }
 
-export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images }) => {
+export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className }: ImageSliderProps) => {
     const [activeImageIndex, setActiveImageIndex] = useState(0);
 
     const activeImage = images?.[activeImageIndex] || EmptyImage;
 
     const handlePrevImage = () => {
-        setActiveImageIndex(prev => (prev - 1 + images!.length) % images!.length);
-    }
+        setActiveImageIndex((prev) => (prev - 1 + images!.length) % images!.length);
+    };
 
     const handleNextImage = () => {
-        setActiveImageIndex(prev => (prev + 1) % images!.length);
-    }
-
+        setActiveImageIndex((prev) => (prev + 1) % images!.length);
+    };
 
     return (
         <div>
-                <div className="relative">
-                        <img src={activeImage} alt="Product image" className="w-full h-full object-cover rounded-xl" />
-                        {images && 
-                        <>
-                            <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2" onClick={handlePrevImage}>
-                            <img src={LeftArrow} className="h-8 w-8"/>
+            <div className={`relative ${className}`}>
+                <img src={activeImage} alt="Product image" className="h-full w-full rounded-xl object-cover" />
+                {images && (
+                    <>
+                        <button
+                            className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2"
+                            onClick={handlePrevImage}
+                        >
+                            <img src={LeftArrow} className="h-8 w-8" />
                         </button>
-                        <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 rounded-full p-2" onClick={handleNextImage}>
-                            <img src={RightArrow} className="h-8 w-8"/>
+                        <button
+                            className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2"
+                            onClick={handleNextImage}
+                        >
+                            <img src={RightArrow} className="h-8 w-8" />
                         </button>
-                        </>}
-                    </div>
-                    <div className="flex flex-row justify-center gap-2 overflow-x-auto">
-                        {images?.map((image, index) => (
-                            <img
-                                key={index}
-                                src={image}
-                                alt="Product thumbnail"
-                                className={`w-24 h-24 rounded-md cursor-pointer ${index === activeImageIndex ? 'border-2 border-primary-200 ' : ''}`}
-                                onClick={() => setActiveImageIndex(index)}
-                            />
-                        ))}
-                </div>
+                    </>
+                )}
+            </div>
+            <div className="flex flex-row justify-center gap-2 overflow-x-auto">
+                {images?.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image}
+                        alt="Product thumbnail"
+                        className={`h-24 w-24 cursor-pointer rounded-md ${index === activeImageIndex ? 'border-2 border-primary-200' : ''}`}
+                        onClick={() => setActiveImageIndex(index)}
+                    />
+                ))}
+            </div>
         </div>
     );
 });
