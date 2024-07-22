@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import authBannerSVG from '@/assets/svgs/auth-banner.svg';
 import { IconLogin, IconSignup } from '@/shared/components/icons';
 import {

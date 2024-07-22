@@ -1,4 +1,4 @@
-import { useFormContext, FieldError } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import useFlag from '@/shared/hooks/useFlag.hook';
 import { IconPassword, IconPasswordEye } from '@/shared/components/icons';
 
