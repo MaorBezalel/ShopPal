@@ -50,4 +50,11 @@ export class OrderController {
         await OrderService.deleteOrder(order_id);
         res.status(HttpStatusCode.NO_CONTENT).send();
     }
+
+    public static async updateProductsStocks(req: Request, res: Response, next: NextFunction) {
+        const product_ids = req.body.product_ids;
+        const new_stocks = req.body.new_stocks;
+        await OrderService.updateProductsStock(product_ids, new_stocks);
+        res.status(HttpStatusCode.NO_CONTENT).send();
+    }
 }

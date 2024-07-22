@@ -114,6 +114,7 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
         thumbnail: item.__product__.thumbnail,
         title: item.__product__.title,
         price: item.__product__.price,
+        stock: item.__product__.stock,
         quantity: item.quantity,
       }
     ));

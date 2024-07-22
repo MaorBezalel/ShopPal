@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkSchema } from 'express-validator';
+import { check, checkSchema } from 'express-validator';
 import { OrderController } from '@/api/orders/order.controller';
 import { validationMiddleware, authorizationMiddleware, tryCatchMiddleware } from '@/middlewares';
 import {
@@ -8,6 +8,7 @@ import {
     createOrderForAuthenticatedUserSchema,
     updateOrderSchema,
     deleteOrderSchema,
+    updateProductsStocksSchema,
 } from '@/api/orders/order.validator';
 
 const router = Router();
@@ -41,6 +42,13 @@ router.patch(
     checkSchema(updateOrderSchema),
     validationMiddleware,
     tryCatchMiddleware(OrderController.updateOrder)
+);
+
+router.patch(
+    '/',
+    checkSchema(updateProductsStocksSchema),
+    validationMiddleware,
+    tryCatchMiddleware(OrderController.updateProductsStocks)
 );
 
 router.delete(

@@ -32,22 +32,22 @@ export const OrderRepository = AppDataSource.getRepository(Order).extend({
             .then((orders) =>
                 orders
                     ? {
-                          order_details: {
-                              order_id: orders[0].o_order_id,
-                              issued_time: orders[0].o_issued_time,
-                              order_status: orders[0].o_order_status,
-                              delivery_address: PGDataTransformer.fromPGCompositeType(Address)(
-                                  orders[0].o_delivery_address
-                              ),
-                              billing_info: orders[0].o_billing_info,
-                          },
-                          order_products: orders.map((order) => ({
-                              product_id: order.opl_product_id,
-                              quantity: order.opl_quantity,
-                              title: order.p_title,
-                              thumbnail: order.p_thumbnail,
-                          })),
-                      }
+                        order_details: {
+                            order_id: orders[0].o_order_id,
+                            issued_time: orders[0].o_issued_time,
+                            order_status: orders[0].o_order_status,
+                            delivery_address: PGDataTransformer.fromPGCompositeType(Address)(
+                                orders[0].o_delivery_address
+                            ),
+                            billing_info: orders[0].o_billing_info,
+                        },
+                        order_products: orders.map((order) => ({
+                            product_id: order.opl_product_id,
+                            quantity: order.opl_quantity,
+                            title: order.p_title,
+                            thumbnail: order.p_thumbnail,
+                        })),
+                    }
                     : orders
             ) as Promise<GetOrdersResponseProps>;
     },
@@ -94,4 +94,15 @@ export const OrderRepository = AppDataSource.getRepository(Order).extend({
 
         return (await query.getCount()) > 0;
     },
+
+    async updateProductsStock(product_ids: string[], new_stocks: number[]): Promise<UpdateResult[]> {
+        return Promise.all(
+            product_ids.map((product_id, index) =>
+                this.createQueryBuilder()
+                    .update(Product)
+                    .set({ stock: new_stocks[index] })
+                    .where('product_id = :product_id', { product_id })
+                    .execute()
+            ));
+    }
 });

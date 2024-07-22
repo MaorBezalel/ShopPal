@@ -90,4 +90,12 @@ export class OrderService {
             );
         }
     }
+
+    public static async updateProductsStock(product_ids: string[], new_stocks: number[]): Promise<void> {
+        const results = await OrderRepository.updateProductsStock(product_ids, new_stocks);
+
+        if (results.some((result) => result.affected === 0)) {
+            throw new AppError('Could not update product stock', HttpStatusCode.INTERNAL_SERVER_ERROR, 'updateProductsStock');
+        }
+    }
 }

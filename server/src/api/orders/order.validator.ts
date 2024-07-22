@@ -364,3 +364,27 @@ export const deleteOrderSchema: Schema = {
         errorMessage: 'Unknown validation error occurred for parameter "user_id"!',
     },
 };
+
+export const updateProductsStocksSchema: Schema = {
+    product_ids: {
+        in: ['body'],
+        notEmpty: {
+            errorMessage: 'Product IDs are required!',
+        },
+        isArray: {
+            options: { min: 1 },
+            errorMessage: 'Product IDs must be an array with at least one product ID!',
+        },
+    },
+
+    new_stocks: {
+        in: ['body'],
+        notEmpty: {
+            errorMessage: 'Quantities are required!',
+        },
+        isArray: {
+            options: { min: 1 },
+            errorMessage: 'Quantities must be non-empty array!',
+        },
+    },
+};

@@ -116,6 +116,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
                 thumbnail: product.thumbnail,
                 title: product.title,
                 price: product.price,
+                stock: product.stock,
                 quantity: cart.quantities[index]
             }
         ));

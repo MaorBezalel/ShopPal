@@ -23,6 +23,11 @@ type useOrderServiceProps = {
     PUBLIC_API: AxiosInstance;
 };
 
+type updateStocksProps = {
+    product_ids: string[];
+    new_stocks: number[];
+};
+
 export const useOrderService = ({ PRIVATE_API, PUBLIC_API }: useOrderServiceProps) => {
     const getUserOrders = useCallback(
         async (userId: string): Promise<GetOrdersResponseProps | ResponseError> => {
@@ -48,5 +53,13 @@ export const useOrderService = ({ PRIVATE_API, PUBLIC_API }: useOrderServiceProp
         [PRIVATE_API]
     );
 
-    return { getUserOrders, addGuestOrder, addUserOrder };
+    const updateStocks = useCallback(
+        async (updateby: updateStocksProps): Promise<void | ResponseError> => {
+            const response = await PUBLIC_API.patch('/order/', updateby);
+            return response.data;
+        },
+        [PUBLIC_API]
+    );
+
+    return { getUserOrders, addGuestOrder, addUserOrder, updateStocks };
 };

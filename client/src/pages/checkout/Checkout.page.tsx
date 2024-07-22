@@ -11,6 +11,7 @@ interface ProductDetails {
   title: string;
   price: string;
   quantity: number;
+  stock: number;
 };
 
 
@@ -75,7 +76,7 @@ export function CheckoutPage() {
   const handleOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const errors = validatePaymentInfo(formData); // 'secondPart' is an example identifier
+    const errors = validatePaymentInfo(formData);
     if (Object.values(errors).some(error => error !== '')) {
       setFormErrors(errors);
       return; // Prevent form submission if there are errors
@@ -110,16 +111,19 @@ export function CheckoutPage() {
       alert('An error occurred while placing the order, please try again later');
     } finally {
       console.log(response);
-      if (response && 'order_id' in response && auth) {
+
+      if (response && 'order_id' in response) {
+        const newStocks = itemsInCart.map((item: ProductDetails) => item.stock - item.quantity);
+        const updateStocks = { product_ids: productIds, new_stocks: newStocks };
         try {
-          await api.cartApi.removeCart(auth.user.user_id);
-        }
-        catch (error) {
+          const updateStocksPromise = api.orderApi.updateStocks(updateStocks);
+          const clearCartPromise = auth ? api.cartApi.removeCart(auth.user.user_id) : Promise.resolve(window.localStorage.setItem('cart', JSON.stringify({ product_ids: [], quantities: [] })));
+          await Promise.all([updateStocksPromise, clearCartPromise]);
+        } catch (error) {
           console.error(error);
         }
-      } else if (response && 'order_id' in response) {
-        window.localStorage.setItem('cart', JSON.stringify({ product_ids: [], quantities: [] }));
       }
+
     }
   };
 
