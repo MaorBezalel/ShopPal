@@ -1,5 +1,3 @@
-// utils/convertSearchParams.ts
-
 export const convertSearchParams = (params: URLSearchParams) => {
     const result: Record<string, any> = {};
   
@@ -18,3 +16,18 @@ export const convertSearchParams = (params: URLSearchParams) => {
     return result;
   };
   
+export const ratingToString = (rating: number) => {
+    if (rating <= 1) {
+        return 'Poor';
+    } else if (rating <= 2) {
+        return 'Fair';
+    } else if (rating <= 3) {
+        return 'Good';
+    } else if (rating <= 4) {
+        return 'Very Good';
+    } else if (rating <= 5) {
+        return 'Excellent';
+    } else {
+        return 'Unknown';
+    }
+}

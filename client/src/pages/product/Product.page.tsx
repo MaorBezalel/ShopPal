@@ -13,7 +13,7 @@ export const ProductPage = () => {
     const params = useParams<ProductPageParams>();
     const location = useLocation();
     if (!params.id) {
-        return (<Message message={'Product Id is missing'} type="error" />);
+        return (<Message message="Product not found" type="error"/>);
     }
     const { currentProduct, fetchProductState, addToCartState, addProductToCart, currentProductSelectedQuantity, increaseProductSelectedQuantity, decreaseProductSelectedQuantity } = useProduct({ product_id: params.id, initialProduct: location.state?.product });
     

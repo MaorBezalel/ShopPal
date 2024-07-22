@@ -11,6 +11,7 @@ type useProductProps = {
 }
 
 export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
+    const [isTriedToAddProduct, setIsTriedToAddProduct] = useState<boolean>(false);
     const [currentProduct, setCurrentProduct] = useState<Product | undefined>(initialProduct);
     const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState<number>(1);
     const { productApi, cartApi } = useApi();
@@ -33,6 +34,7 @@ export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
     }, [productApi, product_id]);
 
     const queryAddToCart = useCallback(async () => {
+        setIsTriedToAddProduct(true);
             if (auth) {
                 try {
                     const response = await cartApi.addProductToCart(product_id, currentProductSelectedQuantity, auth.user.user_id);
@@ -82,6 +84,6 @@ export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
 
     return { currentProduct, currentProductSelectedQuantity, increaseProductSelectedQuantity, decreaseProductSelectedQuantity, 
         fetchProductState: {isLoading: isLoadingProduct, isError: isErrorProduct, error: errorProduct, isSuccess: isSuccessProduct},
-        addToCartState: {isLoading: isLoadingAddToCart, isError: isErrorAddToCart, error: errorAddToCart, isSuccess: isSuccessAddToCart}, 
+        addToCartState: {isLoading: isLoadingAddToCart, isError: isErrorAddToCart && isTriedToAddProduct, error: errorAddToCart, isSuccess: isSuccessAddToCart}, 
         addProductToCart};
 };
