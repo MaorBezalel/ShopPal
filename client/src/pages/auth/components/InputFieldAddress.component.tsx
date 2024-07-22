@@ -57,65 +57,123 @@ export function InputFieldAddress() {
     });
 
     return (
-        <section className="flex w-full flex-row gap-4">
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="country" className="text-xl">
+        <section
+            className="flex w-full flex-row gap-4
+            tablet-sm:gap-2
+            mobile-lg:flex-col"
+        >
+            <section
+                className="flex w-1/3 flex-col gap-4
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="country"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     Country
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 pc-sm:px-9 pc-sm:text-base"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 
+                            pc-md:text-base
+                            pc-sm:px-9 pc-sm:text-base
+                            tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "England"'
                             aria-errormessage="error-country"
                             {...registerCountry}
                         />
-                        <IconCountry className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 pc-sm:size-6" />
+                        <IconCountry
+                            className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
+                            pc-sm:size-6
+                            tablet-sm:size-5"
+                        />
                     </div>
-                    <p id="error-country" className="text-sm text-red-600">
+                    <p
+                        id="error-country"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.address?.country?.message as string) || ''}
                     </p>
                 </div>
             </section>
 
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="city" className="text-xl">
+            <section
+                className="flex w-1/3 flex-col gap-4
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="city"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     City
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 pc-sm:px-9 pc-sm:text-base"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 
+                            pc-md:text-base
+                            pc-sm:px-9 pc-sm:text-base
+                            tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "London"'
                             aria-errormessage="error-city"
                             {...registerCity}
                         />
-                        <IconCity className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 pc-sm:size-6" />
+                        <IconCity
+                            className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
+                            pc-sm:size-6
+                            tablet-sm:size-5"
+                        />
                     </div>
-                    <p id="error-city" className="text-sm text-red-600">
+                    <p
+                        id="error-city"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.address?.city?.message as string) || ''}
                     </p>
                 </div>
             </section>
 
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="street" className="text-xl">
+            <section
+                className="flex w-1/3 flex-col gap-4
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="street"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     Street
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 pc-sm:px-9 pc-sm:text-base"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 
+                            pc-md:text-base
+                            pc-sm:px-9 pc-sm:text-base
+                            tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "Wall Street"'
                             aria-errormessage="error-street"
                             {...registerStreet}
                         />
-                        <IconStreet className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 pc-sm:size-6" />
+                        <IconStreet
+                            className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
+                            pc-sm:size-6
+                            tablet-sm:size-5"
+                        />
                     </div>
-                    <p id="error-street" className="text-sm text-red-600">
+                    <p
+                        id="error-street"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.address?.street?.message as string) || ''}
                     </p>
                 </div>

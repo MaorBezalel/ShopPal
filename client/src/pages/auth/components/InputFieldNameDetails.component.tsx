@@ -56,65 +56,108 @@ export function InputFieldNameDetails() {
     });
 
     return (
-        <section className="flex w-full flex-row gap-4">
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="first_name" className="text-xl">
+        <section
+            className="mobile-lg: flex w-full flex-row 
+            gap-4 
+            tablet-sm:gap-2 mobile-lg:flex-col"
+        >
+            <section
+                className="flex w-1/3 flex-col gap-4 
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="first_name"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     First Name
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500
+                            pc-md:text-base
+                            tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g "John"'
                             aria-errormessage="error-first_name"
                             {...registerFirstName}
                         />
-                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500" />
+                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>
-                    <p id="error-first_name" className="text-sm text-red-600">
+                    <p
+                        id="error-first_name"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.name_details?.first_name?.message as string) || ''}
                     </p>
                 </div>
             </section>
 
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="middle_name" className="text-xl">
+            <section
+                className="flex w-1/3 flex-col gap-4 
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="middle_name"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     Middle Name
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500
+                            pc-md:text-base
+                            tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g. "Smith"'
                             aria-errormessage="error-middle_name"
                             {...registerMiddleName}
                         />
-                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500" />
+                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>
-                    <p id="error-middle_name" className="text-sm text-red-600">
+                    <p
+                        id="error-middle_name"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.name_details?.middle_name?.message as string) || ''}
                     </p>
                 </div>
             </section>
 
-            <section className="flex w-1/3 flex-col gap-4">
-                <label htmlFor="last_name" className="text-xl">
+            <section
+                className="flex w-1/3 flex-col gap-4 
+                tablet-sm:gap-2
+                mobile-lg:w-full"
+            >
+                <label
+                    htmlFor="last_name"
+                    className="text-xl
+                    tablet-sm:text-lg"
+                >
                     Last Name
                 </label>
                 <div className="flex w-full flex-col gap-2">
                     <div className="relative w-full">
                         <input
                             type="text"
-                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500"
+                            className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500
+                            pc-md:text-base
+                            tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g. "Doe"'
                             aria-errormessage="error-last_name"
                             {...registerLastName}
                         />
-                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500" />
+                        <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>
-                    <p id="error-last_name" className="text-sm text-red-600">
+                    <p
+                        id="error-last_name"
+                        className="text-sm text-red-600"
+                    >
                         {(errors?.name_details?.last_name?.message as string) || ''}
                     </p>
                 </div>

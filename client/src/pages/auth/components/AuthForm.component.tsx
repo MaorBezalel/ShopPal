@@ -7,9 +7,9 @@ import { IconError } from '@/shared/components/icons';
 export type AuthFormProps = {
     formType: 'login' | 'signup';
     children: React.ReactNode;
-};
+} & Pick<React.HTMLAttributes<HTMLFormElement>, 'className'>;
 
-export function AuthForm({ formType, children }: AuthFormProps) {
+export function AuthForm({ formType, children, className }: AuthFormProps) {
     const methods = useForm<FormInputs<typeof formType>>({
         defaultValues:
             formType === 'login'
@@ -35,7 +35,7 @@ export function AuthForm({ formType, children }: AuthFormProps) {
     return (
         <FormProvider {...methods}>
             <form
-                className="mt-2 flex w-full flex-col items-start gap-2"
+                className={className}
                 onSubmit={methods.handleSubmit(onSubmit, onError)}
             >
                 {children}
