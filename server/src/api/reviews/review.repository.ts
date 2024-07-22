@@ -29,8 +29,8 @@ export const ReviewRepository = AppDataSource.getRepository(Review).extend({
             ])
             .where('review.product_id = :product_id', { product_id })
             .innerJoin('review.user', 'userLink')
-            .take(limit)
-            .skip(offset)
+            .offset(offset)
+            .limit(limit)
             .orderBy(`review.${sortBy}`, order)
             .getRawMany()
             .then((reviews) => {
