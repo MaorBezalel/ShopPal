@@ -11,13 +11,7 @@ import {
 } from '@/api/reviews/review.types';
 
 export class ReviewService {
-    public static async getReviews({
-        product_id,
-        limit,
-        offset,
-        sortBy,
-        order,
-    }: GetReviewsRequestProps): Promise<Review[]> {
+    public static async getReviews({ product_id, limit, offset, sortBy, order }: GetReviewsRequestProps): Promise<any> {
         return await ReviewRepository.getReviews({ product_id, limit, offset, sortBy, order });
     }
 

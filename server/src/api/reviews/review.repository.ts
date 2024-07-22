@@ -1,6 +1,7 @@
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
 import { Review } from '@/shared/models/entities';
+import type { GetReviewsResponse } from '@/api/reviews/review.types';
 import {
     GetReviewsRequestProps,
     CreateReviewRequestProps,
@@ -9,14 +10,42 @@ import {
 } from '@/api/reviews/review.types';
 
 export const ReviewRepository = AppDataSource.getRepository(Review).extend({
-    async getReviews({ product_id, limit, offset, sortBy, order }: GetReviewsRequestProps): Promise<Review[]> {
-        const query = this.createQueryBuilder('review')
+    async getReviews({
+        product_id,
+        limit,
+        offset,
+        sortBy,
+        order,
+    }: GetReviewsRequestProps): Promise<GetReviewsResponse> {
+        return this.createQueryBuilder('review')
+            .select([
+                'review.product_id',
+                'review.user_id',
+                'review.rating',
+                'review.comment',
+                'review.date',
+                'userLink.username',
+                'userLink.avatar',
+            ])
             .where('review.product_id = :product_id', { product_id })
+            .innerJoin('review.user', 'userLink')
             .take(limit)
             .skip(offset)
-            .orderBy(`review.${sortBy}`, order);
-
-        return await query.getMany();
+            .orderBy(`review.${sortBy}`, order)
+            .getRawMany()
+            .then((reviews) => {
+                return reviews.map((review) => ({
+                    product_id: review.review_product_id,
+                    rating: review.review_rating,
+                    comment: review.review_comment,
+                    date: review.review_date,
+                    author: {
+                        user_id: review.review_user_id,
+                        username: review.userLink_username,
+                        avatar: review.userLink_avatar,
+                    },
+                }));
+            }) as Promise<GetReviewsResponse>;
     },
 
     async insertReview(review: Review): Promise<InsertResult> {
