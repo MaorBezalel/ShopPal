@@ -6,14 +6,12 @@ import SortByOptions from '@/shared/components/SortByOptions';
 import ReviewCardSkeleton from '@/shared/components/ReviewCardSkeleton';
 import ProductCreateReview from './ProductCreateReview';
 import type { SortReviewOptions, OrderReviewOptions } from '../Product.types';
-import { useAuth } from '@/shared/hooks/useAuth.hook';
 
 type ProductReviewsProps = {
     product_id: string;
 };
 
 export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
-    const { auth } = useAuth();
     const {
         reviews,
         isLoadingFirstReviewPage,
@@ -31,7 +29,6 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
         conditionsToFetchNewPage,
         createReview,
         isUserLogged,
-        userReview,
     } = useReviews({
         product_id,
     });

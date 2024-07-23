@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Product } from '@/shared/types';
 import { RatingBar } from '@/shared/components/RatingBar';
 import { formatCategoryName } from '@/pages/products/utils/ProductUtils';
@@ -31,7 +32,7 @@ export const ProductDetails = ({
     };
 
     return (
-        <>
+        <div>
             <span className="cursor-pointer font-semibold text-primary-500" onClick={handleCategoryClick}>
                 {category ? formatCategoryName(category) : 'Unknown Category'}
             </span>
@@ -66,6 +67,6 @@ export const ProductDetails = ({
                     {isLoadingAddToCart ? 'Adding...' : 'Add to Cart'}
                 </button>
             </div>
-        </>
+        </div>
     );
 };

@@ -23,5 +23,3 @@ export const ProductSimilarResults = ({ product }: ProductSimilarResults) => {
         </div>
     );
 };
-
-ProductSimilarResults;

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import type { Product } from '@/shared/types/entities.types';
 import { ProductCardColumn } from './ProductCardColumn';
 import { ProductCardRow } from './ProductCardRow';
+import { memo } from 'react';
 
 interface ProductCardProps {
     cardShape: 'column' | 'row';
@@ -11,7 +12,7 @@ interface ProductCardProps {
     key: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ cardShape, product }: ProductCardProps) => {
+const ProductCard: React.FC<ProductCardProps> = memo(({ cardShape, product }: ProductCardProps) => {
     const navigator = useNavigate();
 
     const handleProductCardClick = useCallback(() => {
@@ -23,6 +24,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ cardShape, product }: Product
             {cardShape === 'column' ? <ProductCardColumn product={product} /> : <ProductCardRow product={product} />}
         </div>
     );
-};
+});
 
 export default ProductCard;
