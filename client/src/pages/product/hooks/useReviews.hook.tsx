@@ -13,37 +13,33 @@ type useReviewsProps = {
 };
 
 export const useReviews = ({ product_id }: useReviewsProps) => {
-    const [reviews, setReviews] = useState<ReviewsWithAuthor>([]);
     const { reviewApi } = useApi();
     const reviewSortOptions: SortReviewOptions[] = useMemo(() => ['rating', 'date'], []);
     const [reviewOptions, setReviewOptions] = useTypedSearchParams<ReviewQueryParams>(
         {
             reviews_sortBy: 'date',
             reviews_order: 'desc',
-            reviews_limit: 5,
-            reviews_offset: 0,
         },
         convertURLParamsRepresentationToProductOptions
     );
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     const queryReviews = useCallback(
-        async (reviewOptions: ReviewQueryParams) => {
+        async (reviewOptions: any) => {
             try {
                 const response = await reviewApi.getReviews({
                     product_id,
-                    limit: reviewOptions.reviews_limit,
-                    offset: reviewOptions.reviews_offset,
+                    limit: reviewOptions.limit,
+                    offset: reviewOptions.offset,
                     sortBy: reviewOptions.reviews_sortBy,
                     order: reviewOptions.reviews_order,
                 });
                 if ('message' in response) {
                     throw new Error(response.message);
                 }
-                if (response.reviews.length < reviewOptions.reviews_limit) {
+                if (response.reviews.length < reviewOptions.limit) {
                     setHasMore(false);
                 }
-                setReviews(response.reviews);
                 return response.reviews;
             } catch (error) {
                 throw new Error('Failed to fetch reviews');
@@ -65,6 +61,7 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
     }, []);
 
     const {
+        data,
         isLoading: isLoadingReviews,
         isError: isErrorReviews,
         error: errorReviews,
@@ -74,10 +71,10 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         goToNextPage,
         resetPage,
         setSaveResults,
-    } = usePaginatedQuery('reviews', queryReviews, reviewOptions);
+    } = usePaginatedQuery('reviews', queryReviews, reviewOptions, 5);
 
     return {
-        reviews,
+        reviews: (data || []) as ReviewsWithAuthor,
         isLoading: isLoadingReviews,
         isFetching: isFetchingReviews,
         isError: isErrorReviews,

@@ -1,7 +1,7 @@
 import type { GetReviewRequestParams } from '@/shared/services/review.service';
 import type { Review } from '@/shared/types';
 
-type unPrefixedReviewQueryParams = Omit<GetReviewRequestParams, 'product_id'>;
+type unPrefixedReviewQueryParams = Omit<GetReviewRequestParams, 'product_id' | 'offset' | 'limit'>;
 export type ReviewQueryParams = {
     [K in keyof unPrefixedReviewQueryParams as `reviews_${K}`]: unPrefixedReviewQueryParams[K];
 };

@@ -5,7 +5,8 @@ import { ProductReviews } from './components/ProductReviews';
 import { ProductSimilarResults } from './components/ProductSimilarResults';
 import { ImageSlider } from '@/shared/components/ImageSlider';
 import LoadingAnimation from '@/shared/components/LoadingAnimation';
-import Message from '@/shared/components/Message';
+import { useMessages } from '@/shared/hooks/useMessages.hook';
+import { useNavigate } from 'react-router';
 
 type ProductPageParams = {
     id: string;
@@ -14,8 +15,12 @@ type ProductPageParams = {
 export const ProductPage = () => {
     const params = useParams<ProductPageParams>();
     const location = useLocation();
+    const navigate = useNavigate();
+    const { displayMessage } = useMessages();
     if (!params.id) {
-        return <Message message="Product not found" type="error" />;
+        displayMessage({ message: 'id not found', type: 'error' });
+        navigate('/404');
+        return;
     }
     const { currentProduct, fetchProductState } = useProduct({
         product_id: params.id,

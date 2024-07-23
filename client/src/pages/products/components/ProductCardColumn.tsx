@@ -10,27 +10,26 @@ interface ProductCardProps {
     product: Product;
 }
 
-export const ProductCardColumn: React.FC<ProductCardProps> = ({ product } : ProductCardProps) => {
-
+export const ProductCardColumn: React.FC<ProductCardProps> = ({ product }: ProductCardProps) => {
     const formattedCategory = formatCategoryName(product.category);
-    
+
     return (
-        <div className='flex flex-col gap-2 relative border border-primary-100 rounded-lg shadow-lg p-4 bg-slate-100 hover:shadow-xl transition-shadow duration-300 justify-between'>
+        <div className="relative flex flex-col justify-between gap-2 rounded-lg border border-primary-100 bg-slate-100 p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl">
             <div>
-                <AsyncImage 
-                    src={product.thumbnail ? product.thumbnail : ProductEmptyImage} 
-                    alt={product.title} 
-                    className='w-24 h-24 object-contain rounded-lg mx-auto'
+                <AsyncImage
+                    src={product.thumbnail ? product.thumbnail : ProductEmptyImage}
+                    alt={product.title}
+                    className="mx-auto h-24 w-24 rounded-lg object-contain"
                     loader={<div style={{ background: '#888' }} />}
                 />
-                <h2 className='text-lg font-semibold mt-2'>{product.title}</h2>
-                <p className='text-md line-clamp-3'>{product.description}</p>
-                <RatingBar rating={product.rating}/>
+                <h2 className="mt-2 text-lg font-semibold">{product.title}</h2>
+                <p className="text-md line-clamp-3">{product.description}</p>
+                <RatingBar rating={product.rating} className="mt-2" />
             </div>
-            <div className='flex flex-row justify-between'>
-                <p className='text-md font-semibold'>${product.price}</p>
-                <div className='bg-primary-200 p-0.5 px-3 rounded-lg'>
-                    <p className='text-md font-semibold'>{formattedCategory}</p>
+            <div className="flex flex-row justify-between">
+                <p className="text-md font-semibold">${product.price}</p>
+                <div className="rounded-lg bg-primary-200 p-0.5 px-3">
+                    <p className="text-md font-semibold">{formattedCategory}</p>
                 </div>
             </div>
         </div>

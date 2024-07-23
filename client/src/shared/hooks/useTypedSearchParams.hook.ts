@@ -21,9 +21,7 @@ export function useTypedSearchParams<T extends object>(
             newTypedSearchParams[key as keyof T] = value as any;
         }
 
-        if (JSON.stringify(newTypedSearchParams) !== JSON.stringify(typedSearchParams)) {
-            setTypedSearchParams(convertFromURLToTyped(newTypedSearchParams as Record<string, string>));
-        }
+        setTypedSearchParams(convertFromURLToTyped(newTypedSearchParams as Record<string, string>));
     }, []);
 
     useEffect(() => {

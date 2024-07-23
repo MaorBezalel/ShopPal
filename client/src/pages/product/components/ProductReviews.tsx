@@ -15,9 +15,10 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
     const {
         reviews,
         isFetching,
+        isLoading,
         reviewSortOptions,
         updateProductFilter,
-        goToNextPage,
+        updateProductPage,
         reviewOptions,
         hasMore,
         isInitialLoading,
@@ -28,7 +29,7 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
     const conditionsToFetchNewPage = useCallback(() => !isFetching && hasMore, [isFetching, hasMore]);
 
     useInfiniteScroll({
-        fetchNextPage: goToNextPage,
+        fetchNextPage: updateProductPage,
         threshold: 300,
         conditionsToFetchNewPage: conditionsToFetchNewPage,
     });
@@ -45,7 +46,7 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
         <>
             <div className="mt-4 flex min-h-[vh] flex-col gap-2">
                 <div className="flex flex-row items-center justify-between">
-                    <h1 className="text-xl font-semibold">Reviews {`(${reviews.length})`}</h1>
+                    <h1 className="text-xl font-semibold">Reviews</h1>
                     <SortByOptions
                         sortOptions={reviewSortOptions}
                         defaultSelectedSortOption={reviewOptions.reviews_sortBy}

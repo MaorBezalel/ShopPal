@@ -7,12 +7,16 @@ type ProductSimilarResults = {
 };
 
 export const ProductSimilarResults = ({ product }: ProductSimilarResults) => {
-    const { similarProducts, isFetching } = useProductSimilarResults({ product });
+    const { similarProducts, isFetching, isError } = useProductSimilarResults({ product });
 
     return (
         <div className="mt-4 flex flex-col gap-4">
             <h1 className="text-xl font-semibold">You Might Also Like: </h1>
-            <ProductList products={similarProducts} productsShape="column" isLoadingProducts={isFetching} />
+            {isError ? (
+                <p className="text-center font-semibold">Error Retreving Similar Results</p>
+            ) : (
+                <ProductList products={similarProducts} productsShape="column" isLoadingProducts={isFetching} />
+            )}
         </div>
     );
 };

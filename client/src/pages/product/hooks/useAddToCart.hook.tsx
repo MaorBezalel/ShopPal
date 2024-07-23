@@ -1,20 +1,22 @@
-import { useCallback, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/shared/hooks/useAuth.hook';
 import { useApi } from '@/shared/hooks/useApi.hook';
 import useLocalStorage from '@/shared/hooks/useLocalStorage.hook';
 import type { GuestCart } from '@/shared/types';
+import { useMessages } from '@/shared/hooks/useMessages.hook';
 
 type UseAddToCartProps = {
     product_id: string;
 };
 
 export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
-    const [isTriedToAddProduct, setIsTriedToAddProduct] = useState<boolean>(false);
     const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState(1);
     const { cartApi } = useApi();
     const { auth } = useAuth();
+    const { displayMessage, clearMessage } = useMessages();
     const [guestCart, setGuestCart] = useLocalStorage<GuestCart>('cart', { product_ids: [], quantities: [] });
+    const [isUserAddedToCart, setIsUserAddedToCart] = useState(false);
 
     const increaseProductSelectedQuantity = useCallback(() => {
         setCurrentProductSelectedQuantity((prev) => prev + 1);
@@ -25,7 +27,7 @@ export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
     }, []);
 
     const queryAddToCart = useCallback(async () => {
-        setIsTriedToAddProduct(true);
+        setIsUserAddedToCart(true);
         if (auth) {
             try {
                 const response = await cartApi.addProductToCart(
@@ -68,9 +70,36 @@ export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
         queryKey: ['addToCart', product_id],
         queryFn: queryAddToCart,
         refetchOnWindowFocus: false,
-        retry: false,
         enabled: false,
     });
+
+    useEffect(() => {
+        let msgid = null;
+        if (isUserAddedToCart && !isFetchingAddToCart && isSuccessAddToCart) {
+            msgid = displayMessage({
+                message: 'Product added to cart successfully',
+                type: 'success',
+            });
+        }
+
+        return () => {
+            msgid && clearMessage(msgid);
+        };
+    }, [isSuccessAddToCart, isFetchingAddToCart]);
+
+    useEffect(() => {
+        let msgid = null;
+        if (isUserAddedToCart && !isFetchingAddToCart && isErrorAddToCart) {
+            msgid = displayMessage({
+                message: 'Failed to add product to cart',
+                type: 'error',
+            });
+        }
+
+        return () => {
+            msgid && clearMessage(msgid);
+        };
+    }, [isErrorAddToCart, isFetchingAddToCart]);
 
     return {
         currentProductSelectedQuantity,

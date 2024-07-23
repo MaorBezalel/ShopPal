@@ -1,7 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useApi } from '@/shared/hooks/useApi.hook';
 import type { Product } from '@/shared/types';
-import type { ReviewsWithAuthor } from '@/shared/types/entities.types';
 import { useQuery } from '@tanstack/react-query';
 
 type useProductProps = {
@@ -10,7 +9,6 @@ type useProductProps = {
 };
 
 export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
-    const [currentProduct, setCurrentProduct] = useState<Product | undefined>(initialProduct);
     const { productApi } = useApi();
 
     const queryProduct = useCallback(async () => {
@@ -19,7 +17,6 @@ export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
             if ('message' in response) {
                 throw new Error(response.message);
             }
-            setCurrentProduct(response.product);
             return response.product;
         } catch (error) {
             throw new Error('Failed to fetch product');
@@ -27,6 +24,7 @@ export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
     }, [productApi, product_id]);
 
     const {
+        data,
         isLoading: isLoadingProduct,
         isError: isErrorProduct,
         error: errorProduct,
@@ -35,12 +33,12 @@ export const useProduct = ({ product_id, initialProduct }: useProductProps) => {
     } = useQuery({
         queryKey: ['product', product_id],
         queryFn: queryProduct,
+        enabled: !initialProduct, // If initialProduct is provided, don't fetch the product
         refetchOnWindowFocus: false,
-        retry: false,
     });
 
     return {
-        currentProduct,
+        currentProduct: data || initialProduct,
         fetchProductState: {
             isLoading: isLoadingProduct,
             isError: isErrorProduct,

@@ -3,6 +3,7 @@ import LeftArrow from '@/assets/photos/left-arrow.png';
 import RightArrow from '@/assets/photos/right-arrow.png';
 import { useState } from 'react';
 import EmptyImage from '@/assets/photos/product-empty-image.png';
+import { AsyncImage } from 'loadable-image';
 import { memo } from 'react';
 
 interface ImageSliderProps {
@@ -26,7 +27,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
     return (
         <div>
             <div className={`relative ${className}`}>
-                <img src={activeImage} alt="Product image" className="h-full w-full rounded-xl object-cover" />
+                <AsyncImage src={activeImage} alt="Product image" className="h-full w-full rounded-xl object-cover" />
                 {images && (
                     <>
                         <button
@@ -44,15 +45,17 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
                     </>
                 )}
             </div>
-            <div className="flex flex-row justify-center gap-2 overflow-x-auto">
+            <div className="mt-2 flex flex-row justify-center gap-4 overflow-auto">
                 {images?.map((image, index) => (
-                    <img
-                        key={index}
-                        src={image}
-                        alt="Product thumbnail"
-                        className={`h-24 w-24 cursor-pointer rounded-md ${index === activeImageIndex ? 'border-2 border-primary-200' : ''}`}
-                        onClick={() => setActiveImageIndex(index)}
-                    />
+                    <div className="flex h-24 w-24">
+                        <AsyncImage
+                            key={index}
+                            src={image}
+                            alt="Product thumbnail"
+                            className={`h-full w-full cursor-pointer rounded-md ${index === activeImageIndex ? 'border-2 border-primary-200' : ''}`}
+                            onClick={() => setActiveImageIndex(index)}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

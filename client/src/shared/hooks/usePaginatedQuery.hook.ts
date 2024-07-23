@@ -1,11 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
-export const usePaginatedQuery = (stringKey: string, queryFn: (config: any) => Promise<any>, filters: object) => {
+export const usePaginatedQuery = (
+    stringKey: string,
+    queryFn: (config: any) => Promise<any>,
+    filters: object,
+    itemsPerPageInit?: number
+) => {
     const [data, setData] = useState<any>(null);
     const [page, setPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(20);
+    const [itemsPerPage, setItemsPerPage] = useState(itemsPerPageInit || 20);
     const [saveResults, setSaveResults] = useState(false);
     const offset = useMemo(() => (page - 1) * itemsPerPage, [itemsPerPage, page]);
 
