@@ -32,8 +32,6 @@ export const MessageProvider = ({ children }: MessageProviderProps) => {
         return id;
     };
 
-    console.log(messages);
-
     const clearMessage = (id: string) => {
         setMessages((oldMessages) => oldMessages.filter((msg) => msg.id !== id));
     };

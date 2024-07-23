@@ -8,6 +8,7 @@ import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll.hook';
 
 import type { ListView, ProductShape, SortProductOptions, OrderProductOptions, ProductOptions } from './Products.types';
+import { ProductListSkeleton } from './components/ProductListSkeleton';
 
 export const ProductsPage = () => {
     const [productsShape, setProductsShape] = useState<ProductShape>('column');
@@ -17,9 +18,9 @@ export const ProductsPage = () => {
         productsOptions,
         updateProducts,
         goToNextPage,
-        isLoadingProducts,
+        isLoadingNextProductsPage,
         isLoadingFirstProductsPage,
-        isErrorLoadingProducts,
+        isErrorLoadingFirstProductsPage,
         conditionsToFetchNewPage,
     } = useProducts();
 
@@ -51,7 +52,7 @@ export const ProductsPage = () => {
                 <ProductFilter
                     onFilterChange={onFilterChange}
                     initialFilterOptions={productsOptions}
-                    disable={isLoadingProducts}
+                    disable={isLoadingNextProductsPage || isLoadingFirstProductsPage}
                 />
             </div>
             <div className="relative flex w-4/5 flex-col gap-2 max-xl:w-full">
@@ -68,16 +69,15 @@ export const ProductsPage = () => {
                         <ListViewBar defaultListView={'grid'} onListViewChange={onListViewChange} />
                     </div>
                 </div>
-                {isLoadingFirstProductsPage && (
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <LoadingAnimation />
-                    </div>
-                )}
-                {!isErrorLoadingProducts && !isLoadingFirstProductsPage && (
+                {isLoadingFirstProductsPage ? (
+                    <ProductListSkeleton skeletonNumber={12} productShape={productsShape} />
+                ) : isErrorLoadingFirstProductsPage ? (
+                    <p className="text-center text-2xl text-red-800">An error occurred while retrieving products</p>
+                ) : (
                     <ProductList
                         products={products}
                         productsShape={productsShape}
-                        isLoadingProducts={isLoadingProducts}
+                        isLoadingProducts={isLoadingNextProductsPage}
                     />
                 )}
             </div>

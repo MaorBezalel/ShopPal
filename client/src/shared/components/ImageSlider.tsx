@@ -47,9 +47,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
             </div>
             <div className="mt-2 flex flex-row justify-center gap-4 overflow-auto">
                 {images?.map((image, index) => (
-                    <div className="flex h-24 w-24">
+                    <div className="flex h-24 w-24" key={index}>
                         <AsyncImage
-                            key={index}
                             src={image}
                             alt="Product thumbnail"
                             className={`h-full w-full cursor-pointer rounded-md ${index === activeImageIndex ? 'border-2 border-primary-200' : ''}`}

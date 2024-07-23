@@ -1,6 +1,6 @@
 import { useTypedSearchParams } from '@/shared/hooks/useTypedSearchParams.hook';
 import type { ProductOptions } from '../Products.types';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useApi } from '@/shared/hooks/useApi.hook';
 import type { SortProductOptions } from '../Products.types';
 import { convertURLParamsRepresentationToProductOptions } from '../utils/ProductUtils';
@@ -49,6 +49,7 @@ export const useProducts = () => {
         isError,
         isFetchingNextPage,
         hasNextPage,
+        isFetchNextPageError,
         error,
         fetchNextPage,
     } = useInfinitePaginatedQuery('products', fetchProducts, productsOptions, 20);
@@ -58,6 +59,12 @@ export const useProducts = () => {
         [isFetchingNextPage, hasNextPage]
     );
 
+    useEffect(() => {
+        if (!isFetchingNextPage && isFetchNextPageError) {
+            displayMessage({ message: 'Failed to load more products', type: 'error' });
+        }
+    }, [isFetchingNextPage, isFetchNextPageError]);
+
     return {
         products: data || [],
         sortOptions,
@@ -65,9 +72,10 @@ export const useProducts = () => {
         updateProducts: updateProductFilter,
         goToNextPage: fetchNextPage,
         productsOptions,
-        isLoadingProducts: isFetchingNextPage,
+        isLoadingNextProductsPage: isFetchingNextPage,
         isLoadingFirstProductsPage: isLoading,
-        isErrorLoadingProducts: isError,
+        isErrorLoadingFirstProductsPage: isError && !isFetchNextPageError,
+        isErrorLoadingNextProductsPage: isFetchNextPageError,
         errorLoadingProductsMessage: isError ? (error as Error).message : null,
         conditionsToFetchNewPage,
     };

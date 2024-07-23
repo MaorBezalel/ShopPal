@@ -4,6 +4,7 @@ import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { ReviewCard } from '@/shared/components/ReviewCard';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll.hook';
 import SortByOptions from '@/shared/components/SortByOptions';
+import ReviewCardSkeleton from '@/shared/components/ReviewCardSkeleton';
 
 import type { SortReviewOptions, OrderReviewOptions } from '../Product.types';
 
@@ -14,18 +15,17 @@ type ProductReviewsProps = {
 export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
     const {
         reviews,
-        isFetching,
+        isLoadingFirstReviewPage,
+        isLoadingNextReviewPage,
+        isErrorLoadingFirstReviewPage,
         reviewSortOptions,
         updateProductFilter,
         updateProductPage,
         reviewOptions,
-        hasMore,
-        isInitialLoading,
+        conditionsToFetchNewPage,
     } = useReviews({
         product_id,
     });
-
-    const conditionsToFetchNewPage = useCallback(() => !isFetching && hasMore, [isFetching, hasMore]);
 
     useInfiniteScroll({
         fetchNextPage: updateProductPage,
@@ -54,8 +54,14 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
                         onSortOptionChange={handleSortByChange}
                     />
                 </div>
-                {isInitialLoading ? (
-                    <LoadingAnimation />
+                {isLoadingFirstReviewPage ? (
+                    <div className="grid gap-4">
+                        {Array.from({ length: 3 }).map((_, index) => (
+                            <ReviewCardSkeleton key={index} />
+                        ))}
+                    </div>
+                ) : isErrorLoadingFirstReviewPage ? (
+                    <p className="text-center text-lg font-semibold text-red-800">Error Retreving Reviews</p>
                 ) : (
                     <>
                         <div className="grid gap-4">
@@ -74,7 +80,7 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
                                 <p className="text-lg font-semibold">No reviews yet</p>
                             )}
                         </div>
-                        {isFetching && <LoadingAnimation />}
+                        {isLoadingNextReviewPage && <LoadingAnimation />}
                     </>
                 )}
             </div>

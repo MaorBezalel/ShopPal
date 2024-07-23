@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useApi } from '@/shared/hooks/useApi.hook';
+import { useMessages } from '@/shared/hooks/useMessages.hook';
 import type { ReviewsWithAuthor } from '@/shared/types';
 import { useTypedSearchParams } from '@/shared/hooks/useTypedSearchParams.hook';
 import type { ReviewQueryParams } from '../Product.types';
@@ -13,6 +14,7 @@ type useReviewsProps = {
 };
 
 export const useReviews = ({ product_id }: useReviewsProps) => {
+    const { displayMessage } = useMessages();
     const { reviewApi } = useApi();
     const reviewSortOptions: SortReviewOptions[] = useMemo(() => ['rating', 'date'], []);
     const [reviewOptions, setReviewOptions] = useTypedSearchParams<ReviewQueryParams>(
@@ -50,26 +52,39 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
 
     const {
         data,
-        isLoading: isInitialLoadingReviews,
-        isError: isErrorReviews,
-        error: errorReviews,
-        isSuccess: isSuccessReviews,
+        isLoading,
+        isError,
+        error,
+        isSuccess,
         hasNextPage,
-        isFetchingNextPage: isFetchingReviews,
+        isFetchingNextPage,
+        isFetchNextPageError,
         fetchNextPage,
     } = useInfinitePaginatedQuery('reviews', queryReviews, { product_id, ...reviewOptions }, 5);
 
+    const conditionsToFetchNewPage = useCallback(
+        () => !isFetchingNextPage && hasNextPage,
+        [isFetchingNextPage, hasNextPage]
+    );
+
+    useEffect(() => {
+        if (!isFetchingNextPage && isFetchNextPageError) {
+            displayMessage({ message: 'Failed to load more reviews', type: 'error' });
+        }
+    }, [isFetchingNextPage, isFetchNextPageError]);
+
     return {
         reviews: (data || []) as ReviewsWithAuthor,
-        isFetching: isFetchingReviews,
-        isError: isErrorReviews,
-        error: errorReviews,
-        isSuccess: isSuccessReviews,
-        isInitialLoading: isInitialLoadingReviews,
+        isLoadingNextReviewPage: isFetchingNextPage,
+        isErrorLoadingNextReviewPage: isFetchNextPageError,
+        isErrorLoadingFirstReviewPage: isError && !isFetchNextPageError,
+        error: error,
+        isSuccess: isSuccess,
+        isLoadingFirstReviewPage: isLoading,
         reviewSortOptions,
         updateProductFilter,
         updateProductPage: fetchNextPage,
         reviewOptions,
-        hasMore: hasNextPage,
+        conditionsToFetchNewPage,
     };
 };
