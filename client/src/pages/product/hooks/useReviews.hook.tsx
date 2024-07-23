@@ -4,9 +4,9 @@ import type { ReviewsWithAuthor } from '@/shared/types';
 import { useTypedSearchParams } from '@/shared/hooks/useTypedSearchParams.hook';
 import type { ReviewQueryParams } from '../Product.types';
 import { convertURLParamsRepresentationToProductOptions } from '../utils/ProductUtils';
-import { usePaginatedQuery } from '@/shared/hooks/usePaginatedQuery.hook';
 
 import type { SortReviewOptions } from '../Product.types';
+import { useInfinitePaginatedQuery } from '@/shared/hooks/useInfinitePaginatedQuery.hook';
 
 type useReviewsProps = {
     product_id: string;
@@ -22,7 +22,6 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         },
         convertURLParamsRepresentationToProductOptions
     );
-    const [hasMore, setHasMore] = useState<boolean>(true);
 
     const queryReviews = useCallback(
         async (reviewOptions: any) => {
@@ -37,9 +36,6 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
                 if ('message' in response) {
                     throw new Error(response.message);
                 }
-                if (response.reviews.length < reviewOptions.limit) {
-                    setHasMore(false);
-                }
                 return response.reviews;
             } catch (error) {
                 throw new Error('Failed to fetch reviews');
@@ -50,32 +46,21 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
 
     const updateProductFilter = useCallback((updatedOptions: Partial<ReviewQueryParams>) => {
         setReviewOptions(updatedOptions);
-        resetPage();
-        setSaveResults(false);
-        setHasMore(true);
-    }, []);
-
-    const updateProductPage = useCallback(() => {
-        goToNextPage();
-        setSaveResults(true);
     }, []);
 
     const {
         data,
-        isLoading: isLoadingReviews,
+        isLoading: isInitialLoadingReviews,
         isError: isErrorReviews,
         error: errorReviews,
         isSuccess: isSuccessReviews,
-        isFetching: isFetchingReviews,
-        isInitialLoading: isInitialLoadingReviews,
-        goToNextPage,
-        resetPage,
-        setSaveResults,
-    } = usePaginatedQuery('reviews', queryReviews, reviewOptions, 5);
+        hasNextPage,
+        isFetchingNextPage: isFetchingReviews,
+        fetchNextPage,
+    } = useInfinitePaginatedQuery('reviews', queryReviews, { product_id, ...reviewOptions }, 5);
 
     return {
         reviews: (data || []) as ReviewsWithAuthor,
-        isLoading: isLoadingReviews,
         isFetching: isFetchingReviews,
         isError: isErrorReviews,
         error: errorReviews,
@@ -83,9 +68,8 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         isInitialLoading: isInitialLoadingReviews,
         reviewSortOptions,
         updateProductFilter,
-        updateProductPage,
-        goToNextPage,
+        updateProductPage: fetchNextPage,
         reviewOptions,
-        hasMore,
+        hasMore: hasNextPage,
     };
 };

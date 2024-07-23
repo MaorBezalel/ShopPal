@@ -27,12 +27,18 @@ export const ProductPage = () => {
         initialProduct: location.state?.product,
     });
 
-    if (fetchProductState.isFetching) {
+    console.log(currentProduct);
+
+    if (!currentProduct && fetchProductState.isLoading) {
         return (
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
                 <LoadingAnimation />
             </div>
         );
+    }
+
+    if (fetchProductState.isError) {
+        return null;
     }
 
     return (

@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useApi } from '@/shared/hooks/useApi.hook';
+import { useMemo } from 'react';
 import type { Product } from '@/shared/types';
 
 type useProductSimilarResultsProps = {
@@ -8,7 +9,6 @@ type useProductSimilarResultsProps = {
 };
 
 export const useProductSimilarResults = ({ product }: useProductSimilarResultsProps) => {
-    const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
     const { productApi } = useApi();
 
     const querySimilarProducts = useCallback(async () => {
@@ -25,8 +25,7 @@ export const useProductSimilarResults = ({ product }: useProductSimilarResultsPr
             if ('message' in response) {
                 throw new Error(response.message);
             }
-            response.products = response.products.filter((p) => p.product_id !== product.product_id);
-            setSimilarProducts(response.products);
+
             return response.products;
         } catch (error) {
             throw new Error('Failed to fetch similar products');
@@ -34,6 +33,7 @@ export const useProductSimilarResults = ({ product }: useProductSimilarResultsPr
     }, []);
 
     const {
+        data,
         isLoading: isLoadingSimilarProducts,
         isError: isErrorSimilarProducts,
         error: errorSimilarProducts,
@@ -43,11 +43,13 @@ export const useProductSimilarResults = ({ product }: useProductSimilarResultsPr
         queryKey: ['similarProducts', product.product_id],
         queryFn: querySimilarProducts,
         refetchOnWindowFocus: false,
-        retry: false,
+        staleTime: Infinity,
     });
 
+    const similarProducts = useMemo(() => data?.filter((data) => data.product_id !== product.product_id) || [], [data]);
+
     return {
-        similarProducts,
+        similarProducts: similarProducts,
         isLoading: isLoadingSimilarProducts,
         isError: isErrorSimilarProducts,
         isFetching: isFetchingSimilarProducts,

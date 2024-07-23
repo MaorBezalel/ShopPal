@@ -1,12 +1,12 @@
 import { useTypedSearchParams } from '@/shared/hooks/useTypedSearchParams.hook';
 import type { ProductOptions } from '../Products.types';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useApi } from '@/shared/hooks/useApi.hook';
 import type { SortProductOptions } from '../Products.types';
 import { convertURLParamsRepresentationToProductOptions } from '../utils/ProductUtils';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import type { ProductQueryParams } from '../Products.types';
-import { usePaginatedQuery } from '@/shared/hooks/usePaginatedQuery.hook';
+import { useInfinitePaginatedQuery } from '@/shared/hooks/useInfinitePaginatedQuery.hook';
 import { useMessages } from '@/shared/hooks/useMessages.hook';
 
 export const useProducts = () => {
@@ -24,18 +24,12 @@ export const useProducts = () => {
         convertURLParamsRepresentationToProductOptions
     );
 
-    const [hasMore, setHasMore] = useState<boolean>(true);
-
     const fetchProducts = useCallback(
         async (productsOptions: ProductOptions) => {
             try {
                 const response = await productApi.getProducts(productsOptions);
                 if ('message' in response) {
                     throw new Error(response.message);
-                }
-
-                if (response.products.length < productsOptions.limit) {
-                    setHasMore(false);
                 }
                 return response.products;
             } catch (error) {
@@ -47,47 +41,34 @@ export const useProducts = () => {
 
     const updateProductFilter = useCallback((updatedOptions: Partial<ProductQueryParams>) => {
         setProductsOptions(updatedOptions);
-        resetPage();
-        setSaveResults(false);
-        setHasMore(true);
-    }, []);
-
-    const updateProductPage = useCallback(() => {
-        goToNextPage();
-        setSaveResults(true);
     }, []);
 
     const {
         data: data,
-        isInitialLoading,
         isLoading,
         isError,
+        isFetchingNextPage,
+        hasNextPage,
         error,
-        goToNextPage,
-        resetPage,
-        setSaveResults,
-    } = usePaginatedQuery('products', fetchProducts, productsOptions);
+        fetchNextPage,
+    } = useInfinitePaginatedQuery('products', fetchProducts, productsOptions, 20);
 
-    useEffect(() => {
-        if (isError) {
-            displayMessage({
-                message: error?.message || 'Failed to fetch products',
-                type: 'error',
-            });
-        }
-    }, [isError]);
+    const conditionsToFetchNewPage = useCallback(
+        () => !isFetchingNextPage && hasNextPage,
+        [isFetchingNextPage, hasNextPage]
+    );
 
     return {
         products: data || [],
         sortOptions,
-        hasMore,
+        hasNextPage,
         updateProducts: updateProductFilter,
-        goToNextPage: updateProductPage,
-        setHasMore,
+        goToNextPage: fetchNextPage,
         productsOptions,
-        isLoadingProducts: isLoading,
-        isLoadingFirstProductsPage: isInitialLoading,
+        isLoadingProducts: isFetchingNextPage,
+        isLoadingFirstProductsPage: isLoading,
         isErrorLoadingProducts: isError,
         errorLoadingProductsMessage: isError ? (error as Error).message : null,
+        conditionsToFetchNewPage,
     };
 };

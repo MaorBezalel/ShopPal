@@ -69,7 +69,6 @@ export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
     } = useQuery({
         queryKey: ['addToCart', product_id],
         queryFn: queryAddToCart,
-        refetchOnWindowFocus: false,
         enabled: false,
     });
 

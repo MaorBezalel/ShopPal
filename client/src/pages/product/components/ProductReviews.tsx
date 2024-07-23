@@ -15,7 +15,6 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
     const {
         reviews,
         isFetching,
-        isLoading,
         reviewSortOptions,
         updateProductFilter,
         updateProductPage,

@@ -20,11 +20,8 @@ export const ProductsPage = () => {
         isLoadingProducts,
         isLoadingFirstProductsPage,
         isErrorLoadingProducts,
-        errorLoadingProductsMessage,
-        hasMore,
+        conditionsToFetchNewPage,
     } = useProducts();
-
-    const conditionsToFetchNewPage = useCallback(() => !isLoadingProducts && hasMore, [isLoadingProducts, hasMore]);
 
     useInfiniteScroll({
         fetchNextPage: goToNextPage,
