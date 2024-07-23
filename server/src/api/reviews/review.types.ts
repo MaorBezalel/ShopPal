@@ -18,3 +18,8 @@ export type DeleteReviewRequestProps = Pick<Review, 'product_id' | 'user_id'>;
 export type GetReviewsResponse = (Omit<Review, 'user_id'> & {
     author: Pick<User, 'user_id' | 'username' | 'avatar'>;
 })[];
+
+export type GetReviewOfUserProps = {
+    user_id: string;
+    product_id: string;
+};

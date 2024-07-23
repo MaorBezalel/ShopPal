@@ -8,11 +8,29 @@ import {
     CreateReviewRequestProps,
     UpdateReviewRequestProps,
     DeleteReviewRequestProps,
+    GetReviewOfUserProps,
+    GetReviewsResponse,
 } from '@/api/reviews/review.types';
 
 export class ReviewService {
-    public static async getReviews({ product_id, limit, offset, sortBy, order }: GetReviewsRequestProps): Promise<any> {
+    public static async getReviews({
+        product_id,
+        limit,
+        offset,
+        sortBy,
+        order,
+    }: GetReviewsRequestProps): Promise<GetReviewsResponse> {
         return await ReviewRepository.getReviews({ product_id, limit, offset, sortBy, order });
+    }
+
+    public static async getReviewOfUser({ user_id, product_id }: GetReviewOfUserProps): Promise<Review> {
+        const reviewOfUser = await ReviewRepository.getReviewOfUser({ user_id, product_id });
+
+        if (!reviewOfUser) {
+            throw new AppError('Review not found', HttpStatusCode.NOT_FOUND, 'getReviewOfUser');
+        }
+
+        return reviewOfUser;
     }
 
     public static async createReview(reviewToCreate: CreateReviewRequestProps): Promise<Review> {

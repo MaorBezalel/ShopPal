@@ -1,28 +1,37 @@
 import { useReviews } from '../hooks/useReviews.hook';
-import { useCallback } from 'react';
 import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { ReviewCard } from '@/shared/components/ReviewCard';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll.hook';
 import SortByOptions from '@/shared/components/SortByOptions';
 import ReviewCardSkeleton from '@/shared/components/ReviewCardSkeleton';
-
+import ProductCreateReview from './ProductCreateReview';
 import type { SortReviewOptions, OrderReviewOptions } from '../Product.types';
+import { useAuth } from '@/shared/hooks/useAuth.hook';
 
 type ProductReviewsProps = {
     product_id: string;
 };
 
 export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
+    const { auth } = useAuth();
     const {
         reviews,
         isLoadingFirstReviewPage,
         isLoadingNextReviewPage,
+        isLoadingUserReview,
         isErrorLoadingFirstReviewPage,
+        isUserReviewNotFound,
+        isUserReviewAdded,
+        isErrorLoadingUserReview,
+        isPendingAddingReview,
         reviewSortOptions,
         updateProductFilter,
         updateProductPage,
         reviewOptions,
         conditionsToFetchNewPage,
+        createReview,
+        isUserLogged,
+        userReview,
     } = useReviews({
         product_id,
     });
@@ -41,8 +50,19 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
         updateProductFilter({ reviews_order: order });
     };
 
+    const shouldShowCreateUserReviewForm =
+        isUserLogged && !isLoadingUserReview && isUserReviewNotFound && !isUserReviewAdded;
+    const shouldShowErrorLoadingUserReview =
+        isUserLogged && !isLoadingUserReview && !isUserReviewNotFound && isErrorLoadingUserReview;
+
     return (
         <>
+            {shouldShowCreateUserReviewForm && (
+                <ProductCreateReview submitReview={createReview} isCreatingReview={isPendingAddingReview} />
+            )}
+            {shouldShowErrorLoadingUserReview && (
+                <p className="text-center text-lg font-semibold text-red-800">Error Loading User Review</p>
+            )}
             <div className="mt-4 flex min-h-[vh] flex-col gap-2">
                 <div className="flex flex-row items-center justify-between">
                     <h1 className="text-xl font-semibold">Reviews</h1>

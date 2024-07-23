@@ -1,12 +1,14 @@
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
 import { Review } from '@/shared/models/entities';
+import { Nullable } from '@/shared/types/utils.types';
 import type { GetReviewsResponse } from '@/api/reviews/review.types';
 import {
     GetReviewsRequestProps,
     CreateReviewRequestProps,
     UpdateReviewRequestProps,
     DeleteReviewRequestProps,
+    GetReviewOfUserProps,
 } from '@/api/reviews/review.types';
 
 export const ReviewRepository = AppDataSource.getRepository(Review).extend({
@@ -46,6 +48,13 @@ export const ReviewRepository = AppDataSource.getRepository(Review).extend({
                     },
                 }));
             }) as Promise<GetReviewsResponse>;
+    },
+
+    async getReviewOfUser({ user_id, product_id }: GetReviewOfUserProps): Promise<Nullable<Review>> {
+        return await this.createQueryBuilder('review')
+            .where('review.product_id = :product_id', { product_id })
+            .andWhere('review.user_id = :user_id', { user_id })
+            .getOne();
     },
 
     async insertReview(review: Review): Promise<InsertResult> {

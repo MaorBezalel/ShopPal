@@ -15,7 +15,11 @@ export type GetReviewsResponse = {
     reviews: ReviewsWithAuthor;
 };
 
-type CreateReviewRequestResponse = {
+export type CreateReviewRequestResponse = {
+    review: Review;
+};
+
+type GetReviewOfUserResponse = {
     review: Review;
 };
 
@@ -43,6 +47,14 @@ export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServicePr
         [PRIVATE_API]
     );
 
+    const getReviewOfUser = useCallback(
+        async (productId: string, userId: string): Promise<GetReviewOfUserResponse | ResponseError> => {
+            const response = await PUBLIC_API.get(`/review/${productId}/${userId}`);
+            return response.data;
+        },
+        [PUBLIC_API]
+    );
+
     const updateReivew = useCallback(
         async (updatedReview: Partial<Review>): Promise<void | ResponseError> => {
             const response = await PRIVATE_API.patch(`/review/${updatedReview.product_id}`, updatedReview);
@@ -59,5 +71,5 @@ export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServicePr
         [PRIVATE_API]
     );
 
-    return { getReviews, addReview, updateReivew, deleteReview };
+    return { getReviews, addReview, updateReivew, deleteReview, getReviewOfUser };
 };
