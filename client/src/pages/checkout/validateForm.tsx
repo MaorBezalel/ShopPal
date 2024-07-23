@@ -5,6 +5,8 @@ type FormData = {
     street: string;
     city: string;
     country: string;
+    email: string;
+    phone: string;
     cardNumber: string;
     expiryDate: string;
     cvv: string;
@@ -99,6 +101,18 @@ export const validatePaymentInfo = (formData: FormData) => {
         errors.cvv = 'CVV is required';
     } else if (!/^\d{3,4}$/.test(formData.cvv)) {
         errors.cvv = 'CVV must be 3 or 4 digits';
+    }
+
+    if (!formData.email) {
+        errors.email = 'Email is required';
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+        errors.email = 'Invalid email address';
+    }
+
+    if (!formData.phone) {
+        errors.phone = 'Phone number is required';
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+        errors.phone = 'Phone number must be 10 digits';
     }
 
     return errors;

@@ -40,6 +40,8 @@ export function CheckoutPage() {
     street: '',
     city: '',
     country: '',
+    email: '',
+    phone: '',
     cardNumber: '',
     expiryDate: '',
     cvv: '',
@@ -59,6 +61,8 @@ export function CheckoutPage() {
         street: userDetails.address.street || '',
         city: userDetails.address.city || '',
         country: userDetails.address.country || '',
+        email: userDetails.email || '',
+        phone: userDetails.phone || '',
       }));
     }
   }, [fillDetails, userDetails]);
@@ -212,6 +216,17 @@ export function CheckoutPage() {
             )}
             {showBillingInfo && (
               <>
+                <h1 className="text-3xl my-3">Contact info</h1>
+                <label htmlFor="email">Email</label>
+                <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email"
+                  className={`border-2 ${formErrors.email ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.email && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.email}</p>}
+
+                <label htmlFor="phone">Phone</label>
+                <input type="text" id="phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone"
+                  className={`border-2 ${formErrors.phone ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.phone && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.phone}</p>}
+
                 <h1 className="text-3xl my-3">Billing info</h1>
                 <label htmlFor="card-number">Card Number</label>
                 <input type="text" id="card-number" name="cardNumber" value={formData.cardNumber} onChange={handleChange} placeholder="Card Number"
