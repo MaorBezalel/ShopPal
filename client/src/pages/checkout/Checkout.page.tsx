@@ -7,6 +7,7 @@ import { validateShippingInfo, validatePaymentInfo } from "./validateForm";
 import { useNavigate } from "react-router";
 import ExclamationIcon from "./icons/ExclamationIcon";
 import logo_svg from '@/assets/svgs/logo.svg';
+import useLoadingOverlay from "./useLoadingOverlay";
 
 interface ProductDetails {
   product_id: string;
@@ -31,6 +32,7 @@ export function CheckoutPage() {
   const [orderId, setOrderId] = useState('');
   const navigate = useNavigate();
   const [fillDetails, setFillDetails] = useState(false);  // Checkbox state
+  const { setIsLoading, LoadingOverlay } = useLoadingOverlay();
   const initialFormState = {
     firstName: '',
     middleName: '',
@@ -83,6 +85,11 @@ export function CheckoutPage() {
       setFormErrors(errors);
       return; // Prevent form submission if there are errors
     }
+
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
     //Preparing order details for API call
     const productIds = itemsInCart.map((item: ProductDetails) => item.product_id);
@@ -155,92 +162,95 @@ export function CheckoutPage() {
   }
 
   return (
-    <div className="flex justify-center container mx-auto">
-      <div className="w-full max-w-[640px] tablet-md:max-w-[400px] tablet-sm:max-w-[280px] mobile-lg:px-3 mobile-md:px-3 mobile-sm:px-3">
-        <form onSubmit={handleOrder} className="flex flex-col space-y-4">
-          {!showBillingInfo && (
-            <>
-              <div>
-                <h1 className="text-3xl my-3">Shipping Address</h1>
-                <input type="checkbox" id="fill-details" checked={fillDetails} onChange={(e) => setFillDetails(e.target.checked)} className="h-4 w-4 accent-accent-500" />
-                <label htmlFor="fill-details"> Fill details from profile</label>
-              </div>
+    <div className="relative min-h-screen">
+      <LoadingOverlay />
+      <div className="flex justify-center container mx-auto">
+        <div className="w-full max-w-[640px] tablet-md:max-w-[400px] tablet-sm:max-w-[280px] mobile-lg:px-3 mobile-md:px-3 mobile-sm:px-3">
+          <form onSubmit={handleOrder} className="flex flex-col space-y-4">
+            {!showBillingInfo && (
+              <>
+                <div>
+                  <h1 className="text-3xl my-3">Shipping Address</h1>
+                  <input type="checkbox" id="fill-details" checked={fillDetails} onChange={(e) => setFillDetails(e.target.checked)} className="h-4 w-4 accent-accent-500" />
+                  <label htmlFor="fill-details"> Fill details from profile</label>
+                </div>
 
-              <label htmlFor="first-name">First Name</label>
-              <input type="text" id="first-name" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name"
-                className={`border-2 ${formErrors.firstName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.firstName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.firstName}</p>}
+                <label htmlFor="first-name">First Name</label>
+                <input type="text" id="first-name" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name"
+                  className={`border-2 ${formErrors.firstName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.firstName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.firstName}</p>}
 
-              <label htmlFor="middle-name">Middle Name</label>
-              <input type="text" id="middle-name" name="middleName" value={formData.middleName} onChange={handleChange} placeholder="Middle Name"
-                className={`border-2 ${formErrors.middleName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.middleName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.middleName}</p>}
+                <label htmlFor="middle-name">Middle Name</label>
+                <input type="text" id="middle-name" name="middleName" value={formData.middleName} onChange={handleChange} placeholder="Middle Name"
+                  className={`border-2 ${formErrors.middleName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.middleName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.middleName}</p>}
 
-              <label htmlFor="last-name">Last Name</label>
-              <input type="text" id="last-name" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name"
-                className={`border-2 ${formErrors.lastName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.lastName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.lastName}</p>}
+                <label htmlFor="last-name">Last Name</label>
+                <input type="text" id="last-name" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name"
+                  className={`border-2 ${formErrors.lastName ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.lastName && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.lastName}</p>}
 
-              <label htmlFor="street">Street</label>
-              <input type="text" id="street" name="street" value={formData.street} onChange={handleChange} placeholder="Street"
-                className={`border-2 ${formErrors.street ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.street && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.street}</p>}
+                <label htmlFor="street">Street</label>
+                <input type="text" id="street" name="street" value={formData.street} onChange={handleChange} placeholder="Street"
+                  className={`border-2 ${formErrors.street ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.street && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.street}</p>}
 
-              <label htmlFor="city">City</label>
-              <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} placeholder="City"
-                className={`border-2 ${formErrors.city ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.city && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.city}</p>}
+                <label htmlFor="city">City</label>
+                <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} placeholder="City"
+                  className={`border-2 ${formErrors.city ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.city && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.city}</p>}
 
-              <label htmlFor="country">Country</label>
-              <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} placeholder="Country"
-                className={`border-2 ${formErrors.country ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.country && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.country}</p>}
+                <label htmlFor="country">Country</label>
+                <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} placeholder="Country"
+                  className={`border-2 ${formErrors.country ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.country && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.country}</p>}
 
-              <button type="button" onClick={handleContinue} className="text-white bg-secondary-300 hover:bg-primary-500 py-4 rounded-md w-1/5 ml-auto tablet-sm:w-1/4 mobile-md:w-1/4 mobile-sm:w-1/4">
-                Continue
-              </button>
-            </>
-          )}
-          {showBillingInfo && (
-            <>
-              <h1 className="text-3xl my-3">Billing info</h1>
-              <label htmlFor="card-number">Card Number</label>
-              <input type="text" id="card-number" name="cardNumber" value={formData.cardNumber} onChange={handleChange} placeholder="Card Number"
-                className={`border-2 ${formErrors.cardNumber ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.cardNumber && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.cardNumber}</p>}
+                <button type="button" onClick={handleContinue} className="text-white bg-secondary-300 hover:bg-primary-500 py-4 rounded-md w-1/5 ml-auto tablet-sm:w-1/4 mobile-md:w-1/4 mobile-sm:w-1/4">
+                  Continue
+                </button>
+              </>
+            )}
+            {showBillingInfo && (
+              <>
+                <h1 className="text-3xl my-3">Billing info</h1>
+                <label htmlFor="card-number">Card Number</label>
+                <input type="text" id="card-number" name="cardNumber" value={formData.cardNumber} onChange={handleChange} placeholder="Card Number"
+                  className={`border-2 ${formErrors.cardNumber ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.cardNumber && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.cardNumber}</p>}
 
-              <label htmlFor="expiry-date">Expiry Date</label>
-              <input type="text" id="expiry-date" name="expiryDate" value={formData.expiryDate} onChange={handleChange} placeholder="Expiry Date"
-                className={`border-2 ${formErrors.expiryDate ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.expiryDate && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.expiryDate}</p>}
+                <label htmlFor="expiry-date">Expiry Date</label>
+                <input type="text" id="expiry-date" name="expiryDate" value={formData.expiryDate} onChange={handleChange} placeholder="Expiry Date"
+                  className={`border-2 ${formErrors.expiryDate ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.expiryDate && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.expiryDate}</p>}
 
-              <label htmlFor="cvv">CVV</label>
-              <input type="text" id="cvv" name="cvv" value={formData.cvv} onChange={handleChange} placeholder="CVV"
-                className={`border-2 ${formErrors.cvv ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
-              {formErrors.cvv && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.cvv}</p>}
+                <label htmlFor="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" value={formData.cvv} onChange={handleChange} placeholder="CVV"
+                  className={`border-2 ${formErrors.cvv ? 'border-red-500 focus:outline-red-500' : 'border-gray-300 focus:outline-primary-500'} p-2 rounded-md`} />
+                {formErrors.cvv && <p className="text-red-500"> <ExclamationIcon className="inline mb-2" /> {formErrors.cvv}</p>}
 
-              <button type="submit" className="text-white bg-secondary-300 hover:bg-primary-500 py-4 rounded-md w-1/5 ml-auto tablet-md:w-1/3 tablet-sm:w-1/2 mobile-lg:w-1/3 mobile-md:w-1/2 mobile-sm:w-1/2">Confirm purchase</button>
-            </>
-          )}
-        </form>
-      </div>
-      <div className="ml-4 border-l bg-accent-100 mt-10 border-accent-300 pr-4 mobile-lg:hidden mobile-md:hidden mobile-sm:hidden">
-        <table className="ml-3">
-          <tbody>
-            {itemsInCart.map((item: ProductDetails, index: number) => (
-              <tr key={index} className="border-b border-accent-300">
-                <td className="w-20 h-20"><img src={item.thumbnail} alt={item.title} className="w-20 h-20 object-cover" /></td>
-                <td className="">{item.title} <br /> Qty:{item.quantity}</td>
-                <td className="pl-10">${(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
+                <button type="submit" className="text-white bg-secondary-300 hover:bg-primary-500 py-4 rounded-md w-1/5 ml-auto tablet-md:w-1/3 tablet-sm:w-1/2 mobile-lg:w-1/3 mobile-md:w-1/2 mobile-sm:w-1/2">Confirm purchase</button>
+              </>
+            )}
+          </form>
+        </div>
+        <div className="ml-4 border-l bg-accent-100 mt-10 border-accent-300 pr-4 mobile-lg:hidden mobile-md:hidden mobile-sm:hidden">
+          <table className="ml-3">
+            <tbody>
+              {itemsInCart.map((item: ProductDetails, index: number) => (
+                <tr key={index} className="border-b border-accent-300">
+                  <td className="w-20 h-20"><img src={item.thumbnail} alt={item.title} className="w-20 h-20 object-cover" /></td>
+                  <td className="">{item.title} <br /> Qty:{item.quantity}</td>
+                  <td className="pl-10">${(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
+                </tr>
+              ))}
+              <tr>
+                <td className="px-4 font-bold">Total:</td>
+                <td className="pl-4"> {totalQuantity} items</td>
+                <td className="pl-10">${totalPrice}</td>
               </tr>
-            ))}
-            <tr>
-              <td className="px-4 font-bold">Total:</td>
-              <td className="pl-4"> {totalQuantity} items</td>
-              <td className="pl-10">${totalPrice}</td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
