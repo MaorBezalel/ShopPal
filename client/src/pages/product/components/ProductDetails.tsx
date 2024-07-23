@@ -32,11 +32,11 @@ export const ProductDetails = ({
     };
 
     return (
-        <div>
+        <div className="flex flex-col gap-2">
             <span className="cursor-pointer font-semibold text-primary-500" onClick={handleCategoryClick}>
                 {category ? formatCategoryName(category) : 'Unknown Category'}
             </span>
-            <h1 className="text-3xl font-bold">{title || 'Unknown Product'}</h1>
+            <h1 className="mb-1 text-3xl font-bold">{title || 'Unknown Product'}</h1>
             {rating && <RatingBar rating={rating} />}
             <p>{description || 'No description.'}</p>
             <h6 className="text-2xl font-semibold">{price ? `$${price}` : 'Price Not Avaliable'}</h6>
