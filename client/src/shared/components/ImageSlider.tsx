@@ -27,7 +27,12 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
     return (
         <div>
             <div className={`relative ${className}`}>
-                <AsyncImage src={activeImage} alt="Product image" className="h-full w-full rounded-xl object-cover" />
+                <AsyncImage
+                    key={activeImage}
+                    src={activeImage}
+                    alt="Product image"
+                    className="h-full w-full rounded-xl object-cover"
+                />
                 {images && (
                     <>
                         <button
@@ -49,6 +54,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
                 {images?.map((image, index) => (
                     <div className="flex h-24 w-24" key={index}>
                         <AsyncImage
+                            key={image}
                             src={image}
                             alt="Product thumbnail"
                             className={`h-full w-full cursor-pointer rounded-md ${index === activeImageIndex ? 'border-2 border-primary-200' : ''}`}
