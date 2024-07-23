@@ -1,11 +1,14 @@
+// Import necessary hooks and utilities
 import { useApi } from "@/shared/hooks/useApi.hook";
 import { useEffect, useRef, useState } from "react";
 import useLocalStorage from "@/shared/hooks/useLocalStorage.hook";
+// Import components and types
 import { ProductDisplayInCart } from "./ProductDisplayInCart";
 import { Product } from "@/shared/types";
+// Import hook for navigation
 import { useNavigate } from 'react-router';
 
-// Define props type
+// Define the type for the component's props
 type UserCartProps = {
     onTotalPriceUpdate: (totalPrice: number) => void;
     onClearCart: () => void;
@@ -14,50 +17,56 @@ type UserCartProps = {
     checkoutTrigger: boolean;
 };
 
+// Define the GuestCart component
 export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
+    // Hook to interact with the API
     const api = useApi();
+    // Ref to track if the component is mounted
     const isMounted = useRef<boolean>(false);
+    // State to manage cart items using local storage
     const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>, quantities: Array<number> }>('cart', { product_ids: [], quantities: [] });
+    // State to store product details
     const [productDetails, setProductDetails] = useState<Product[]>([]);
+    // Loading, error, and empty states
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    // Hook for navigation
     const navigate = useNavigate();
 
-
-
-
+    // Effect to fetch cart data
     useEffect(() => {
         const fetchData = async () => {
             isMounted.current = true;
             setIsLoading(true);
             setIsError(false);
+            // Validate cart state before fetching data
             if (cart.product_ids.length) {
                 const isValidQuantities = cart.quantities.length === cart.product_ids.length && cart.quantities.every(q => typeof q === 'number');
 
                 if (!isValidQuantities) {
                     console.error("Invalid cart state: Quantities and Product IDs mismatch or Quantities not all numbers");
-                    setIsError(true); // Set error state due to invalid cart state
-                    setIsLoading(false); // End loading since we're not proceeding with the fetch
-                    setCart({ product_ids: [], quantities: [] }); // Clear the cart to prevent further errors
+                    setIsError(true);
+                    setIsLoading(false);
+                    setCart({ product_ids: [], quantities: [] });
                     return;
                 }
                 try {
+                    // Fetch product details from API
                     const response = await api.cartApi.getGuestCart({ product_ids: cart.product_ids });
                     if ('products' in response) {
                         setProductDetails(response.products);
-                        setIsEmpty(response.products.length === 0); // Check if the response is empty
+                        setIsEmpty(response.products.length === 0);
                     } else {
-                        console.log(response.message);
-                        setIsError(true); // Set error state if response doesn't contain products
+
+                        setIsError(true);
                     }
                 } catch (error) {
                     console.error("Fetching error:", error);
                     setIsError(true);
                 }
             } else {
-                console.log("No product IDs found in local storage");
-                setIsEmpty(true); // Set empty state if no product IDs
+                setIsEmpty(true);
             }
             setIsLoading(false);
         };
@@ -68,7 +77,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         };
     }, [api.cartApi, cart.product_ids]);
 
-
+    // Calculate total price of items in the cart
     const calculateTotalPrice = () => {
         let totalPrice = 0;
         productDetails.forEach((product, index) => {
@@ -77,11 +86,13 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         return totalPrice;
     };
 
+    // Update total price whenever product details or quantities change
     useEffect(() => {
         const totalPrice = calculateTotalPrice();
         onTotalPriceUpdate(totalPrice);
     }, [productDetails, cart.quantities]);
 
+    // Remove a product from the cart
     const removeProductFromCart = (productId: string) => {
         const productIndex = cart.product_ids.findIndex(id => id === productId);
         if (productIndex > -1) {
@@ -95,6 +106,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         }
     };
 
+    // Clear the cart
     const handleClearCart = () => {
         setCart({ product_ids: [], quantities: [] });
         setProductDetails([]);
@@ -102,13 +114,14 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         onClearCart();
     };
 
+    // Clear cart when clearTrigger changes
     useEffect(() => {
         if (clearTrigger) {
-            handleClearCart(); // Call the existing cart clearing logic when clearTrigger changes
+            handleClearCart();
         }
     }, [clearTrigger]);
 
-
+    // Handle checkout process
     const handleCheckout = () => {
         const itemsInCart = productDetails.map((product, index) => (
             {
@@ -126,15 +139,14 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
         }
     };
 
+    // Navigate to checkout when checkoutTrigger changes
     useEffect(() => {
         if (checkoutTrigger) {
             handleCheckout();
         }
     }, [checkoutTrigger]);
 
-
-
-
+    // Render the component
     return (
         <div>
             {isLoading ? (
@@ -157,5 +169,4 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
             )}
         </div>
     );
-
 }

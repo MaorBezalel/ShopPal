@@ -5,6 +5,7 @@ import { Cart } from "@/shared/types/entities.types";
 import { ProductDisplayInCart } from "./ProductDisplayInCart";
 import { useNavigate } from 'react-router';
 
+// Define the props for UserCart component
 type UserCartProps = {
   onTotalPriceUpdate: (totalPrice: number) => void;
   onClearCart: () => void;
@@ -13,19 +14,21 @@ type UserCartProps = {
   checkoutTrigger: boolean;
 };
 
-
+// UserCart component definition
 export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
-
+  // Hooks for API access and user authentication
   const api = useApi();
   const isMounted = useRef<boolean>(false);
   const userId = useAuth().auth?.user.user_id;
+
+  // State management for cart items, loading, error, and empty states
   const [cartItems, setCartItems] = useState<Cart>();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const navigate = useNavigate();
 
-
+  // Fetch user cart data on component mount
   useEffect(() => {
     isMounted.current = true;
     const fetchData = async () => {
@@ -37,7 +40,6 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
             setCartItems(response.userCart);
             setIsEmpty(response.userCart.length === 0);
           } else {
-            console.log(response.message);
             setIsError(true);
           }
         } catch (error) {
@@ -50,10 +52,11 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
 
     fetchData();
     return () => {
-      isMounted.current = false;
+      isMounted.current = false; // Cleanup function to set isMounted to false when component unmounts
     };
   }, [api.cartApi, userId]);
 
+  // Calculate total price of items in the cart
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     cartItems?.forEach(item => {
@@ -62,17 +65,18 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
     return totalPrice;
   };
 
+  // Update total price in parent component whenever cartItems changes
   useEffect(() => {
     const totalPrice = calculateTotalPrice();
-    onTotalPriceUpdate(totalPrice); // Update parent component with the total price
-  }, [cartItems]); // Recalculate when cartItems changes
+    onTotalPriceUpdate(totalPrice);
+  }, [cartItems]);
 
+  // Handle removal of a product from the cart
   const handleRemoveProductFromCart = async (productId: string) => {
-    if (!userId) return; // Ensure there's a userId available
+    if (!userId) return;
     try {
       const response = await api.cartApi.removeProductFromCart(productId, userId);
       if (response.message === "Product removed from cart successfully") {
-        // Filter out the removed product and update state
         setCartItems(currentItems => currentItems?.filter(item => item.__product__.product_id !== productId));
       } else {
         console.error(response.message);
@@ -82,14 +86,15 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
     }
   };
 
+  // Handle clearing of the cart
   const handleClearCart = async () => {
-    if (!userId) return; // Ensure there's a userId available
+    if (!userId) return;
     try {
       const response = await api.cartApi.removeCart(userId);
       if (response.message === "All products removed from cart successfully") {
-        // Clear the cart items and update state
         setCartItems([]);
-        onClearCart(); // Notify parent component that the cart is cleared
+        setIsEmpty(true);
+        onClearCart(); // Notify parent component that the cart has been cleared
       } else {
         console.error(response.message);
       }
@@ -98,16 +103,16 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
     }
   };
 
+  // Effect to clear cart when clearTrigger changes
   useEffect(() => {
     if (clearTrigger) {
-      handleClearCart(); // Call the existing cart clearing logic when clearTrigger changes
+      handleClearCart();
     }
   }, [clearTrigger]);
 
+  // Handle checkout process
   const handleCheckout = () => {
-    if (!cartItems || cartItems.length === 0) {
-      return; // Prevent navigation if the cart is empty
-    }
+    if (!cartItems || cartItems.length === 0) return;
     const itemsInCart = cartItems?.map((item) => (
       {
         product_id: item.__product__.product_id,
@@ -119,16 +124,17 @@ export default function UserCart({ onTotalPriceUpdate, onClearCart, clearTrigger
       }
     ));
     navigate('/checkout', { state: { itemsInCart: itemsInCart } });
-    onCheckout();
+    onCheckout(); // Notify parent component that checkout has been initiated
   };
 
+  // Effect to handle checkout when checkoutTrigger changes
   useEffect(() => {
     if (checkoutTrigger) {
       handleCheckout();
     }
   }, [checkoutTrigger]);
 
-
+  // Render the component UI
   return (
     <div>
       {isLoading ? (

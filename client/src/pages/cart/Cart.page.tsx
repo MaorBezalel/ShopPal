@@ -3,29 +3,27 @@ import UserCart from "./UserCart";
 import { useAuth } from "@/shared/hooks/useAuth.hook";
 import { useState } from "react";
 
-
-
+// CartPage component to display either UserCart or GuestCart based on authentication status
 export const CartPage = () => {
-    const { auth } = useAuth();
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [checkoutTrigger, setCheckoutTrigger] = useState(false);
-    const [clearTrigger, setClearTrigger] = useState(false); // Add a state to trigger cart clearing
+    const { auth } = useAuth(); // Use the custom hook to access authentication status
+    const [totalPrice, setTotalPrice] = useState(0); // State to keep track of the total price of items in the cart
+    const [checkoutTrigger, setCheckoutTrigger] = useState(false); // State to manage checkout process trigger
+    const [clearTrigger, setClearTrigger] = useState(false); // State to manage cart clearing trigger
 
-
-
+    // Function to update the total price of items in the cart
     const handleTotalPriceUpdate = (price: number) => {
         setTotalPrice(price);
     };
 
+    // Function to toggle the clear cart trigger
     const handleClearCart = () => {
-        setClearTrigger(prev => !prev); // Toggle the trigger to clear the cart
-
+        setClearTrigger(prev => !prev);
     };
 
+    // Function to toggle the checkout trigger
     const handleCheckout = () => {
         setCheckoutTrigger(prev => !prev);
     };
-
 
     return (
         <div className="flex justify-center container mx-auto 
@@ -35,7 +33,6 @@ mobile-lg:flex-col
 mobile-md:flex-col
 mobile-sm:flex-col">
             <div className="w-1/2 mx-5 tablet-md:w-full tablet-sm:w-full mobile-lg:w-full mobile-md:w-full">
-                <h1 className="-mx-40">Shopping cart</h1>
                 <div className="grid gap-4 grid-cols-[2fr_1fr_1fr_1fr] mobile-md:grid-cols-[2fr_1fr]  mobile-sm:hidden">
                     <h2 className="ml-5">Product</h2>
                     <h2 className="ml-5">Price</h2>

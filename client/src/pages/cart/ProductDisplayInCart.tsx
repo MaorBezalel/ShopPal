@@ -1,6 +1,3 @@
-// ProductDisplay.tsx
-
-
 interface ProductDisplayProps {
     title: string;
     price: number;
@@ -8,8 +5,6 @@ interface ProductDisplayProps {
     thumbnail?: string;
     onRemoveProduct: () => void;
 }
-
-
 
 export const ProductDisplayInCart = ({ title, price, quantity, thumbnail, onRemoveProduct }: ProductDisplayProps) => {
 
@@ -20,8 +15,7 @@ export const ProductDisplayInCart = ({ title, price, quantity, thumbnail, onRemo
                     <tr className="grid gap-4 border-t border-b border-gray-200 grid-cols-[2fr_1fr_1fr_1fr] mobile-md:grid-cols-[2fr_1fr] mobile-sm:grid-cols-[2fr_1fr]">
                         {thumbnail && (
                             <td className="col-span-1">
-                                {/* Flex container for image, title, and button */}
-                                <div className="flex items-center space-x-4"> {/* Adjusted for flex row layout */}
+                                <div className="flex items-center space-x-4">
                                     <img src={thumbnail} alt={title} className="w-24 h-24 object-cover" />
                                     <div>
                                         <div className="font-bold mobile-lg:text-sm mobile-md:text-sm mobile-sm:text-sm">{title}</div>
