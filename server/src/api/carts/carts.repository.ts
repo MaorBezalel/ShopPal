@@ -1,4 +1,4 @@
-import { InsertResult, DeleteResult } from 'typeorm';
+import { InsertResult, DeleteResult, UpdateResult } from 'typeorm';
 import { AppDataSource } from '@/shared/db/pg.data-source';
 import { Cart } from '@/shared/models/relationships';
 import { Product } from '@/shared/models/entities';
@@ -11,7 +11,6 @@ export type CartRepositoryType = {
 };
 
 export const CartRepository = AppDataSource.getRepository(Cart).extend({
-
     // Retrieve a user's cart with all products
     getUserCartWithProducts: async (user_id: string): Promise<Cart[]> => {
         return AppDataSource.createQueryBuilder()
@@ -32,12 +31,26 @@ export const CartRepository = AppDataSource.getRepository(Cart).extend({
     },
 
     // Add a new product to a user's cart
-    addProductToCart: async (user_id: string, product_id: string, quantity: number): Promise<InsertResult> => {
-        return AppDataSource.createQueryBuilder()
-            .insert()
-            .into(Cart)
-            .values({ user_id: user_id, product_id: product_id, quantity: quantity })
+    addProductToCart: async (
+        user_id: string,
+        product_id: string,
+        quantity: number
+    ): Promise<UpdateResult | InsertResult> => {
+        const updateResult = await AppDataSource.createQueryBuilder()
+            .update(Cart)
+            .set({ quantity: () => `quantity + ${quantity}` })
+            .where('user_id = :user_id AND product_id = :product_id', { user_id, product_id })
             .execute();
+
+        if (updateResult.affected === 0) {
+            return AppDataSource.createQueryBuilder()
+                .insert()
+                .into(Cart)
+                .values({ user_id: user_id, product_id: product_id, quantity: quantity })
+                .execute();
+        }
+
+        return updateResult;
     },
 
     // Remove a product from the cart
