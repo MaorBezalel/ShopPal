@@ -18,9 +18,8 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
         isLoadingNextReviewPage,
         isLoadingUserReview,
         isErrorLoadingFirstReviewPage,
-        isUserReviewNotFound,
+        userReviewStatus,
         isUserReviewAdded,
-        isErrorLoadingUserReview,
         isPendingAddingReview,
         reviewSortOptions,
         updateProductFilter,
@@ -48,9 +47,8 @@ export const ProductReviews = ({ product_id }: ProductReviewsProps) => {
     };
 
     const shouldShowCreateUserReviewForm =
-        isUserLogged && !isLoadingUserReview && isUserReviewNotFound && !isUserReviewAdded;
-    const shouldShowErrorLoadingUserReview =
-        isUserLogged && !isLoadingUserReview && !isUserReviewNotFound && isErrorLoadingUserReview;
+        isUserLogged && !isLoadingUserReview && userReviewStatus === 'no_review' && !isUserReviewAdded;
+    const shouldShowErrorLoadingUserReview = isUserLogged && userReviewStatus === 'error';
 
     return (
         <>

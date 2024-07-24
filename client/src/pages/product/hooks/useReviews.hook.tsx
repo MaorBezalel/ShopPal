@@ -61,13 +61,11 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
             if ('message' in response) {
                 throw new Error(response.message);
             }
+            setUserReviewStatus(response.review.status);
             return response.review;
         } catch (error) {
-            if (((error as AxiosError).response?.data as ResponseError).statusCode === 404) {
-                throw new Error('Review not found');
-            } else {
-                throw new Error('Failed to fetch user review');
-            }
+            setUserReviewStatus('error');
+            throw new Error('Failed to fetch user review');
         }
     }, [reviewApi, product_id, auth]);
 
@@ -87,12 +85,7 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         fetchNextPage,
     } = useInfinitePaginatedQuery('reviews', queryReviews, { product_id, ...reviewOptions }, 5);
 
-    const {
-        data: userReview,
-        isLoading: isLoadingUserReview,
-        isError: isErrorLoadingUserReview,
-        error: errorLoadingUserReview,
-    } = useQuery({
+    const { data: userReview, isLoading: isLoadingUserReview } = useQuery({
         queryKey: ['reviewOfUser', product_id, auth?.user.user_id!],
         queryFn: queryReviewOfUser,
         enabled: !!auth?.user,
@@ -161,9 +154,8 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         });
     }, []);
 
-    const isUserReviewNotFound = useMemo(
-        () => errorLoadingUserReview?.message === 'Review not found',
-        [errorLoadingUserReview]
+    const [userReviewStatus, setUserReviewStatus] = useState(
+        'no_order' as 'no_order' | 'no_review' | 'review_found' | 'error'
     );
     const [isUserReviewAdded, setIsUserReviewAdded] = useState(false);
 
@@ -173,8 +165,7 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         isLoadingUserReview: isLoadingUserReview,
         isPendingAddingReview: isPendingAddingReview,
         isErrorAddingReview: isErrorAddingReview,
-        isErrorLoadingUserReview: isErrorLoadingUserReview,
-        isUserReviewNotFound: isUserReviewNotFound,
+        userReviewStatus: userReviewStatus,
         isUserReviewAdded: isUserReviewAdded,
         isErrorLoadingNextReviewPage: isFetchNextPageError,
         isErrorLoadingFirstReviewPage: isError && !isFetchNextPageError,

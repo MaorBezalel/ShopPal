@@ -19,8 +19,11 @@ export type CreateReviewRequestResponse = {
     review: Review;
 };
 
-type GetReviewOfUserResponse = {
-    review: Review;
+export type GetReviewOfUserResponse = {
+    review: {
+        status: 'no_order' | 'no_review' | 'review_found';
+        review?: Review;
+    };
 };
 
 type useReviewServiceProps = {

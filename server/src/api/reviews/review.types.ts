@@ -1,5 +1,6 @@
 import { Review, User } from '@/shared/models/entities';
 import { Keys } from '@/shared/types/utils.types';
+import type { Nullable } from '@/shared/types/utils.types';
 
 export type GetReviewsRequestProps = {
     product_id: string;
@@ -22,4 +23,9 @@ export type GetReviewsResponse = (Omit<Review, 'user_id'> & {
 export type GetReviewOfUserProps = {
     user_id: string;
     product_id: string;
+};
+
+export type GetReviewOfUserResponse = {
+    status: 'no_order' | 'no_review' | 'review_found';
+    review: Nullable<Review>;
 };

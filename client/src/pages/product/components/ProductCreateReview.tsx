@@ -31,6 +31,7 @@ export const ProductCreateReview = ({ submitReview, isCreatingReview }: ProductC
     return (
         <div className="mt-4">
             <h1 className="text-xl font-semibold">Add Your Own Review</h1>
+            <h2 className="text-md font-semibold">Since you recently bought this product, tell us about it!</h2>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="mt-2 flex flex-col gap-8 rounded-lg border border-primary-200 bg-slate-100 p-4"
