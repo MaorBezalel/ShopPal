@@ -32,7 +32,9 @@ export const ProductList: React.FC<ProductListProps> = ({
                     <LoadingAnimation />
                 </div>
             )}
-            {products.length === 0 && !isLoadingProducts && <p className="text-center text-2xl">No products found</p>}
+            {products.length === 0 && !isLoadingProducts && (
+                <p className="mt-6 text-center text-2xl font-semibold">No products found</p>
+            )}
         </>
     );
 };
