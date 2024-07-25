@@ -24,12 +24,13 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
         },
     });
 
-    const registerConfirmPassword = register('confirmPassword', {
-        required: 'Confirm Password is required!',
-        validate: (value, { password }) => {
-            return value === password || 'Passwords do not match!';
-        },
-    });
+    const registerConfirmPassword = () =>
+        register('confirmPassword', {
+            required: 'Confirm Password is required!',
+            validate: (value, { password }) => {
+                return value === password || 'Passwords do not match!';
+            },
+        });
 
     return (
         <section
@@ -112,7 +113,7 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
                                 placeholder="Confirm Password..."
                                 aria-errormessage="error-confirmPassword"
                                 autoComplete={isSignup ? 'new-password' : 'current-password'}
-                                {...registerConfirmPassword}
+                                {...registerConfirmPassword()}
                             />
                             <IconPassword
                                 className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 

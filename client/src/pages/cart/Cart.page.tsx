@@ -27,15 +27,20 @@ export const CartPage = () => {
 
     return (
         <main
-            className="container-highlight container flex flex-1 justify-center
-            tablet-md:flex-col"
+            className="container-highlight container flex w-full flex-1 justify-center
+            gap-14 pc-sm:gap-0 tablet-lg:flex-col
+            tablet-lg:justify-start"
         >
-            <div className="mx-5 w-1/2 tablet-md:w-full tablet-sm:w-full mobile-lg:w-full mobile-md:w-full">
-                <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 mobile-md:grid-cols-[2fr_1fr]  mobile-sm:hidden">
+            {/* Products */}
+            <div className="tablet-md:w-full tablet-sm:w-full mobile-lg:w-full mobile-md:w-full">
+                <div
+                    className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 tablet-lg:grid-cols-[3fr_1fr_1fr_1fr]  tablet-sm:hidden
+                    tablet-sm:grid-cols-[2fr_1fr]"
+                >
                     <h2 className="ml-5">Product</h2>
                     <h2 className="ml-5">Price</h2>
-                    <h2 className="mobile-md:hidden">Quantity</h2>
-                    <h2 className="mx-5 mobile-md:hidden">Total</h2>
+                    <h2 className="tablet-sm:hidden">Quantity</h2>
+                    <h2 className="mx-5 tablet-sm:hidden">Total</h2>
                 </div>
                 <div className="w-full">
                     {auth?.user ? (
@@ -57,35 +62,51 @@ export const CartPage = () => {
                     )}
                 </div>
             </div>
-            <div className="my-6 flex-none">
-                <h1 className="text-lg font-bold">Order summary</h1>
-                <div
+
+            {/* Order summary */}
+            <section
+                className="my-6 flex w-60 flex-col gap-2
+                tablet-lg:w-80 tablet-lg:gap-4 tablet-lg:pl-5"
+            >
+                <h1 className="text-lg font-bold tablet-lg:text-[2rem]">Order summary</h1>
+                {/* total price */}
+                <section
                     className="flex items-center justify-between 
-        tablet-md:justify-start
-        tablet-sm:justify-start
-        mobile-lg:justify-start
-        mobile-md:justify-start
-        mobile-sm:justify-start"
+                    tablet-lg:gap-5 tablet-lg:pr-6"
                 >
-                    <h2 className="tablet-md:pr-5 tablet-sm:pr-5 mobile-lg:pr-5 mobile-md:pr-5 mobile-sm:pr-5">
-                        Total
+                    <h2
+                        className="tablet-lg:text-2xl
+                        tablet-md:pr-5 tablet-sm:pr-5 mobile-lg:pr-5 mobile-md:pr-5 mobile-sm:pr-5"
+                    >
+                        Total:
                     </h2>
-                    <span>${totalPrice.toFixed(2)}</span>
-                </div>
-                <button
-                    onClick={handleCheckout}
-                    className="my-2 rounded-md bg-secondary-300 px-4 py-1 text-white hover:bg-primary-500"
+                    <span className="tablet-lg:text-2xl">${totalPrice.toFixed(2)}</span>
+                </section>
+                <menu
+                    className="flex flex-row items-center gap-2
+                pc-sm:flex-col
+                tablet-lg:flex-row"
                 >
-                    CHECKOUT
-                </button>
-                <br />
-                <button
-                    onClick={handleClearCart}
-                    className="my-2 rounded-md bg-accent-400 px-4 py-1 text-white hover:bg-accent-600"
-                >
-                    Clear cart
-                </button>
-            </div>
+                    <li>
+                        <button
+                            onClick={handleCheckout}
+                            className="rounded-md bg-secondary-300 px-4 py-1 text-white hover:bg-primary-500
+                            tablet-lg:px-6 tablet-lg:py-2 tablet-lg:text-lg"
+                        >
+                            CHECKOUT
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            onClick={handleClearCart}
+                            className="rounded-md bg-accent-400 px-4 py-1 text-white hover:bg-accent-600
+                            tablet-lg:px-6 tablet-lg:py-2 tablet-lg:text-lg"
+                        >
+                            Clear cart
+                        </button>
+                    </li>
+                </menu>
+            </section>
         </main>
     );
 };

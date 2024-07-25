@@ -7,13 +7,14 @@ export function InputFieldEmail() {
         formState: { errors },
     } = useFormContext();
 
-    const registerEmail = register('email', {
-        required: 'Email is required!',
-        pattern: {
-            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-            message: 'Invalid email address!',
-        },
-    });
+    const registerEmail = () =>
+        register('email', {
+            required: 'Email is required!',
+            pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                message: 'Invalid email address!',
+            },
+        });
 
     return (
         <section
@@ -33,7 +34,7 @@ export function InputFieldEmail() {
                         type="text"
                         placeholder='e.g. "JohnDoe@email.com"'
                         aria-errormessage="error-email"
-                        {...registerEmail}
+                        {...registerEmail()}
                         className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 
                         pc-md:text-base
                         pc-sm:px-9

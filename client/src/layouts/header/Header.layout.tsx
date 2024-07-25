@@ -66,7 +66,7 @@ export function Header() {
                         </li>
                         {auth?.user && (
                             <li>
-                                <Link to={`/profile`}>Profile</Link>
+                                <Link to={`/profile/${auth?.user.user_id}`}>Profile</Link>
                             </li>
                         )}
                         <hr className="border-1 w-full border-solid border-text-950" />
@@ -114,7 +114,7 @@ export function Header() {
                         </li>
                         {auth?.user && (
                             <li>
-                                <Link to={`/profile`}>Profile</Link>
+                                <Link to={`/profile/${auth?.user.user_id}`}>Profile</Link>
                             </li>
                         )}
                     </ul>

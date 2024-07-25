@@ -1,27 +1,50 @@
-
-import { useApi } from "@/shared/hooks/useApi.hook";
-
 export function ProfilePage() {
-
-    const { userApi } = useApi();
-
-    const testUpdate = async () => {
-        try {
-            const message = await userApi.updateUser({username: 'idantest999'}, '96ba525b-ccda-4846-bfb1-357d1e2e31c8');
-            console.log('update success: ' + message);
-        }
-        catch(error) {
-            console.error(error);
-        }
-    }
-
-
     return (
-        <div>
-            <h1>Profile Page</h1>
+        <main className="container flex flex-1 flex-col">
+            {/* Maor */}
+            <header className="flex flex-col">
+                <h2>Basic Info</h2>
+                <div className="flex flex-row items-center gap-4">
+                    <img
+                        src=""
+                        alt=""
+                        className="rounded-full"
+                    />
+                    <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                        <section>
+                            <h3></h3>
+                            <p></p>
+                        </section>
+                        <section>
+                            <h3></h3>
+                            <p></p>
+                        </section>
+                        <section>
+                            <h3></h3>
+                            <p></p>
+                        </section>
+                        <section>
+                            <h3></h3>
+                            <p></p>
+                        </section>
+                    </div>
+                </div>
+            </header>
 
-            
-            <button onClick={testUpdate}>Update Me! (test)</button>
-        </div>
+            {/* Idan */}
+            <section>
+                <h2>Advanced Info</h2>
+            </section>
+
+            {/* Maor */}
+            <section>
+                <h2>Orders</h2>
+            </section>
+
+            {/* Nadav */}
+            <section>
+                <h2>Edit Info</h2>
+            </section>
+        </main>
     );
 }
