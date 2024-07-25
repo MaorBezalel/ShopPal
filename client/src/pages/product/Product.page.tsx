@@ -41,17 +41,17 @@ export const ProductPage = () => {
     }
 
     return (
-        <div className="container-highlight container flex flex-1 flex-row">
+        <div className="mx-auto flex max-w-screen-2xl flex-row max-2xl:max-w-screen-xl max-xl:max-w-screen-lg max-xl:flex-col max-lg:max-w-screen-md max-md:max-w-screen-sm max-sm:mx-2">
             <div className="max-w-screen-2xl">
                 <div className="m-4">
-                    <div className="lg:flex-row lg:items-center lg:justify-center flex flex-col justify-between gap-16">
-                        <div className="lg:w-2/5 flex flex-col gap-6">
+                    <div className="flex flex-col justify-between gap-16 lg:flex-row lg:items-center lg:justify-center">
+                        <div className="flex flex-col gap-6 lg:w-2/5">
                             <ImageSlider
                                 images={currentProduct?.images}
                                 className="h-[50vh]"
                             />
                         </div>
-                        <div className="lg:w-3/5 flex flex-col gap-4 overflow-auto">
+                        <div className="flex flex-col gap-4 overflow-auto lg:w-3/5">
                             <ProductDetails product={currentProduct!} />
                         </div>
                     </div>

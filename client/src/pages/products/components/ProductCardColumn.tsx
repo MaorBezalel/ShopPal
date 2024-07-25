@@ -14,7 +14,7 @@ export const ProductCardColumn: React.FC<ProductCardProps> = ({ product }: Produ
     const formattedCategory = formatCategoryName(product.category);
 
     return (
-        <div className="relative flex flex-col justify-between gap-2 rounded-lg border border-primary-100 bg-slate-100 p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+        <div className="relative flex h-[22rem] flex-col justify-between rounded-lg border border-primary-100 bg-slate-100 p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl">
             <div>
                 <AsyncImage
                     src={product.thumbnail ? product.thumbnail : ProductEmptyImage}
@@ -22,14 +22,19 @@ export const ProductCardColumn: React.FC<ProductCardProps> = ({ product }: Produ
                     className="mx-auto h-24 w-24 rounded-lg object-contain"
                     loader={<div style={{ background: '#888' }} />}
                 />
-                <h2 className="mt-2 text-lg font-semibold">{product.title}</h2>
-                <p className="text-md line-clamp-3">{product.description}</p>
-                <RatingBar rating={product.rating} className="mt-2" />
+                <h2 className="mt-2 line-clamp-2 text-lg font-semibold">{product.title}</h2>
+                <p className="text-md mt-2 line-clamp-3">{product.description}</p>
             </div>
-            <div className="flex flex-row justify-between">
-                <p className="text-md font-semibold">${product.price}</p>
-                <div className="rounded-lg bg-primary-200 p-0.5 px-3">
-                    <p className="text-md font-semibold">{formattedCategory}</p>
+            <div className="flex flex-col gap-3">
+                <RatingBar
+                    rating={product.rating}
+                    className="mt-2"
+                />
+                <div className="flex flex-row justify-between">
+                    <p className="text-md font-semibold">${product.price}</p>
+                    <div className="rounded-lg bg-primary-200 p-0.5 px-3">
+                        <p className="text-md font-semibold">{formattedCategory}</p>
+                    </div>
                 </div>
             </div>
         </div>

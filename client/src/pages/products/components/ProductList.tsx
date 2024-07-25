@@ -24,7 +24,11 @@ export const ProductList: React.FC<ProductListProps> = ({
             >
                 {products.length > 0 &&
                     products.map((product) => (
-                        <ProductCard key={product.product_id} cardShape={productsShape} product={product} />
+                        <ProductCard
+                            key={product.product_id}
+                            cardShape={productsShape}
+                            product={product}
+                        />
                     ))}
             </div>
             {isLoadingProducts && (

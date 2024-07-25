@@ -31,7 +31,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
                     key={activeImage}
                     src={activeImage}
                     alt="Product image"
-                    className="h-full w-full rounded-xl object-cover"
+                    className="h-full w-full rounded-lg"
+                    objectFit="contain"
                 />
                 {images && (
                     <>
@@ -39,20 +40,29 @@ export const ImageSlider: React.FC<ImageSliderProps> = memo(({ images, className
                             className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2"
                             onClick={handlePrevImage}
                         >
-                            <img src={LeftArrow} className="h-8 w-8" />
+                            <img
+                                src={LeftArrow}
+                                className="h-8 w-8"
+                            />
                         </button>
                         <button
                             className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2"
                             onClick={handleNextImage}
                         >
-                            <img src={RightArrow} className="h-8 w-8" />
+                            <img
+                                src={RightArrow}
+                                className="h-8 w-8"
+                            />
                         </button>
                     </>
                 )}
             </div>
-            <div className="mt-2 flex flex-row justify-center gap-4 overflow-auto">
+            <div className="mt-2 flex flex-row justify-center gap-4">
                 {images?.map((image, index) => (
-                    <div className="flex h-24 w-24" key={index}>
+                    <div
+                        className="flex h-24 w-24"
+                        key={index}
+                    >
                         <AsyncImage
                             key={image}
                             src={image}
