@@ -14,7 +14,6 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
         formState: { errors },
     } = useFormContext();
     const { value: showPassword, toggle: toggleShowPassword } = useFlag(false);
-    const { value: showConfirmPassword, toggle: toggleShowConfirmPassword } = useFlag(false);
 
     const registerPassword = () =>
         register('password', {
