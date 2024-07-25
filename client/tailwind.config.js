@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    darkMode: 'selector', // will apply dark mode (all elements with `dark:` perfix) only if the `dark` class is present in the `html` tag
     theme: {
         extend: {
             colors: {
@@ -70,6 +71,32 @@ export default {
                     950: 'var(--accent-950)',
                 },
             },
+            container: {
+                center: true,
+                screens: {
+                    'pc-lg': '1680px',
+                    'pc-md': '1440px',
+                    'pc-sm': '1280px',
+                    'tablet-lg': '1024px',
+                    'tablet-md': '768px',
+                    'tablet-sm': '640px',
+                    'mobile-lg': '480px',
+                    'mobile-md': '375px',
+                    'mobile-sm': '320px',
+                },
+            },
+        },
+        screens: {
+            // a "desktop-first" approach (larger screens first and smaller screens later)
+            'pc-lg': { max: '1679px' },
+            'pc-md': { max: '1439px' },
+            'pc-sm': { max: '1279px' },
+            'tablet-lg': { max: '1023px' },
+            'tablet-md': { max: '767px' },
+            'tablet-sm': { max: '639px' },
+            'mobile-lg': { max: '479px' },
+            'mobile-md': { max: '374px' },
+            'mobile-sm': { max: '319px' },
         },
     },
     plugins: ['tailwind-scrollbar'],

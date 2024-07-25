@@ -12,6 +12,7 @@
     "dependencies": {
         "@tanstack/react-query": "^5.51.1",
         "axios": "^1.7.2",
+        "hamburger-react": "^2.5.1",
         "loadable-image": "^3.2.3",
         "lodash": "^4.17.21",
         "lottie-react": "^2.4.0",

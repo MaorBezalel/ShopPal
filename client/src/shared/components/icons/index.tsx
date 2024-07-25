@@ -1,0 +1,15 @@
+export { IconLogin } from './IconLogin.icon';
+export { IconShoppingBag } from './IconShoppingBag.icon';
+export { IconGithub } from './IconGitHub.icon';
+export { IconUser } from './IconUser.icon';
+export { IconEmail } from './IconEmail.icon';
+export { IconPassword } from './IconPassword.icon';
+export { IconPasswordEye } from './IconPasswordEye.icon';
+export { IconTheme } from './IconTheme.icon';
+export { IconLogout } from './IconLogout.icon';
+export { IconSignup } from './IconSignup.icon';
+export { IconError } from './IconError.icon';
+export { IconCountry } from './IconCountry.icon';
+export { IconCity } from './IconCity.icon';
+export { IconStreet } from './IconStreet.icon';
+export { IconNameDetails } from './IconNameDetails.icon';
