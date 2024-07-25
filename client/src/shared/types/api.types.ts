@@ -3,3 +3,8 @@ export type ResponseError = {
     message: string;
     statusCode: number;
 };
+
+export type Pagination = {
+    offset: number;
+    limit: number;
+};

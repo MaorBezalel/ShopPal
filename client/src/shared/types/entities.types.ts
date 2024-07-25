@@ -39,7 +39,7 @@ export type Review = {
     product_id: string;
     user_id: string;
     rating: number;
-    review: string;
+    comment: string;
     date: Date;
 };
 
@@ -58,3 +58,5 @@ export type CartItem = {
 };
 
 export type Cart = CartItem[];
+export type GuestCart = { product_ids: string[]; quantities: number[] };
+export type ReviewsWithAuthor = (Omit<Review, 'user_id'> & { author: Pick<User, 'user_id' | 'username' | 'avatar'> })[];

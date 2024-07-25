@@ -159,3 +159,24 @@ export const deleteReviewSchema: Schema = {
         },
     },
 };
+
+export const getReviewOfUserSchema: Schema = {
+    product_id: {
+        in: ['params'],
+        notEmpty: {
+            errorMessage: 'Product ID is required!',
+        },
+        isUUID: {
+            errorMessage: 'Product ID must be a valid UUID!',
+        },
+    },
+    user_id: {
+        in: ['params'],
+        notEmpty: {
+            errorMessage: 'User ID is required!',
+        },
+        isUUID: {
+            errorMessage: 'User ID must be a valid UUID!',
+        },
+    },
+};
