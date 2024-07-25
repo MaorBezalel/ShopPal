@@ -99,5 +99,5 @@ export default {
             'mobile-sm': { max: '319px' },
         },
     },
-    plugins: [],
+    plugins: ['tailwind-scrollbar'],
 };

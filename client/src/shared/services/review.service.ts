@@ -1,22 +1,29 @@
-import type { Review } from '@/shared/types/entities.types';
+import type { Review, ReviewsWithAuthor } from '@/shared/types/entities.types';
 import type { ResponseError } from '../types/api.types';
 import { useCallback } from 'react';
 import { AxiosInstance } from 'axios';
 
-type GetReviewRequestParams = {
+export type GetReviewRequestParams = {
     product_id: string;
-    limit?: number;
-    offset?: number;
+    limit: number;
+    offset: number;
     sortBy?: keyof Pick<Review, 'rating' | 'date'>;
     order?: 'asc' | 'desc';
 };
 
-type GetReviewRequestResponse = {
-    reviews: Review[];
+export type GetReviewsResponse = {
+    reviews: ReviewsWithAuthor;
 };
 
-type CreateReviewRequestResponse = {
+export type CreateReviewRequestResponse = {
     review: Review;
+};
+
+export type GetReviewOfUserResponse = {
+    review: {
+        status: 'no_order' | 'no_review' | 'review_found';
+        review?: Review;
+    };
 };
 
 type useReviewServiceProps = {
@@ -26,7 +33,7 @@ type useReviewServiceProps = {
 
 export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServiceProps) => {
     const getReviews = useCallback(
-        async (reviewRequestParams: GetReviewRequestParams): Promise<GetReviewRequestResponse | ResponseError> => {
+        async (reviewRequestParams: GetReviewRequestParams): Promise<GetReviewsResponse | ResponseError> => {
             const response = await PUBLIC_API.get(`/review/${reviewRequestParams.product_id}`, {
                 params: reviewRequestParams,
             });
@@ -41,6 +48,14 @@ export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServicePr
             return response.data;
         },
         [PRIVATE_API]
+    );
+
+    const getReviewOfUser = useCallback(
+        async (productId: string, userId: string): Promise<GetReviewOfUserResponse | ResponseError> => {
+            const response = await PUBLIC_API.get(`/review/${productId}/${userId}`);
+            return response.data;
+        },
+        [PUBLIC_API]
     );
 
     const updateReivew = useCallback(
@@ -59,5 +74,5 @@ export const useReviewService = ({ PRIVATE_API, PUBLIC_API }: useReviewServicePr
         [PRIVATE_API]
     );
 
-    return { getReviews, addReview, updateReivew, deleteReview };
+    return { getReviews, addReview, updateReivew, deleteReview, getReviewOfUser };
 };

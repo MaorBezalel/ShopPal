@@ -1,11 +1,11 @@
-import { Cart } from "@/shared/models/relationships";
-import { CartRepository } from "./carts.repository";
+import { Cart } from '@/shared/models/relationships';
+import { CartRepository } from './carts.repository';
 import AppError from '@/shared/exceptions/app-error';
 import { HttpStatusCode } from '@/shared/types/enums/httpcode.types';
-import { Product } from "@/shared/models/entities";
+import { Product } from '@/shared/models/entities';
+import { InsertResult, UpdateResult } from 'typeorm';
 
 export class CartService {
-
     public static async getUserCartWithProducts(user_id: string): Promise<Cart[]> {
         return await CartRepository.getUserCartWithProducts(user_id);
     }
@@ -17,8 +17,15 @@ export class CartService {
     public static async addProductToCart(user_id: string, product_id: string, quantity: number): Promise<void> {
         const result = await CartRepository.addProductToCart(user_id, product_id, quantity);
 
-        if (result.identifiers.length === 0) {
-            throw new AppError('Could not add product to cart', HttpStatusCode.INTERNAL_SERVER_ERROR, 'addProductToCart');
+        if (
+            ('identifires' in result && (result as InsertResult).identifiers.length === 0) ||
+            ('affected' in result && (result as UpdateResult).affected === 0)
+        ) {
+            throw new AppError(
+                'Could not add product to cart',
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                'addProductToCart'
+            );
         }
     }
 
@@ -34,7 +41,11 @@ export class CartService {
         const result = await CartRepository.removeAllProductsFromCart(user_id);
 
         if (result.affected === 0) {
-            throw new AppError('Could not remove all products from cart', HttpStatusCode.NOT_FOUND, 'removeAllProductsFromCart');
+            throw new AppError(
+                'Could not remove all products from cart',
+                HttpStatusCode.NOT_FOUND,
+                'removeAllProductsFromCart'
+            );
         }
     }
 }

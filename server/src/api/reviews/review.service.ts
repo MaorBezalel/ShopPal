@@ -8,6 +8,9 @@ import {
     CreateReviewRequestProps,
     UpdateReviewRequestProps,
     DeleteReviewRequestProps,
+    GetReviewOfUserProps,
+    GetReviewsResponse,
+    GetReviewOfUserResponse,
 } from '@/api/reviews/review.types';
 
 export class ReviewService {
@@ -17,8 +20,25 @@ export class ReviewService {
         offset,
         sortBy,
         order,
-    }: GetReviewsRequestProps): Promise<Review[]> {
+    }: GetReviewsRequestProps): Promise<GetReviewsResponse> {
         return await ReviewRepository.getReviews({ product_id, limit, offset, sortBy, order });
+    }
+
+    public static async getReviewOfUser({
+        user_id,
+        product_id,
+    }: GetReviewOfUserProps): Promise<GetReviewOfUserResponse> {
+        const reviewOfUser = await ReviewRepository.getReviewOfUser({ user_id, product_id });
+
+        if (reviewOfUser.status === 'review_found' && !reviewOfUser.review) {
+            throw new AppError(
+                'Cloud not retreive the review',
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                'getReviewOfUser'
+            );
+        }
+
+        return reviewOfUser;
     }
 
     public static async createReview(reviewToCreate: CreateReviewRequestProps): Promise<Review> {

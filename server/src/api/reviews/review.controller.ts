@@ -6,6 +6,7 @@ import {
     CreateReviewRequestProps,
     UpdateReviewRequestProps,
     DeleteReviewRequestProps,
+    GetReviewOfUserProps,
 } from '@/api/reviews/review.types';
 
 export class ReviewController {
@@ -13,6 +14,12 @@ export class ReviewController {
         const reviewsQuery = req.body as GetReviewsRequestProps;
         const reviews = await ReviewService.getReviews(reviewsQuery);
         res.status(HttpStatusCode.OK).json({ reviews });
+    }
+
+    public static async getReviewOfUser(req: Request, res: Response, next: NextFunction) {
+        const reviewsQuery = req.body as GetReviewOfUserProps;
+        const review = await ReviewService.getReviewOfUser(reviewsQuery);
+        res.status(HttpStatusCode.OK).json({ review });
     }
 
     public static async createReview(req: Request, res: Response, next: NextFunction) {
