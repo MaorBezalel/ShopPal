@@ -1,3 +1,5 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -97,6 +99,13 @@ export default {
             'mobile-lg': { max: '479px' },
             'mobile-md': { max: '374px' },
             'mobile-sm': { max: '319px' },
+
+            'max-2xl': { max: '1535px' },
+            'max-xl': { max: '1279px' },
+            'max-lg': { max: '1023px' },
+            'max-md': { max: '767px' },
+            'max-sm': { max: '639px' },
+            ...defaultTheme.screens,
         },
     },
     plugins: ['tailwind-scrollbar'],

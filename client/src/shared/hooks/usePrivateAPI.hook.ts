@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useAuth } from './useAuth.hook';
 import { SERVER_URL } from '@/shared/constants';
 import axois from 'axios';
@@ -21,7 +21,7 @@ export function usePrivateAPI() {
         return privateAPI;
     });
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const authorizationHeaderRequestInterceptor = PRIVATE_API.interceptors.request.use(
             (request) => {
                 if (!request.headers['Authorization']) {
@@ -40,6 +40,7 @@ export function usePrivateAPI() {
                 // when access token is expired
                 if (error?.response.status === 401 && !prevRequest?.sent) {
                     try {
+                        console.log('Refreshing token...', error?.config);
                         prevRequest.sent = true;
                         const refreshResponse = await PRIVATE_API.get('/auth/refresh-token');
                         const refreshData = refreshResponse.data as RefreshTokenResponse;

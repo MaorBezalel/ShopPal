@@ -14,32 +14,66 @@ import { LayoutWrapper } from './layouts/LayoutWrapper.layout';
 
 export default function App() {
     return (
-        <Routes
-            <Route path="/" element={<LayoutWrapper />}>
-                {/* public routes */}
+        <Routes>
+            <Route
+                path="/"
+                element={<LayoutWrapper />}
+            >
                 <Route element={<PersistentLogin />}>
-                    <Route path="/" element={<HomePage />} />
-                </Route>
-                <Route path="products" element={<ProductsPage />} />
-                <Route path="product/:id" element={<ProductPage />} />
-                <Route path="auth">
-                    <Route path="/auth" element={<Navigate to="/auth/login" />} />
-                    <Route path="login" element={<AuthPage type="login" />} />
-                    <Route path="signup" element={<AuthPage type="signup" />} />
-                </Route>
-                <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<CheckoutPage />} />
+                    {/* public routes */}
+                    <Route
+                        path="/"
+                        element={<HomePage />}
+                    />
+                    <Route
+                        path="products"
+                        element={<ProductsPage />}
+                    />
+                    <Route
+                        path="product/:id"
+                        element={<ProductPage />}
+                    />
+                    <Route path="auth">
+                        <Route
+                            path="/auth"
+                            element={<Navigate to="/auth/login" />}
+                        />
+                        <Route
+                            path="login"
+                            element={<AuthPage type="login" />}
+                        />
+                        <Route
+                            path="signup"
+                            element={<AuthPage type="signup" />}
+                        />
+                    </Route>
+                    <Route
+                        path="cart"
+                        element={<CartPage />}
+                    />
+                    <Route
+                        path="checkout"
+                        element={<CheckoutPage />}
+                    />
 
-                {/* private routes */}
-                <Route element={<PersistentLogin />}>
+                    {/* private routes */}
                     <Route element={<RequireAuth />}>
-                        <Route path="profile/:id" element={<ProfilePage />} />
-                        <Route path="order/:id" element={<OrderPage />} />
+                        <Route
+                            path="profile/:id"
+                            element={<ProfilePage />}
+                        />
+                        <Route
+                            path="order/:id"
+                            element={<OrderPage />}
+                        />
                     </Route>
                 </Route>
 
                 {/* catch all... */}
-                <Route path="*" element={<NotFoundPage />} />
+                <Route
+                    path="*"
+                    element={<NotFoundPage />}
+                />
             </Route>
         </Routes>
     );

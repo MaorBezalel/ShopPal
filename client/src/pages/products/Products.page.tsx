@@ -47,16 +47,16 @@ export const ProductsPage = () => {
     }, []);
 
     return (
-        <div className="mx-auto flex max-w-screen-2xl flex-row gap-2 max-2xl:max-w-screen-xl max-xl:max-w-screen-lg max-xl:flex-col max-lg:max-w-screen-md max-md:max-w-screen-sm max-sm:mx-2">
-            <div className="mt-2 w-1/5 max-xl:w-full">
+        <div className="max-w-screen-2xl max-2xl:max-w-screen-xl max-xl:max-w-screen-lg max-xl:flex-col max-lg:max-w-screen-md max-md:max-w-screen-sm max-sm:mx-2 container mx-auto flex flex-row gap-2">
+            <div className="max-xl:w-full mt-2 w-1/5">
                 <ProductFilter
                     onFilterChange={onFilterChange}
                     initialFilterOptions={productsOptions}
                     disable={isLoadingNextProductsPage || isLoadingFirstProductsPage}
                 />
             </div>
-            <div className="relative flex w-4/5 flex-col gap-2 max-xl:w-full">
-                <div className="flex flex-row items-center justify-between max-sm:flex-col max-sm:gap-2">
+            <div className="max-xl:w-full relative flex w-4/5 flex-col gap-2">
+                <div className="max-sm:flex-col max-sm:gap-2 flex flex-row items-center justify-between">
                     <h1 className="text-3xl font-semibold">Products List: </h1>
                     <div className="flex flex-row items-center gap-4">
                         <SortByOptions
@@ -66,11 +66,17 @@ export const ProductsPage = () => {
                             onSortOptionChange={onSortByChange}
                             onOrderOptionChange={onOrderByChange}
                         />
-                        <ListViewBar defaultListView={'grid'} onListViewChange={onListViewChange} />
+                        <ListViewBar
+                            defaultListView={'grid'}
+                            onListViewChange={onListViewChange}
+                        />
                     </div>
                 </div>
                 {isLoadingFirstProductsPage ? (
-                    <ProductListSkeleton skeletonNumber={12} productShape={productsShape} />
+                    <ProductListSkeleton
+                        skeletonNumber={12}
+                        productShape={productsShape}
+                    />
                 ) : isErrorLoadingFirstProductsPage ? (
                     <p className="text-center text-2xl text-red-800">An error occurred while retrieving products</p>
                 ) : (

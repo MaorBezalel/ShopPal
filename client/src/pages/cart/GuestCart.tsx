@@ -1,10 +1,10 @@
 // Import necessary hooks and utilities
-import { useApi } from "@/shared/hooks/useApi.hook";
-import { useEffect, useRef, useState } from "react";
-import useLocalStorage from "@/shared/hooks/useLocalStorage.hook";
+import { useApi } from '@/shared/hooks/useApi.hook';
+import { useEffect, useRef, useState } from 'react';
+import useLocalStorage from '@/shared/hooks/useLocalStorage.hook';
 // Import components and types
-import { ProductDisplayInCart } from "./ProductDisplayInCart";
-import { Product } from "@/shared/types";
+import { ProductDisplayInCart } from './ProductDisplayInCart';
+import { Product } from '@/shared/types';
 // Import hook for navigation
 import { useNavigate } from 'react-router';
 
@@ -18,13 +18,22 @@ type UserCartProps = {
 };
 
 // Define the GuestCart component
-export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigger, onCheckout, checkoutTrigger }: UserCartProps) {
+export default function GuestCart({
+    onTotalPriceUpdate,
+    onClearCart,
+    clearTrigger,
+    onCheckout,
+    checkoutTrigger,
+}: UserCartProps) {
     // Hook to interact with the API
     const api = useApi();
     // Ref to track if the component is mounted
     const isMounted = useRef<boolean>(false);
     // State to manage cart items using local storage
-    const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>, quantities: Array<number> }>('cart', { product_ids: [], quantities: [] });
+    const [cart, setCart] = useLocalStorage<{ product_ids: Array<string>; quantities: Array<number> }>('cart', {
+        product_ids: [],
+        quantities: [],
+    });
     // State to store product details
     const [productDetails, setProductDetails] = useState<Product[]>([]);
     // Loading, error, and empty states
@@ -42,10 +51,14 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
             setIsError(false);
             // Validate cart state before fetching data
             if (cart.product_ids.length) {
-                const isValidQuantities = cart.quantities.length === cart.product_ids.length && cart.quantities.every(q => typeof q === 'number');
+                const isValidQuantities =
+                    cart.quantities.length === cart.product_ids.length &&
+                    cart.quantities.every((q) => typeof q === 'number');
 
                 if (!isValidQuantities) {
-                    console.error("Invalid cart state: Quantities and Product IDs mismatch or Quantities not all numbers");
+                    console.error(
+                        'Invalid cart state: Quantities and Product IDs mismatch or Quantities not all numbers'
+                    );
                     setIsError(true);
                     setIsLoading(false);
                     setCart({ product_ids: [], quantities: [] });
@@ -58,11 +71,10 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
                         setProductDetails(response.products);
                         setIsEmpty(response.products.length === 0);
                     } else {
-
                         setIsError(true);
                     }
                 } catch (error) {
-                    console.error("Fetching error:", error);
+                    console.error('Fetching error:', error);
                     setIsError(true);
                 }
             } else {
@@ -94,7 +106,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
 
     // Remove a product from the cart
     const removeProductFromCart = (productId: string) => {
-        const productIndex = cart.product_ids.findIndex(id => id === productId);
+        const productIndex = cart.product_ids.findIndex((id) => id === productId);
         if (productIndex > -1) {
             const newProductIds = [...cart.product_ids];
             const newQuantities = [...cart.quantities];
@@ -102,7 +114,7 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
             newQuantities.splice(productIndex, 1);
             setCart({ product_ids: newProductIds, quantities: newQuantities });
 
-            setProductDetails(prevDetails => prevDetails.filter(product => product.product_id !== productId));
+            setProductDetails((prevDetails) => prevDetails.filter((product) => product.product_id !== productId));
         }
     };
 
@@ -123,16 +135,14 @@ export default function GuestCart({ onTotalPriceUpdate, onClearCart, clearTrigge
 
     // Handle checkout process
     const handleCheckout = () => {
-        const itemsInCart = productDetails.map((product, index) => (
-            {
-                product_id: product.product_id,
-                thumbnail: product.thumbnail,
-                title: product.title,
-                price: product.price,
-                stock: product.stock,
-                quantity: cart.quantities[index]
-            }
-        ));
+        const itemsInCart = productDetails.map((product, index) => ({
+            product_id: product.product_id,
+            thumbnail: product.thumbnail,
+            title: product.title,
+            price: product.price,
+            stock: product.stock,
+            quantity: cart.quantities[index],
+        }));
         if (itemsInCart.length > 0) {
             navigate('/checkout', { state: { itemsInCart: itemsInCart } });
             onCheckout();
