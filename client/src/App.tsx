@@ -8,12 +8,13 @@ import { ProfilePage } from '@/pages/profile/Profile.page';
 import { OrderPage } from '@/pages/order/Order.page';
 import { NotFoundPage } from '@/pages/not-found/NotFound.page';
 import { RequireAuth } from '@/shared/components/RequireAuth';
+import { CheckoutPage } from './pages/checkout/Checkout.page';
 import { PersistentLogin } from '@/shared/components/PersistentLogin';
 import { LayoutWrapper } from './layouts/LayoutWrapper.layout';
 
 export default function App() {
     return (
-        <Routes>
+        <Routes
             <Route path="/" element={<LayoutWrapper />}>
                 {/* public routes */}
                 <Route element={<PersistentLogin />}>
@@ -27,6 +28,7 @@ export default function App() {
                     <Route path="signup" element={<AuthPage type="signup" />} />
                 </Route>
                 <Route path="cart" element={<CartPage />} />
+                <Route path="checkout" element={<CheckoutPage />} />
 
                 {/* private routes */}
                 <Route element={<PersistentLogin />}>
