@@ -1,5 +1,5 @@
 import { Outlet as CurrentPage } from 'react-router';
-import { Header } from './Header.layout';
+import { Header } from './header/Header.layout';
 
 export function LayoutWrapper() {
     return (
