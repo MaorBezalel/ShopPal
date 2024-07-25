@@ -58,7 +58,7 @@ export const useCartService = ({ PRIVATE_API, PUBLIC_API }: useCartServiceProps)
             quantity: number,
             userId: string
         ): Promise<AddProductToCartResponse | ResponseError> => {
-            const response = await PRIVATE_API.post(`/cart/${userId}`, { productId, quantity });
+            const response = await PRIVATE_API.post(`/cart/${userId}`, { product_id: productId, quantity });
 
             return response.data;
         },

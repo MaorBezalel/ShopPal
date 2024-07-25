@@ -4,7 +4,7 @@ import type { Category } from '@/shared/types/enum.types';
 import { useCallback } from 'react';
 import { AxiosInstance } from 'axios';
 
-type GetProductsRequestParams = {
+export type GetProductsRequestParams = {
     offset: number;
     limit: number;
     categories?: Category[];
@@ -33,7 +33,16 @@ type useUserServiceProps = {
 export const useProductService = ({ PUBLIC_API }: useUserServiceProps) => {
     const getProducts = useCallback(
         async (getProductRequestParams: GetProductsRequestParams): Promise<GetProductsResponse | ResponseError> => {
-            const response = await PUBLIC_API.get('/product/', { params: getProductRequestParams });
+            const commaSepratedCategories = getProductRequestParams.categories
+                ? getProductRequestParams.categories.join(',')
+                : undefined;
+
+            const params = commaSepratedCategories
+                ? { ...getProductRequestParams, categories: commaSepratedCategories }
+                : getProductRequestParams;
+            const response = await PUBLIC_API.get('/product/', {
+                params: params,
+            });
             return response.data;
         },
         [PUBLIC_API]

@@ -7,6 +7,7 @@ import {
     createReviewSchema,
     updateReviewSchema,
     deleteReviewSchema,
+    getReviewOfUserSchema,
 } from '@/api/reviews/review.validator';
 
 const router = Router();
@@ -16,6 +17,13 @@ router.get(
     checkSchema(getReviewsSchema),
     validationMiddleware,
     tryCatchMiddleware(ReviewController.getReviews)
+);
+
+router.get(
+    '/:product_id/:user_id',
+    checkSchema(getReviewOfUserSchema),
+    validationMiddleware,
+    tryCatchMiddleware(ReviewController.getReviewOfUser)
 );
 
 router.post(
