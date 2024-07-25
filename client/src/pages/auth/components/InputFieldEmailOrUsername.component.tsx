@@ -1,48 +1,58 @@
 import { useFormContext } from 'react-hook-form';
+import { useEffect } from 'react';
 import { IconEmail, IconUser } from '@/shared/components/icons';
 
 export function InputFieldEmailOrUsername() {
     const {
         register,
+        unregister,
         watch,
         formState: { errors },
     } = useFormContext();
     const watchEmailOrUsername = watch('emailOrUsername', '');
 
-    const registerEmailOrUsername = register('emailOrUsername', {
-        required: 'Email or Username is required!',
-        validate: {
-            pattern: (value) => {
-                const stringValue = value as string;
-                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                const usernamePattern = /^[a-zA-Z0-9_]+$/;
-                if (stringValue.includes('@')) {
-                    return emailPattern.test(stringValue) || 'Email should be in the format "example@example.com"';
-                } else {
-                    return (
-                        usernamePattern.test(stringValue) ||
-                        'Username should contain only letters, numbers and underscores'
-                    );
-                }
+    const registerEmailOrUsername = () =>
+        register('emailOrUsername', {
+            required: 'Email or Username is required!',
+            validate: {
+                pattern: (value) => {
+                    const stringValue = value as string;
+                    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                    const usernamePattern = /^[a-zA-Z0-9_]+$/;
+                    if (stringValue.includes('@')) {
+                        return emailPattern.test(stringValue) || 'Email should be in the format "example@example.com"';
+                    } else {
+                        return (
+                            usernamePattern.test(stringValue) ||
+                            'Username should contain only letters, numbers and underscores'
+                        );
+                    }
+                },
+                minLength: (value) => {
+                    const stringValue = value as string;
+                    if (stringValue.includes('@')) {
+                        return true; // email min length is not checked
+                    } else {
+                        return stringValue.length >= 3 || 'Username must be at least 3 characters long!';
+                    }
+                },
+                maxLength: (value) => {
+                    const stringValue = value as string;
+                    if (stringValue.includes('@')) {
+                        return true; // email max length is not checked
+                    } else {
+                        return stringValue.length <= 32 || 'Username must be at most 32 characters long!';
+                    }
+                },
             },
-            minLength: (value) => {
-                const stringValue = value as string;
-                if (stringValue.includes('@')) {
-                    return true; // email min length is not checked
-                } else {
-                    return stringValue.length >= 3 || 'Username must be at least 3 characters long!';
-                }
-            },
-            maxLength: (value) => {
-                const stringValue = value as string;
-                if (stringValue.includes('@')) {
-                    return true; // email max length is not checked
-                } else {
-                    return stringValue.length <= 32 || 'Username must be at most 32 characters long!';
-                }
-            },
-        },
-    });
+        });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('emailOrUsername');
+        };
+    }, []);
 
     return (
         <section className="flex w-full flex-col gap-4 mobile-md:gap-2">
@@ -64,7 +74,7 @@ export function InputFieldEmailOrUsername() {
                         placeholder='e.g. "JohnDoe@email.com" or "JohnDoe"'
                         aria-errormessage="error-emailOrUsername"
                         autoComplete="email"
-                        {...registerEmailOrUsername}
+                        {...registerEmailOrUsername()}
                     />
                     {(watchEmailOrUsername as string).includes('@') ? (
                         <IconEmail className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 pc-sm:size-6 mobile-md:size-5" />

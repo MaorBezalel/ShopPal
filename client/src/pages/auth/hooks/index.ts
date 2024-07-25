@@ -1,1 +1,1 @@
-export { useAuthFormActions } from './useAuthFormActions.hook';
+export { useAuthFormActions, type UseAuthFormActionsReturn } from './useAuthFormActions.hook';

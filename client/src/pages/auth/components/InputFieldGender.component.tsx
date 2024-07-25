@@ -1,14 +1,24 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 export function InputFieldGender() {
     const {
         register,
+        unregister,
         formState: { errors },
     } = useFormContext();
 
-    const registerGender = register('gender', {
-        required: 'Gender is required!',
-    });
+    const registerGender = () =>
+        register('gender', {
+            required: 'Gender is required!',
+        });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('gender');
+        };
+    }, []);
 
     return (
         <section className="flex w-full flex-col gap-4 pr-56 tablet-sm:gap-2">
@@ -28,7 +38,7 @@ export function InputFieldGender() {
                             tablet-sm:w-[0.75rem]"
                             aria-errormessage="error-gender"
                             value="male"
-                            {...registerGender}
+                            {...registerGender()}
                         />
                         <label
                             htmlFor="male"
@@ -45,7 +55,7 @@ export function InputFieldGender() {
                             tablet-sm:w-[0.75rem]"
                             aria-errormessage="error-gender"
                             value="female"
-                            {...registerGender}
+                            {...registerGender()}
                         />
                         <label
                             htmlFor="female"
@@ -62,7 +72,7 @@ export function InputFieldGender() {
                             tablet-sm:w-[0.75rem]"
                             aria-errormessage="error-gender"
                             value="other"
-                            {...registerGender}
+                            {...registerGender()}
                         />
                         <label
                             htmlFor="other"

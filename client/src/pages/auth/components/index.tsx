@@ -8,3 +8,4 @@ export { InputFieldGender } from './InputFieldGender.component';
 export { InputFieldNameDetails } from './InputFieldNameDetails.component';
 export { InputFieldAddress } from './InputFieldAddress.component';
 export { AuthHeader } from './AuthHeader.component';
+export { LoadingSpinner } from './LoadingSpinner.component';

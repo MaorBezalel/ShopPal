@@ -1,9 +1,11 @@
 import { useFormContext } from 'react-hook-form';
+import { useEffect } from 'react';
 import { IconEmail } from '@/shared/components/icons';
 
 export function InputFieldEmail() {
     const {
         register,
+        unregister,
         formState: { errors },
     } = useFormContext();
 
@@ -15,6 +17,13 @@ export function InputFieldEmail() {
                 message: 'Invalid email address!',
             },
         });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('email');
+        };
+    }, []);
 
     return (
         <section

@@ -11,6 +11,7 @@ export function Header() {
     const { userApi } = useApi();
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isBlurred, setIsBlurred] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -31,10 +32,11 @@ export function Header() {
                 "
             >
                 {/* Hamburger */}
-                <div
-                    className="hidden
+                <button
+                    className="peer relative z-10 hidden
                     pc-sm:block pc-sm:rounded-full pc-sm:border pc-sm:border-solid pc-sm:border-primary-950 pc-sm:p-1
                     tablet-md:p-0.5"
+                    onBlur={() => console.log('blur')}
                 >
                     <Hamburger
                         color="#EB7AA5"
@@ -46,7 +48,7 @@ export function Header() {
                         toggled={isMenuOpen}
                         toggle={setIsMenuOpen}
                     />
-                </div>
+                </button>
 
                 {/* Menu */}
                 <nav
