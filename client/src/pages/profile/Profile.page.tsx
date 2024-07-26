@@ -1,35 +1,9 @@
+import { UserBasicInfo } from '@/pages/profile/components/UserBasicInfo.component';
+
 export function ProfilePage() {
     return (
-        <main className="container flex flex-1 flex-col">
-            {/* Maor */}
-            <header className="flex flex-col">
-                <h2>Basic Info</h2>
-                <div className="flex flex-row items-center gap-4">
-                    <img
-                        src=""
-                        alt=""
-                        className="rounded-full"
-                    />
-                    <div className="grid grid-cols-2 grid-rows-2 gap-4">
-                        <section>
-                            <h3></h3>
-                            <p></p>
-                        </section>
-                        <section>
-                            <h3></h3>
-                            <p></p>
-                        </section>
-                        <section>
-                            <h3></h3>
-                            <p></p>
-                        </section>
-                        <section>
-                            <h3></h3>
-                            <p></p>
-                        </section>
-                    </div>
-                </div>
-            </header>
+        <main className="container-highlight container flex flex-1 flex-col gap-10">
+            <UserBasicInfo />
 
             {/* Idan */}
             <section>
