@@ -4,10 +4,12 @@ import type { Order, Product } from '@/shared/types/entities.types';
 import { useCallback } from 'react';
 import { AxiosInstance } from 'axios';
 
-type GetOrdersResponseProps = {
-    order_details: Order;
-    order_products: Partial<Product> & { quantity: number }[];
-};
+export type GetOrdersResponseProps = (Pick<
+    Order,
+    'order_id' | 'issued_time' | 'order_status' | 'delivery_address' | 'billing_info'
+> & {
+    products: Partial<Product & { quantity: number }>[];
+})[];
 
 type AddOrderRequestProps = {
     product_ids: string[];
@@ -30,8 +32,8 @@ type updateStocksProps = {
 
 export const useOrderService = ({ PRIVATE_API, PUBLIC_API }: useOrderServiceProps) => {
     const getUserOrders = useCallback(
-        async (userId: string): Promise<GetOrdersResponseProps | ResponseError> => {
-            const response = await PRIVATE_API.get(`/order/${userId}`);
+        async (userId: string, limit?: number, offset?: number): Promise<GetOrdersResponseProps | ResponseError> => {
+            const response = await PRIVATE_API.get(`/order/${userId}`, { params: { limit, offset } });
             return response.data;
         },
         [PRIVATE_API]

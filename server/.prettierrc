@@ -7,5 +7,5 @@
     "bracketSpacing": true,
     "arrowParens": "always",
     "quoteProps": "as-needed",
-    "useTabs": false
+    "useTabs": true
 }
