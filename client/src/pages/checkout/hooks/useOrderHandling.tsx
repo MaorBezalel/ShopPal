@@ -29,6 +29,14 @@ export const useOrderHandlers = (itemsInCart: ProductDetails[], formData: any, s
         const productIds = itemsInCart.map((item: ProductDetails) => item.product_id);
         const quantities = itemsInCart.map((item: ProductDetails) => item.quantity);
         const billingInfo = `${formData.cardNumber},${formData.expiryDate},${formData.cvv}`;
+        const newStocks = itemsInCart.map((item: ProductDetails) => item.stock - item.quantity);
+
+        const outOfStockItem = itemsInCart.find((item, index) => newStocks[index] < 0);
+        if (outOfStockItem) {
+            alert(`The item "${outOfStockItem.title}" is out of stock. Please adjust your cart.`);
+            setIsLoading(false);
+            return;
+        }
 
         const deliveryAddress = {
             country: formData.country,
@@ -55,7 +63,6 @@ export const useOrderHandlers = (itemsInCart: ProductDetails[], formData: any, s
             alert('An error occurred while placing the order, please try again later');
         } finally {
             if (response && 'order_id' in response) {
-                const newStocks = itemsInCart.map((item: ProductDetails) => item.stock - item.quantity);
                 const updateStocks = { product_ids: productIds, new_stocks: newStocks };
                 setOrderSuccess(true);
                 setOrderId(response.order_id);
