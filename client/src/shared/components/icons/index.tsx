@@ -13,3 +13,5 @@ export { IconCountry } from './IconCountry.icon';
 export { IconCity } from './IconCity.icon';
 export { IconStreet } from './IconStreet.icon';
 export { IconNameDetails } from './IconNameDetails.icon';
+export { IconPhone } from './IconPhone.icon';
+export { IconBirthday } from './IconBirthday.icon';
