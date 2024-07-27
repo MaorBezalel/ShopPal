@@ -27,7 +27,7 @@ export const CartPage = () => {
 
     return (
         <main
-            className="container-highlight container flex w-full flex-1 justify-center
+            className="container flex w-full flex-1 justify-center
             gap-14 pc-sm:gap-0 tablet-lg:flex-col
             tablet-lg:justify-start"
         >
@@ -84,7 +84,7 @@ export const CartPage = () => {
                 </section>
                 <menu
                     className="flex flex-row items-center gap-2
-                pc-sm:flex-col
+                pc-md:flex-col
                 tablet-lg:flex-row"
                 >
                     <li>

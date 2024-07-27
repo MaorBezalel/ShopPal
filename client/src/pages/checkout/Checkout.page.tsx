@@ -27,7 +27,7 @@ export function CheckoutPage() {
     } = useOrderHandlers(itemsInCart, formData, setFormErrors);
 
     return (
-        <main className="container-highlight container relative flex flex-1 flex-row justify-between px-2 tablet-lg:gap-4 tablet-md:flex-col-reverse">
+        <main className="container relative flex flex-1 flex-row justify-between tablet-lg:gap-4 tablet-md:flex-col-reverse">
             {orderSuccess ? (
                 <OrderSuccess orderId={orderId} />
             ) : (
@@ -37,7 +37,7 @@ export function CheckoutPage() {
                             <LoadingAnimation />
                         </div>
                     )}
-                    <section className="w-full max-w-[40%] pc-sm:w-1/2 tablet-lg:max-w-[50%] tablet-md:w-full tablet-md:max-w-full mobile-lg:px-3">
+                    <section className="pl-2 w-full max-w-[40%] pc-sm:w-1/2 tablet-lg:max-w-[50%] tablet-md:w-full tablet-md:max-w-full mobile-lg:px-3">
                         <CheckoutForm
                             formData={formData}
                             formErrors={formErrors}
@@ -52,7 +52,7 @@ export function CheckoutPage() {
                     </section>
                     <aside className="my-3 flex flex-col gap-6">
                         <h1 className="text-4xl">Order summary</h1>
-                        <section className="h-full border-l border-accent-300 bg-accent-100 pr-4 tablet-md:ml-0 tablet-md:mt-0 tablet-md:w-full">
+                        <section className="h-full border-l border-accent-300 bg-accent-100 pr-7 tablet-md:ml-0 tablet-md:mt-0 tablet-md:w-full">
                             <CartTable
                                 itemsInCart={itemsInCart}
                                 totalQuantity={totalQuantity}
