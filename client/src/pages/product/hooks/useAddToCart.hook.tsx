@@ -12,7 +12,7 @@ type UseAddToCartProps = {
 };
 
 export const useAddToCart = ({ product_id, stock }: UseAddToCartProps) => {
-    const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState(stock != null ? 1 : 0);
+    const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState(stock != 0 ? 1 : 0);
     const { cartApi } = useApi();
     const { auth } = useAuth();
     const { displayMessage, clearMessage } = useMessages();
