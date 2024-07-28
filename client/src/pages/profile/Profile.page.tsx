@@ -1,3 +1,5 @@
+import { ProfileEdit } from './components/ProfileEdit';
+
 export function ProfilePage() {
     return (
         <main className="container flex flex-1 flex-col">
@@ -42,9 +44,7 @@ export function ProfilePage() {
             </section>
 
             {/* Nadav */}
-            <section>
-                <h2>Edit Info</h2>
-            </section>
+            <ProfileEdit />
         </main>
     );
 }
