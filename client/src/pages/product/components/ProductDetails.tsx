@@ -44,9 +44,9 @@ export const ProductDetails = ({
             <p>{description || 'No description.'}</p>
             <h6 className="text-2xl font-semibold">{price ? `$${price}` : 'Price Not Avaliable'}</h6>
             <p
-                className={`text-sm font-semibold ${stock ? (stock === 0 ? 'text-red-800' : `text-green-800`) : 'text-gray-800'}`}
+                className={`text-sm font-semibold ${stock != null ? (stock === 0 ? 'text-red-800' : `text-green-800`) : 'text-gray-800'}`}
             >
-                {stock ? (stock === 0 ? 'Out of stock' : `${stock} In stock`) : 'Stock unknown'}
+                {stock != null ? (stock === 0 ? 'Out of stock' : `${stock} In stock`) : 'Stock unknown'}
             </p>
             <div className="flex flex-col gap-12 sm:flex-row sm:items-center">
                 <div className="flex flex-row items-center">

@@ -90,7 +90,7 @@ export const useReviews = ({ product_id }: useReviewsProps) => {
         queryFn: queryReviewOfUser,
         enabled: !!auth?.user,
         refetchOnWindowFocus: false,
-        staleTime: Infinity,
+        staleTime: 0,
         retry: false,
     });
 
