@@ -33,6 +33,9 @@ const ProfileEditSchema = z
                 })
                 .max(32, {
                     message: 'First name must be at most 32 characters long.',
+                })
+                .regex(/^[A-Za-z]+$/, {
+                    message: 'First name must contain only letters.',
                 }),
             middle_name: z
                 .string()
@@ -41,6 +44,9 @@ const ProfileEditSchema = z
                 })
                 .max(32, {
                     message: 'Middle name must be at most 32 characters long.',
+                })
+                .regex(/^[A-Za-z]+$/, {
+                    message: 'Middle name must contain only letters.',
                 })
                 .optional()
                 .nullable()
@@ -52,6 +58,9 @@ const ProfileEditSchema = z
                 })
                 .max(32, {
                     message: 'Last name must be at most 32 characters long.',
+                })
+                .regex(/^[A-Za-z]+$/, {
+                    message: 'Last name must contain only letters.',
                 }),
         }),
         address: z.object({
@@ -70,6 +79,9 @@ const ProfileEditSchema = z
                 })
                 .max(32, {
                     message: 'City must be at most 32 characters long.',
+                })
+                .regex(/^[A-Za-z]+$/, {
+                    message: 'City must contain only letters.',
                 }),
             country: z
                 .string()
@@ -78,6 +90,9 @@ const ProfileEditSchema = z
                 })
                 .max(16, {
                     message: 'Country must be at most 16 characters long.',
+                })
+                .regex(/^[A-Za-z]+$/, {
+                    message: 'Country must contain only letters.',
                 }),
         }),
         gender: z.enum([Gender.FEMALE, Gender.MALE, Gender.OTHER], {
