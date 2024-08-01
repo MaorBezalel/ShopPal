@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { SignupFormInputs } from '@/pages/auth/types';
 import { IconNameDetails } from '@/shared/components/icons';
@@ -5,55 +6,68 @@ import { IconNameDetails } from '@/shared/components/icons';
 export function InputFieldNameDetails() {
     const {
         register,
+        unregister,
         formState: { errors },
     } = useFormContext<SignupFormInputs>();
 
-    const registerFirstName = register('name_details.first_name', {
-        required: 'First Name is required!',
-        minLength: {
-            value: 2,
-            message: 'First Name must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 32,
-            message: 'First Name must be at most 32 characters long!',
-        },
-        pattern: {
-            value: /^[a-zA-Z]+$/,
-            message: 'First Name should contain only letters!',
-        },
-    });
+    const registerFirstName = () =>
+        register('name_details.first_name', {
+            required: 'First Name is required!',
+            minLength: {
+                value: 2,
+                message: 'First Name must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 32,
+                message: 'First Name must be at most 32 characters long!',
+            },
+            pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: 'First Name should contain only letters!',
+            },
+        });
 
-    const registerMiddleName = register('name_details.middle_name', {
-        minLength: {
-            value: 2,
-            message: 'Middle Name must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 32,
-            message: 'Middle Name must be at most 32 characters long!',
-        },
-        pattern: {
-            value: /^[a-zA-Z]*$/,
-            message: 'Middle Name should contain only letters!',
-        },
-    });
+    const registerMiddleName = () =>
+        register('name_details.middle_name', {
+            minLength: {
+                value: 2,
+                message: 'Middle Name must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 32,
+                message: 'Middle Name must be at most 32 characters long!',
+            },
+            pattern: {
+                value: /^[a-zA-Z]*$/,
+                message: 'Middle Name should contain only letters!',
+            },
+        });
 
-    const registerLastName = register('name_details.last_name', {
-        required: 'Last Name is required!',
-        minLength: {
-            value: 2,
-            message: 'Last Name must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 32,
-            message: 'Last Name must be at most 32 characters long!',
-        },
-        pattern: {
-            value: /^[a-zA-Z]+$/,
-            message: 'Last Name should contain only letters!',
-        },
-    });
+    const registerLastName = () =>
+        register('name_details.last_name', {
+            required: 'Last Name is required!',
+            minLength: {
+                value: 2,
+                message: 'Last Name must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 32,
+                message: 'Last Name must be at most 32 characters long!',
+            },
+            pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: 'Last Name should contain only letters!',
+            },
+        });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('name_details.first_name');
+            unregister('name_details.middle_name');
+            unregister('name_details.last_name');
+        };
+    }, []);
 
     return (
         <section
@@ -82,7 +96,7 @@ export function InputFieldNameDetails() {
                             tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g "John"'
                             aria-errormessage="error-first_name"
-                            {...registerFirstName}
+                            {...registerFirstName()}
                         />
                         <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>
@@ -116,7 +130,7 @@ export function InputFieldNameDetails() {
                             tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g. "Smith"'
                             aria-errormessage="error-middle_name"
-                            {...registerMiddleName}
+                            {...registerMiddleName()}
                         />
                         <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>
@@ -150,7 +164,7 @@ export function InputFieldNameDetails() {
                             tablet-sm:px-9 tablet-sm:text-sm"
                             placeholder='e.g. "Doe"'
                             aria-errormessage="error-last_name"
-                            {...registerLastName}
+                            {...registerLastName()}
                         />
                         <IconNameDetails className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 tablet-sm:size-6" />
                     </div>

@@ -1,5 +1,6 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAuthFormActions } from '@/pages/auth/hooks';
+import { LoadingSpinner } from '@/pages/auth/components';
 import { FormInputs } from '@/pages/auth/types';
 import { DialogModal } from '@/shared/components/DialogModal.component';
 import { IconError } from '@/shared/components/icons';
@@ -30,7 +31,7 @@ export function AuthForm({ formType, children, className }: AuthFormProps) {
                       },
                   },
     });
-    const { onSubmit, onError, error, setError } = useAuthFormActions<typeof formType>();
+    const { onSubmit, onError, isLoading, error, setError } = useAuthFormActions<typeof formType>();
 
     return (
         <FormProvider {...methods}>
@@ -40,12 +41,13 @@ export function AuthForm({ formType, children, className }: AuthFormProps) {
             >
                 {children}
             </form>
+            <LoadingSpinner open={isLoading} />
             <DialogModal
                 open={!!error}
                 onClose={() => setError(null)}
                 className="flex flex-col items-center gap-4"
             >
-                <div className="mt-4 flex flex-row items-center gap-2">
+                <div className="mt-4 flex flex-row items-center gap-2 ">
                     <IconError className="size-16 text-red-600" />
                     <h1 className="text-3xl font-bold text-text-950">
                         {error?.statusCode} Error during {formType}!

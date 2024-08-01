@@ -9,27 +9,27 @@ export type LoginRequest = {
     password: string;
     username?: string;
 };
-type UpdateUserRequest = Partial<User>;
+export type UpdateUserRequest = Partial<User>;
 
-type SignupResponse = {
+export type SignupResponse = {
     user: User;
     accessToken: string;
 };
-type LoginResponse = {
+export type LoginResponse = {
     user: User;
     accessToken: string;
 };
-type UpdateUserResponse = {
+export type UpdateUserResponse = {
     user: Partial<User>;
 };
-type DeleteUserResponse = {
+export type DeleteUserResponse = {
     message: string;
 };
-type LogoutResponse = {
+export type LogoutResponse = {
     message: string;
 };
 
-type useUserServiceProps = {
+export type useUserServiceProps = {
     PRIVATE_API: AxiosInstance;
     PUBLIC_API: AxiosInstance;
 };

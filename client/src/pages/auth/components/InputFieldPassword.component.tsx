@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import useFlag from '@/shared/hooks/useFlag.hook';
 import { IconPassword, IconPasswordEye } from '@/shared/components/icons';
@@ -9,20 +10,22 @@ type InputFieldPasswordProps = {
 export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.Element {
     const {
         register,
+        unregister,
         formState: { errors },
     } = useFormContext();
     const { value: showPassword, toggle: toggleShowPassword } = useFlag(false);
-    const { value: showConfirmPassword, toggle: toggleShowConfirmPassword } = useFlag(false);
 
-    const registerPassword = register('password', {
-        required: 'Password is required!',
-        minLength: { value: 8, message: 'Password must be at least 8 characters long!' },
-        maxLength: { value: 32, message: 'Password must be at most 32 characters long!' },
-        pattern: {
-            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/,
-            message: 'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
-        },
-    });
+    const registerPassword = () =>
+        register('password', {
+            required: 'Password is required!',
+            minLength: { value: 8, message: 'Password must be at least 8 characters long!' },
+            maxLength: { value: 32, message: 'Password must be at most 32 characters long!' },
+            pattern: {
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/,
+                message:
+                    'Password should contain at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 symbol',
+            },
+        });
 
     const registerConfirmPassword = () =>
         register('confirmPassword', {
@@ -31,6 +34,14 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
                 return value === password || 'Passwords do not match!';
             },
         });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('password');
+            unregister('confirmPassword');
+        };
+    }, []);
 
     return (
         <section
@@ -64,7 +75,7 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
                             placeholder="Password..."
                             aria-errormessage="error-password"
                             autoComplete="new-password"
-                            {...registerPassword}
+                            {...registerPassword()}
                         />
                         <IconPassword
                             className={`absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
@@ -89,54 +100,79 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
                 </div>
             </section>
 
-            {isSignup && (
-                <section
-                    className="flex w-1/2 flex-col gap-4
+            {isSignup && <InputFieldConfirmPassword />}
+        </section>
+    );
+}
+
+export function InputFieldConfirmPassword(): JSX.Element {
+    const {
+        register,
+        unregister,
+        formState: { errors },
+    } = useFormContext();
+    const { value: showConfirmPassword, toggle: toggleShowConfirmPassword } = useFlag(false);
+
+    const registerConfirmPassword = () =>
+        register('confirmPassword', {
+            required: 'Confirm Password is required!',
+            validate: (value, { password }) => {
+                return value === password || 'Passwords do not match!';
+            },
+        });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('confirmPassword');
+        };
+    }, []);
+
+    return (
+        <section
+            className="flex w-1/2 flex-col gap-4
                     tablet-sm:gap-2
                     mobile-lg:w-full"
-                >
-                    <label
-                        htmlFor="confirmPassword"
-                        className="text-xl
+        >
+            <label
+                htmlFor="confirmPassword"
+                className="text-xl
                         tablet-sm:text-lg"
-                    >
-                        Confirm Password
-                    </label>
-                    <div className="flex w-full flex-col gap-2">
-                        <div className="relative w-full">
-                            <input
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500
+            >
+                Confirm Password
+            </label>
+            <div className="flex w-full flex-col gap-2">
+                <div className="relative w-full">
+                    <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        className="peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500
                                 pc-md:text-base
                                 pc-sm:px-9 pc-sm:text-base
                                 tablet-sm:px-8 tablet-sm:text-sm"
-                                placeholder="Confirm Password..."
-                                aria-errormessage="error-confirmPassword"
-                                autoComplete={isSignup ? 'new-password' : 'current-password'}
-                                {...registerConfirmPassword()}
-                            />
-                            <IconPassword
-                                className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
+                        placeholder="Confirm Password..."
+                        aria-errormessage="error-confirmPassword"
+                        {...registerConfirmPassword()}
+                    />
+                    <IconPassword
+                        className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
                                 pc-sm:size-6
                                 tablet-sm:size-5"
-                            />
-                            <IconPasswordEye
-                                className="absolute right-1 top-1/2 size-7 -translate-y-1/2 transform cursor-pointer text-text-950 peer-focus:text-accent-500 
+                    />
+                    <IconPasswordEye
+                        className="absolute right-1 top-1/2 size-7 -translate-y-1/2 transform cursor-pointer text-text-950 peer-focus:text-accent-500 
                                 pc-sm:size-6
                                 tablet-sm:size-5"
-                                closed={!showConfirmPassword}
-                                onClick={toggleShowConfirmPassword}
-                            />
-                        </div>
-                        <p
-                            id="error-confirmPassword"
-                            className="text-sm text-red-600"
-                        >
-                            {(errors?.confirmPassword?.message as string) || ''}
-                        </p>
-                    </div>
-                </section>
-            )}
+                        closed={!showConfirmPassword}
+                        onClick={toggleShowConfirmPassword}
+                    />
+                </div>
+                <p
+                    id="error-confirmPassword"
+                    className="text-sm text-red-600"
+                >
+                    {(errors?.confirmPassword?.message as string) || ''}
+                </p>
+            </div>
         </section>
     );
 }

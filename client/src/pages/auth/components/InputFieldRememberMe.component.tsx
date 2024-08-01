@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 export function InputFieldRememberMe() {
     const { register } = useFormContext();
 
-    const registerRememberMe = register('rememberMe');
+    const registerRememberMe = () => register('rememberMe');
 
     return (
         <section
@@ -14,7 +14,7 @@ export function InputFieldRememberMe() {
             <input
                 type="checkbox"
                 className="mt-0.5 size-3.5"
-                {...registerRememberMe}
+                {...registerRememberMe()}
             />
             <label
                 htmlFor="rememberMe"

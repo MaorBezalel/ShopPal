@@ -1,60 +1,75 @@
 import { useFormContext } from 'react-hook-form';
+import { useEffect } from 'react';
 import { SignupFormInputs } from '@/pages/auth/types';
 import { IconCountry, IconCity, IconStreet } from '@/shared/components/icons';
 
 export function InputFieldAddress() {
     const {
         register,
+        unregister,
         formState: { errors },
     } = useFormContext<SignupFormInputs>();
 
-    const registerCountry = register('address.country', {
-        required: 'Country is required!',
-        minLength: {
-            value: 2,
-            message: 'Country must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 16,
-            message: 'Country must be at most 16 characters long!',
-        },
-        pattern: {
-            value: /^[A-Za-z]+(?:[-\s][A-Za-z]+)*$/,
-            message: 'Country can only contain letters, dashes, and spaces (no successive spaces or dashes)!',
-        },
-    });
+    const registerCountry = () =>
+        register('address.country', {
+            required: 'Country is required!',
+            minLength: {
+                value: 2,
+                message: 'Country must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 16,
+                message: 'Country must be at most 16 characters long!',
+            },
+            pattern: {
+                value: /^[A-Za-z]+(?:[-\s][A-Za-z]+)*$/,
+                message: 'Country can only contain letters, dashes, and spaces (no successive spaces or dashes)!',
+            },
+        });
 
-    const registerCity = register('address.city', {
-        required: 'City is required!',
-        minLength: {
-            value: 2,
-            message: 'City must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 16,
-            message: 'City must be at most 32 characters long!',
-        },
-        pattern: {
-            value: /^[A-Za-z]+(?:[-\s][A-Za-z]+)*$/,
-            message: 'City can only contain letters, dashes, and spaces (no successive spaces or dashes)!',
-        },
-    });
+    const registerCity = () =>
+        register('address.city', {
+            required: 'City is required!',
+            minLength: {
+                value: 2,
+                message: 'City must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 16,
+                message: 'City must be at most 32 characters long!',
+            },
+            pattern: {
+                value: /^[A-Za-z]+(?:[-\s][A-Za-z]+)*$/,
+                message: 'City can only contain letters, dashes, and spaces (no successive spaces or dashes)!',
+            },
+        });
 
-    const registerStreet = register('address.street', {
-        required: 'Street is required!',
-        minLength: {
-            value: 2,
-            message: 'Street must be at least 2 characters long!',
-        },
-        maxLength: {
-            value: 32,
-            message: 'Street must be at most 32 characters long!',
-        },
-        pattern: {
-            value: /^[A-Za-z0-9]+(?:[-\s][A-Za-z0-9]+)*$/,
-            message: 'Street can only contain letters, numbers, dashes, and spaces (no successive spaces or dashes)!',
-        },
-    });
+    const registerStreet = () =>
+        register('address.street', {
+            required: 'Street is required!',
+            minLength: {
+                value: 2,
+                message: 'Street must be at least 2 characters long!',
+            },
+            maxLength: {
+                value: 32,
+                message: 'Street must be at most 32 characters long!',
+            },
+            pattern: {
+                value: /^[A-Za-z0-9]+(?:[-\s][A-Za-z0-9]+)*$/,
+                message:
+                    'Street can only contain letters, numbers, dashes, and spaces (no successive spaces or dashes)!',
+            },
+        });
+
+    // unmount
+    useEffect(() => {
+        return () => {
+            unregister('address.country');
+            unregister('address.city');
+            unregister('address.street');
+        };
+    }, []);
 
     return (
         <section
@@ -84,7 +99,7 @@ export function InputFieldAddress() {
                             tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "England"'
                             aria-errormessage="error-country"
-                            {...registerCountry}
+                            {...registerCountry()}
                         />
                         <IconCountry
                             className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
@@ -123,7 +138,7 @@ export function InputFieldAddress() {
                             tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "London"'
                             aria-errormessage="error-city"
-                            {...registerCity}
+                            {...registerCity()}
                         />
                         <IconCity
                             className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
@@ -162,7 +177,7 @@ export function InputFieldAddress() {
                             tablet-sm:px-7 tablet-sm:text-sm"
                             placeholder='e.g. "Wall Street"'
                             aria-errormessage="error-street"
-                            {...registerStreet}
+                            {...registerStreet()}
                         />
                         <IconStreet
                             className="absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 
