@@ -21,10 +21,10 @@ export const ProfileEdit = () => {
 
     return (
         <FormProvider {...methods}>
-            <section>
+            <section className="w-full">
                 <form
                     onSubmit={methods.handleSubmit(onSubmit)}
-                    className="flex w-[60%] flex-col gap-3 p-4 pc-lg:w-[65%] pc-md:w-[70%] pc-sm:w-[80%] tablet-lg:w-[95%] tablet-md:w-full"
+                    className="flex w-[60%] flex-col gap-3 pc-lg:w-[65%] pc-md:w-[70%] pc-sm:w-[80%] tablet-lg:w-[95%] tablet-md:w-full"
                 >
                     <ProfileBasicDetailsEdit />
                     <ProfileAdvancedDetailsEdit />

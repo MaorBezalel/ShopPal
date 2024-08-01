@@ -11,17 +11,22 @@ import {
 import OrderItemAccordion from '@/shared/components/Accordion';
 import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { IconMenu } from '@/shared/components/icons';
+import { useInfiniteScroll } from '@/shared/hooks';
 
 export function OrderHistory() {
-    const { orders, isLoading, isError } = useOrderHistory();
+    const { orders, isLoading, isError, conditionsToFetchNewPage, fetchNextPage, isFetchingNextPage } =
+        useOrderHistory();
     const isSuceess = !isLoading && !isError;
     const hasOrders = orders.length > 0;
 
+    useInfiniteScroll({
+        fetchNextPage,
+        threshold: 300,
+        conditionsToFetchNewPage,
+    });
+
     return (
-        <section
-            className="flex flex-col gap-6 px-4
-            tablet-sm:px-2"
-        >
+        <section className="flex flex-col gap-6">
             <h2
                 className="text-5xl font-semibold text-secondary-400
                 tablet-md:text-4xl"
@@ -64,6 +69,7 @@ export function OrderHistory() {
                     <OrderItemProductsTable products={order.products} />
                 </OrderItemAccordion>
             ))}
+            {isFetchingNextPage && <LoadingAnimation />}
         </section>
     );
 }

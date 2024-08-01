@@ -2,16 +2,18 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/shared/hooks/useAuth.hook';
 import logoSVG from '@/assets/svgs/logo.svg';
-import { IconGithub, IconLogin, IconLogout, IconSignup, IconTheme } from '@/shared/components/icons';
+import { IconLogin, IconLogout, IconSignup, IconTheme, IconGithub } from '@/shared/components/icons';
 import { useApi } from '@/shared/hooks';
 import Hamburger from 'hamburger-react';
+import { HamburgerMenu } from './components/HamburgerMenu.component';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery.hook';
 
 export function Header() {
     const { auth, setAuth } = useAuth();
     const { userApi } = useApi();
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isBlurred, setIsBlurred] = useState(false);
+    const isMobile = useMediaQuery('(max-width: 1279px)');
 
     const handleLogout = async () => {
         try {
@@ -27,16 +29,15 @@ export function Header() {
     return (
         <header className="relative w-full">
             <div
-                className="container-highlight container relative mx-auto flex flex-row items-center justify-between px-1 py-4
+                className="container relative mx-auto flex flex-row items-center justify-between px-1 py-4
                 mobile-lg:flex-row-reverse
                 "
             >
                 {/* Hamburger */}
                 <button
-                    className="peer relative z-10 hidden
-                    pc-sm:block pc-sm:rounded-full pc-sm:border pc-sm:border-solid pc-sm:border-primary-950 pc-sm:p-1
-                    tablet-md:p-0.5"
-                    onBlur={() => console.log('blur')}
+                    className="peer relative z-20 hidden
+                    bg-background-50 pc-sm:block pc-sm:rounded-full pc-sm:border pc-sm:border-solid pc-sm:border-primary-950
+                    pc-sm:p-1 tablet-md:p-0.5"
                 >
                     <Hamburger
                         color="#EB7AA5"
@@ -45,49 +46,16 @@ export function Header() {
                         easing="ease-in"
                         duration={0.21}
                         label="Show menu"
-                        toggled={isMenuOpen}
+                        toggled={isMenuOpen && isMobile}
                         toggle={setIsMenuOpen}
                     />
                 </button>
 
                 {/* Menu */}
-                <nav
-                    className={`absolute left-1/2 top-24 z-10 hidden h-fit w-2/3 -translate-x-1/2 border-2 border-text-950 bg-background-50 p-10 ${
-                        isMenuOpen ? 'pc-sm:block' : ''
-                    }`}
-                >
-                    <ul className="flex h-full flex-col items-center justify-center gap-4">
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/products">Products</Link>
-                        </li>
-                        <li>
-                            <Link to="/cart">Cart</Link>
-                        </li>
-                        {auth?.user && (
-                            <li>
-                                <Link to={`/profile/${auth?.user.user_id}`}>Profile</Link>
-                            </li>
-                        )}
-                        <hr className="border-1 w-full border-solid border-text-950" />
-                        <li className="flex w-full flex-row items-center justify-center gap-20">
-                            <Link
-                                to="https://github.com/MaorBezalel/e-commerce-app"
-                                className="flex flex-row items-center gap-2 rounded-md border border-solid border-text-950 p-1"
-                            >
-                                <IconGithub className="size-6" />
-                            </Link>
-                            <button className="flex flex-row items-center gap-2 rounded-md border border-solid border-text-950 p-1">
-                                <IconTheme
-                                    theme="light"
-                                    className="size-6"
-                                />
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                <HamburgerMenu
+                    isMenuOpen={isMenuOpen && isMobile}
+                    onLinkClick={setIsMenuOpen}
+                />
 
                 {/* Logo */}
                 <nav>
@@ -169,7 +137,7 @@ export function Header() {
                         )}
 
                         {/* Theme */}
-                        <li className="pc-sm:hidden">
+                        <li className="hidden pc-sm:hidden">
                             <button className="flex flex-row items-center gap-2 rounded-md border border-solid border-text-950 p-1">
                                 <IconTheme
                                     theme="light"

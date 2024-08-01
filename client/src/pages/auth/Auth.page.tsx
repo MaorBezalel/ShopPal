@@ -20,7 +20,7 @@ type AuthPageProps = {
 export function AuthPage({ type }: AuthPageProps) {
     return (
         <main
-            className="container-highlight container flex flex-1 flex-row items-center justify-between gap-4 text-text-950 
+            className="container flex flex-1 flex-row items-center justify-between gap-4 text-text-950 
             pc-sm:flex-col-reverse pc-sm:items-center pc-sm:justify-normal
             tablet-md:flex-col-reverse tablet-md:items-start tablet-md:justify-normal"
         >

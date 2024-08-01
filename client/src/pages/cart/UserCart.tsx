@@ -4,6 +4,7 @@ import { useAuth } from '@/shared/hooks/useAuth.hook';
 import { Cart } from '@/shared/types/entities.types';
 import { ProductDisplayInCart } from './ProductDisplayInCart';
 import { useNavigate } from 'react-router';
+import LoadingAnimation from '@/shared/components/LoadingAnimation';
 
 // Define the props for UserCart component
 type UserCartProps = {
@@ -142,9 +143,9 @@ export default function UserCart({
 
     // Render the component UI
     return (
-        <div>
+        <div className={`relative ${isLoading || isError || isEmpty ? 'h-48' : ''}`}>
             {isLoading ? (
-                <p className="m-5">Loading...</p>
+                <LoadingAnimation className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
             ) : isError ? (
                 <p className="m-5">Error loading cart.</p>
             ) : isEmpty ? (

@@ -14,7 +14,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ResponseError } from '@/shared/types/api.types';
 import type { CreateReviewRequestResponse } from '@/shared/services/review.service';
 import type { CreateReviewFormFields } from '../components/ProductCreateReview';
-import type { AxiosError } from 'axios';
 
 type useReviewsProps = {
     product_id: string;

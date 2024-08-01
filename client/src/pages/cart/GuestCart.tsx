@@ -7,6 +7,7 @@ import { ProductDisplayInCart } from './ProductDisplayInCart';
 import { Product } from '@/shared/types';
 // Import hook for navigation
 import { useNavigate } from 'react-router';
+import LoadingAnimation from '@/shared/components/LoadingAnimation';
 
 // Define the type for the component's props
 type UserCartProps = {
@@ -158,9 +159,9 @@ export default function GuestCart({
 
     // Render the component
     return (
-        <div>
+        <div className={`relative ${isLoading || isError || isEmpty ? 'h-48' : ''}`}>
             {isLoading ? (
-                <p className="m-5">Loading...</p>
+                <LoadingAnimation className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
             ) : isError ? (
                 <p className="m-5">Error loading cart. Please try again later.</p>
             ) : isEmpty ? (

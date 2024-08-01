@@ -1,12 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAuth, useInfinitePaginatedQuery, useMessages, useApi } from '@/shared/hooks';
-import { GetOrdersResponseProps } from '@/shared/services/order.service';
 
 export function useOrderHistory() {
     const { displayMessage } = useMessages();
     const { orderApi } = useApi();
     const { auth } = useAuth();
-    const [orders, setOrders] = useState<GetOrdersResponseProps[]>([]);
 
     const fetchOrders = useCallback(
         async ({ offset, limit }: { offset: number; limit: number }) => {
@@ -32,7 +30,7 @@ export function useOrderHistory() {
         isFetchNextPageError,
         error,
         fetchNextPage,
-    } = useInfinitePaginatedQuery('orders', fetchOrders, { userId: auth?.user.user_id }, 20);
+    } = useInfinitePaginatedQuery('orders', fetchOrders, { userId: auth?.user.user_id }, 10);
 
     const conditionsToFetchNewPage = useCallback(
         () => !isFetchingNextPage && hasNextPage,
@@ -45,14 +43,8 @@ export function useOrderHistory() {
         }
     }, [isFetchingNextPage, isFetchNextPageError]);
 
-    useEffect(() => {
-        if (data) {
-            setOrders(data);
-        }
-    }, [data]);
-
     return {
-        orders,
+        orders: data,
         isLoading,
         isError,
         isFetchingNextPage,

@@ -34,9 +34,10 @@ export const OrderRepository = AppDataSource.getRepository(Order).extend({
 			.addGroupBy('o.order_status')
 			.addGroupBy('o.delivery_address')
 			.addGroupBy('o.billing_info')
-			.take(limit)
-			.skip(offset)
+			.offset(offset)
+			.limit(limit)
 			.orderBy('o.issued_time', 'DESC')
+			.addOrderBy('o.order_id', 'ASC')
 			.getRawMany();
 
 		return orders.map((order) => ({

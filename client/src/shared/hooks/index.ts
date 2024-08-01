@@ -11,3 +11,4 @@ export { useInfinitePaginatedQuery } from './useInfinitePaginatedQuery.hook';
 export { useMessages } from './useMessages.hook';
 export { useTypedSearchParams } from './useTypedSearchParams.hook';
 export { useInfiniteScroll } from './useInfiniteScroll.hook';
+export { useMediaQuery } from './useMediaQuery.hook';

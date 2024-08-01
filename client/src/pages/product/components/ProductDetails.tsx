@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Product } from '@/shared/types';
 import { RatingBar } from '@/shared/components/RatingBar';
 import { formatCategoryName } from '@/pages/products/utils/ProductUtils';

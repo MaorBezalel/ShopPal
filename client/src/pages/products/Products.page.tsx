@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react';
 import { useProducts } from './hooks/useProducts.hook';
 import ProductFilter from './components/ProductFilter';
 import { ProductList } from './components/ProductList';
-import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll.hook';
 
 import type { ListView, ProductShape, SortProductOptions, OrderProductOptions, ProductOptions } from './Products.types';

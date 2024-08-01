@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import star from '@/assets/photos/star.png';
 import { ratingToString } from '@/shared/utils';
@@ -37,12 +36,21 @@ export const ProductCreateReview = ({ submitReview, isCreatingReview }: ProductC
                 className="mt-2 flex flex-col gap-8 rounded-lg border border-primary-200 bg-slate-100 p-4"
             >
                 <div className="flex flex-row flex-wrap items-center gap-1">
-                    <label htmlFor="rating" className="text-md mr-8 font-semibold">
+                    <label
+                        htmlFor="rating"
+                        className="text-md mr-8 font-semibold"
+                    >
                         Rating
                     </label>
                     {[1, 2, 3, 4, 5].map((ratingValue) => (
-                        <div key={ratingValue} className="flex flex-row items-center justify-center">
-                            <img src={star} className={`h-6 w-6 ${ratingValue <= rating ? '' : 'opacity-50'}`} />
+                        <div
+                            key={ratingValue}
+                            className="flex flex-row items-center justify-center"
+                        >
+                            <img
+                                src={star}
+                                className={`h-6 w-6 ${ratingValue <= rating ? '' : 'opacity-50'}`}
+                            />
                             <input
                                 className="absolute h-6 w-6 opacity-0"
                                 {...register('rating', {
@@ -58,7 +66,10 @@ export const ProductCreateReview = ({ submitReview, isCreatingReview }: ProductC
                     <div className="ml-3">{rating !== 0 && ratingToString(rating)}</div>
                 </div>
                 <div className="relative flex w-3/5 flex-row gap-1 max-md:w-5/6">
-                    <label htmlFor="comment" className="text-md mr-3 font-semibold">
+                    <label
+                        htmlFor="comment"
+                        className="text-md mr-3 font-semibold"
+                    >
                         Comment
                     </label>
                     <textarea

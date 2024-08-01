@@ -24,10 +24,7 @@ export function UserBasicInfo() {
     ] as const;
 
     return (
-        <header
-            className="flex flex-col gap-10 px-4
-            tablet-sm:gap-4 tablet-sm:px-2"
-        >
+        <header className="flex w-full flex-col gap-10">
             <h2
                 className="text-5xl font-semibold text-secondary-400
                 tablet-md:text-4xl"
