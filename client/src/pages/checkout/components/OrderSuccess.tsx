@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const OrderSuccess = ({ orderId }: { orderId: string }) => {
     return (
-        <main className="container-highlight container mx-auto flex flex-1 flex-col items-center justify-center gap-4 text-center">
+        <main className="container mx-auto flex flex-1 flex-col items-center justify-center gap-4 text-center">
             <i className="-translate-y-28 scale-[2] text-9xl text-primary-500">🎉</i>
             <h1 className="mt-4 text-6xl font-bold pc-sm:text-5xl tablet-sm:text-4xl">Order placed successfully</h1>
             <p className="mt-2 text-4xl pc-sm:text-2xl tablet-lg:text-xl tablet-sm:text-base">
