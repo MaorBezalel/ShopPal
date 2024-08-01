@@ -3,11 +3,12 @@ import { IconUser } from '@/shared/components/icons';
 
 type InputFieldProps<
     TFieldValues extends Record<string, any>,
-    TFieldValueName extends Extract<keyof TFieldValues, string>,
+    TFieldValueName extends string, //extends Extract<keyof TFieldValues, string>,
 > = {
     register: () => UseFormRegisterReturn<TFieldValueName>;
     fieldName: TFieldValueName;
     formState: FormState<TFieldValues>;
+    InferError?: () => string;
     Icon: React.JSX.Element;
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -19,8 +20,15 @@ const DEFAULT_CLASS_NAME_ICON =
 
 export function InputField<
     TFieldValues extends Record<string, any>,
-    TFieldValueName extends Extract<keyof TFieldValues, string>,
->({ register, fieldName, formState: { errors }, Icon, ...inputProps }: InputFieldProps<TFieldValues, TFieldValueName>) {
+    TFieldValueName extends string, //extends Extract<keyof TFieldValues, string>,
+>({
+    register,
+    fieldName,
+    formState: { errors },
+    Icon,
+    InferError,
+    ...inputProps
+}: InputFieldProps<TFieldValues, TFieldValueName>) {
     return (
         <>
             <label
@@ -35,14 +43,15 @@ export function InputField<
                     <input
                         {...inputProps}
                         {...register()}
+                        className={`${inputProps.className || ''} ${DEFAULT_CLASS_NAME_INPUT}`}
                     />
                     {Icon}
                 </div>
                 <p
                     id={`error-${fieldName}`}
-                    className="text-sm text-red-600"
+                    className={`text-sm text-red-600`}
                 >
-                    {(errors[fieldName]?.message as string) || ''}
+                    {(errors[fieldName]?.message as string) || InferError?.() || ''}
                 </p>
             </div>
         </>

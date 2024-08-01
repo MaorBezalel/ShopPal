@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/shared/hooks/useAuth.hook';
 import { useApi } from '@/shared/hooks/useApi.hook';
 import useLocalStorage from '@/shared/hooks/useLocalStorage.hook';
@@ -8,10 +8,11 @@ import { useMessages } from '@/shared/hooks/useMessages.hook';
 
 type UseAddToCartProps = {
     product_id: string;
+    stock: number;
 };
 
-export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
-    const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState(1);
+export const useAddToCart = ({ product_id, stock }: UseAddToCartProps) => {
+    const [currentProductSelectedQuantity, setCurrentProductSelectedQuantity] = useState(stock != 0 ? 1 : 0);
     const { cartApi } = useApi();
     const { auth } = useAuth();
     const { displayMessage, clearMessage } = useMessages();
@@ -19,8 +20,8 @@ export const useAddToCart = ({ product_id }: UseAddToCartProps) => {
     const [isUserAddedToCart, setIsUserAddedToCart] = useState(false);
 
     const increaseProductSelectedQuantity = useCallback(() => {
-        setCurrentProductSelectedQuantity((prev) => prev + 1);
-    }, []);
+        setCurrentProductSelectedQuantity((prev) => Math.min(prev + 1, stock));
+    }, [stock]);
 
     const decreaseProductSelectedQuantity = useCallback(() => {
         setCurrentProductSelectedQuantity((prev) => Math.max(prev - 1, 1));
