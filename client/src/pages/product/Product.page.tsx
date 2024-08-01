@@ -7,7 +7,6 @@ import { ImageSlider } from '@/shared/components/ImageSlider';
 import LoadingAnimation from '@/shared/components/LoadingAnimation';
 import { useMessages } from '@/shared/hooks/useMessages.hook';
 import { useNavigate } from 'react-router';
-import Test from './components/Test';
 
 type ProductPageParams = {
     id: string;

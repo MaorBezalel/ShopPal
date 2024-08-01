@@ -399,22 +399,40 @@ export const updateUserSchema: Schema = {
 
     birthday: {
         in: ['body'],
-        isDate: {
-            errorMessage: 'Invalid date',
-            negated: true,
+        custom: {
+            options: (value) => {
+                if (value == null || value === '') return true;
+                if (typeof value !== 'string') {
+                    throw new Error('Birthday must be a string');
+                }
+                const date = new Date(value);
+                if (isNaN(date.getTime())) {
+                    throw new Error('Invalid date');
+                }
+                return true;
+            },
         },
-        toDate: true,
         optional: true,
     },
 
     avatar: {
         in: ['body'],
-        isURL: {
-            // TODO: URL Validation isnt working as expceted
+        custom: {
+            options: (value) => {
+                if (value == null || value === '') return true;
+                const urlPattern = new RegExp(
+                    '^(https?:\\/\\/)?' +
+                        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' +
+                        '((\\d{1,3}\\.){3}\\d{1,3}))' +
+                        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+                        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+                        '(\\#[-a-z\\d_]*)?$',
+                    'i'
+                );
+                return urlPattern.test(value);
+            },
             errorMessage: 'Invalid URL',
-            negated: true,
         },
-        isString: true,
         trim: true,
         optional: true,
     },
@@ -422,7 +440,7 @@ export const updateUserSchema: Schema = {
     phone: {
         in: ['body'],
         custom: {
-            options: (value) => value === null || value.length === 10,
+            options: (value) => value === null || value === '' || value.length === 10,
             errorMessage: 'Phone number should be 10 digits',
         },
         trim: true,

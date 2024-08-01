@@ -1,3 +1,4 @@
+import { ProfileEdit } from './components/ProfileEdit';
 import { AdvancedUserInfo } from "./components/AdvancedUserInfo";
 
 export function ProfilePage() {
@@ -46,9 +47,7 @@ export function ProfilePage() {
             </section>
 
             {/* Nadav */}
-            <section>
-                <h2>Edit Info</h2>
-            </section>
+            <ProfileEdit />
         </main>
     );
 }
