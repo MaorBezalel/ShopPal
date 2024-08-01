@@ -1,6 +1,8 @@
 import { ProfileEdit } from './components/ProfileEdit';
+import { AdvancedUserInfo } from "./components/AdvancedUserInfo";
 
 export function ProfilePage() {
+
     return (
         <main className="container flex flex-1 flex-col">
             {/* Maor */}
@@ -36,6 +38,7 @@ export function ProfilePage() {
             {/* Idan */}
             <section>
                 <h2>Advanced Info</h2>
+                <AdvancedUserInfo />
             </section>
 
             {/* Maor */}
