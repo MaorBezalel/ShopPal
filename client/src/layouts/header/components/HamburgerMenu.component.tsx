@@ -76,7 +76,7 @@ export function HamburgerMenu({ isMenuOpen, onLinkClick }: HamburgerMenuProps) {
                                     <IconGithub className="size-6" />
                                 </Link>
                                 <button
-                                    className="flex flex-row items-center gap-2 rounded-md border border-solid border-text-950 p-1"
+                                    className="flex flex-row items-center gap-2 rounded-md border border-solid border-text-950 p-1 hidden"
                                     onClick={() => onLinkClick((prev) => !prev)}
                                 >
                                     <IconTheme
