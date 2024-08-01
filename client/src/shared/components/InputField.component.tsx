@@ -8,13 +8,12 @@ type InputFieldProps<
     register: () => UseFormRegisterReturn<TFieldValueName>;
     fieldName: TFieldValueName;
     formState: FormState<TFieldValues>;
-    iconClassName?: string;
     InferError?: () => string;
     Icon: React.JSX.Element;
 } & React.HTMLProps<HTMLInputElement>;
 
 const DEFAULT_CLASS_NAME_INPUT =
-    'peer w-full rounded-md pl-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 pc-md:text-base pc-sm:pl-9 pc-sm:text-base tablet-sm:pl-8 tablet-sm:text-sm';
+    'peer w-full rounded-md px-10 py-1 text-lg outline outline-1 outline-text-950 focus:outline-2 focus:outline-accent-500 pc-md:text-base pc-sm:px-9 pc-sm:text-base tablet-sm:px-8 tablet-sm:text-sm';
 
 const DEFAULT_CLASS_NAME_ICON =
     'absolute left-1 top-1/2 size-7 -translate-y-1/2 transform text-text-950 peer-focus:text-accent-500 pc-sm:size-6 tablet-sm:size-5';
@@ -27,7 +26,6 @@ export function InputField<
     fieldName,
     formState: { errors },
     Icon,
-    iconClassName,
     InferError,
     ...inputProps
 }: InputFieldProps<TFieldValues, TFieldValueName>) {

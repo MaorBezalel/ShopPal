@@ -1,3 +1,5 @@
+import { UserBasicInfo } from '@/pages/profile/components/UserBasicInfo.component';
+import { OrderHistory } from '@/pages/profile/components/order-history/OrderHistory.component';
 import { ProfileEdit } from './components/ProfileEdit';
 import { AdvancedUserInfo } from "./components/AdvancedUserInfo";
 
