@@ -21,7 +21,11 @@ const app = express();
 const PORT = 3000;
 
 // Middlewares (before routes):
-app.use(corsMiddleware);
+app.use(
+	process.env.NODE_ENV === 'production'
+		? cors({ origin: process.env.CLIENT_PROD_URL, credentials: true })
+		: corsMiddleware
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -38,10 +42,10 @@ app.use(errorMiddleware); // Every endpoint & middleware chain avaliable will ev
 
 //  !!!!!!!! npm run start:dev !!!!!!!!
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+	console.log(`Server is running on port ${PORT}`);
 
-    // Initialize database connection:
-    AppDataSource.initialize()
-        .then(() => console.log('Database is up and running'))
-        .catch((error) => console.log(`error starting database connection -> ${error.message}`));
+	// Initialize database connection:
+	AppDataSource.initialize()
+		.then(() => console.log('Database is up and running'))
+		.catch((error) => console.log(`error starting database connection -> ${error.message}`));
 });
