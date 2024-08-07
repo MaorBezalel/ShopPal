@@ -60,7 +60,7 @@ ShopPal is a full-stack e-commerce web application developed as a final project 
             <td>🗄️ Database</td>
             <td>
                 <a href="https://www.postgresql.org/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"></a>
-                <a href="https://typeorm.io/" target="_blank" rel="noopener noreferrer"><img src=https://img.shields.io/badge/TypeORM-FE0803.svg?style=for-the-badge&logo=TypeORM&logoColor=white" alt="TypeORM"></a>
+                <a href="https://typeorm.io/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/TypeORM-FE0803.svg?style=for-the-badge&logo=TypeORM&logoColor=white" alt="TypeORM"></a>
             </td>
         </tr>
         <tr>
