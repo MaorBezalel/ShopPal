@@ -1,4 +1,3 @@
-import { GetProductsRequestParams } from '@/shared/services/product.service';
 import { Category } from '@/shared/types';
 import type { Product } from '@/shared/types';
 import type { ProductQueryParams } from '../Products.types';

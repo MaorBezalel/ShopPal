@@ -27,14 +27,6 @@ export function InputFieldPassword({ isSignup }: InputFieldPasswordProps): JSX.E
             },
         });
 
-    const registerConfirmPassword = () =>
-        register('confirmPassword', {
-            required: 'Confirm Password is required!',
-            validate: (value, { password }) => {
-                return value === password || 'Passwords do not match!';
-            },
-        });
-
     // unmount
     useEffect(() => {
         return () => {

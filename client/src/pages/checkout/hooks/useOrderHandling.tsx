@@ -31,7 +31,7 @@ export const useOrderHandlers = (itemsInCart: ProductDetails[], formData: any, s
         const billingInfo = `${formData.cardNumber},${formData.expiryDate},${formData.cvv}`;
         const newStocks = itemsInCart.map((item: ProductDetails) => item.stock - item.quantity);
 
-        const outOfStockItem = itemsInCart.find((item, index) => newStocks[index] < 0);
+        const outOfStockItem = itemsInCart.find((_, index) => newStocks[index] < 0);
         if (outOfStockItem) {
             alert(`The item "${outOfStockItem.title}" is out of stock. Please adjust your cart.`);
             setIsLoading(false);
@@ -71,8 +71,8 @@ export const useOrderHandlers = (itemsInCart: ProductDetails[], formData: any, s
                     const clearCartPromise = auth
                         ? api.cartApi.removeCart(auth.user.user_id)
                         : Promise.resolve(
-                            window.localStorage.setItem('cart', JSON.stringify({ product_ids: [], quantities: [] }))
-                        );
+                              window.localStorage.setItem('cart', JSON.stringify({ product_ids: [], quantities: [] }))
+                          );
                     await Promise.all([updateStocksPromise, clearCartPromise]);
                 } catch (error) {
                     console.error(error);
