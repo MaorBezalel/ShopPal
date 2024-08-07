@@ -1,6 +1,6 @@
 <div align="center">
     <img src="./assets/preview.png/">
-    <h1>ShopPal, Shop Smarter, Shop ShopPal!</h1>
+    <h1>ShopPal - Shop Smarter, Shop ShopPal!</h1>
     <h3>
         <a href="#" color="white">
         Live (WIP)
@@ -101,8 +101,8 @@ ShopPal is a full-stack e-commerce web application developed as a final project 
 
 ## 🎉 Contributors <a name="contributors"></a>
 
-<a href="https://github.com/MaorBezalel/e-commerce-app/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=MaorBezalel/e-commerce-app" />
+<a href="https://github.com/MaorBezalel/ShopPal/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=MaorBezalel/ShopPal" />
 </a>
 
 ## 📄 License <a name="license"></a>
