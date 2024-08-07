@@ -101,8 +101,8 @@ ShopPal is a full-stack e-commerce web application developed as a final project 
 
 ## 🎉 Contributors <a name="contributors"></a>
 
-<a href="https://github.com/OWNER/REPO/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=MaorBezalel/PlayPal" />
+<a href="https://github.com/MaorBezalel/e-commerce-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=MaorBezalel/e-commerce-app" />
 </a>
 
 ## 📄 License <a name="license"></a>
