@@ -2,8 +2,8 @@
     <img src="./assets/preview.png/">
     <h1>ShopPal - Shop Smarter, Shop ShopPal!</h1>
     <h3>
-        <a href="#" color="white">
-        Live (WIP)
+        <a href="https://shoppal-ui.netlify.app/" color="white">
+        Live
         </a>
         <span> | </span>
         <a href="./assets/preview.mp4">
@@ -73,9 +73,8 @@ ShopPal is a full-stack e-commerce web application developed as a final project 
         <tr>
             <td>☁️ Hosting</td>
             <td>
-                Work In Progress...
-                <!-- <a href="https://netlify.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Netlify-00C7B7.svg?style=for-the-badge&logo=Netlify&logoColor=white" alt="Netlify"></a>
-                <a href="https://render.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Render-46E3B7.svg?style=for-the-badge&logo=Render&logoColor=white" alt="Render"></a> -->
+                <a href="https://netlify.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Netlify-00C7B7.svg?style=for-the-badge&logo=Netlify&logoColor=white" alt="Netlify"></a>
+                <a href="https://render.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Render-46E3B7.svg?style=for-the-badge&logo=Render&logoColor=white" alt="Render"></a>
             </td>
         </tr>
     </tbody>
